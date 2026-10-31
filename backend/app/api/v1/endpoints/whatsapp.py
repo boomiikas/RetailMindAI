@@ -51,6 +51,27 @@ async def simulate_local_whatsapp_approval(
     db: AsyncSession = Depends(get_db)
 ):
     """Simulates an interactive WhatsApp approval button click offline without Meta credentials."""
+    from backend.app.models import DecisionRecord
+    dec_obj = await db.get(DecisionRecord, payload.decision_id)
+    if not dec_obj:
+        dec_obj = DecisionRecord(
+            decision_id=payload.decision_id,
+            current_version=payload.version,
+            decision_status="PENDING",
+            execution_status="NOT_STARTED",
+            original_recommendation_snapshot={
+                "action_type": payload.option_chosen,
+                "product_id": "MILK_001",
+                "source_store_id": "CBE_01",
+                "dest_store_id": "SLM_01",
+                "quantity": 50,
+                "expected_cost": 100.0,
+                "expected_net_profit": 500.0
+            }
+        )
+        db.add(dec_obj)
+        await db.commit()
+
     webhook_data = mock_whatsapp.simulate_manager_button_click(
         manager_phone=payload.manager_phone,
         decision_id=payload.decision_id,

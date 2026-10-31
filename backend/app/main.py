@@ -73,6 +73,7 @@ async def websocket_dashboard_endpoint(websocket: WebSocket):
         ws_manager.disconnect(websocket)
 
 @app.get("/health", tags=["System"])
+@app.get("/api/v1/health", tags=["System"])
 async def health_check():
     """System health check endpoint."""
     return {

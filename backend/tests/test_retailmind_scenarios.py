@@ -106,6 +106,15 @@ async def test_scenario_3_supplier_delay_ripple():
 async def test_scenario_4_whatsapp_approval_flow():
     """Test 4: WhatsApp button click approves decision and creates reserved transfer order."""
     async with AsyncSessionLocal() as session:
+        # Ensure source store has sufficient available stock for reservation
+        cbe_inv = (await session.execute(
+            select(Inventory).where(Inventory.store_id == "CBE_01", Inventory.product_id == "MILK_001")
+        )).scalar_one_or_none()
+        if cbe_inv:
+            cbe_inv.available_stock = 100
+            cbe_inv.physical_on_hand = 100
+            await session.commit()
+
         uid = uuid.uuid4().hex[:8]
         dec_id = f"DEC_TEST_APPR_{uid}"
         rec_snapshot = {

@@ -7,6 +7,7 @@ import {
   Network,
   Cpu,
   GitFork,
+  MessageSquare,
   ShieldAlert,
   Search,
   BarChart3,
@@ -25,7 +26,8 @@ const NAV_ITEMS = [
   { path: '/risks', label: 'Risk Centre', icon: AlertTriangle, hasPill: true, pillKey: 'risks' },
   { path: '/network', label: 'Inventory Network', icon: Network },
   { path: '/decisions', label: 'AI Decision Centre', icon: Cpu, hasPill: true, pillKey: 'pendingDecisions' },
-  { path: '/simulator', label: 'Decision Ripple Simulator', icon: GitFork, isSignature: true },
+  { path: '/simulator', label: 'Decision Ripple Simulator', icon: GitFork, isSignature: true, badgeText: 'Sim' },
+  { path: '/whatsapp', label: 'WhatsApp Assistant', icon: MessageSquare, isSignature: true, badgeText: 'Live' },
   { path: '/promotions', label: 'Promotion Guardian', icon: ShieldAlert },
   { path: '/hidden-demand', label: 'Hidden Demand Detector', icon: Search },
   { path: '/impact', label: 'Impact & Performance', icon: BarChart3 },
@@ -109,14 +111,14 @@ const Sidebar = () => {
                     style={{
                       fontSize: '0.65rem',
                       fontWeight: 700,
-                      backgroundColor: 'rgba(56, 189, 248, 0.2)',
-                      color: '#38BDF8',
+                      backgroundColor: item.badgeText === 'Live' ? 'rgba(37, 211, 102, 0.2)' : 'rgba(56, 189, 248, 0.2)',
+                      color: item.badgeText === 'Live' ? '#16A34A' : '#38BDF8',
                       padding: '0.1rem 0.4rem',
                       borderRadius: '4px',
                       textTransform: 'uppercase',
                     }}
                   >
-                    Sim
+                    {item.badgeText || 'Sim'}
                   </span>
                 )}
               </NavLink>

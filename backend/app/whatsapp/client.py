@@ -29,10 +29,14 @@ class WhatsAppClient:
         }
 
         async with httpx.AsyncClient(timeout=10.0) as client:
-            resp = await client.post(url, json=payload, headers=self.headers)
-            if resp.status_code != 200:
-                logger.error(f"WhatsApp API Error: {resp.status_code} - {resp.text}")
-            return resp.json()
+            try:
+                resp = await client.post(url, json=payload, headers=self.headers)
+                if resp.status_code != 200:
+                    logger.error(f"WhatsApp API Error: {resp.status_code} - {resp.text}")
+                return resp.json()
+            except Exception as e:
+                logger.error(f"WhatsApp API request failed: {e}")
+                return {"error": str(e), "status": "failed"}
 
     async def send_interactive_options(
         self,
@@ -78,5 +82,9 @@ class WhatsAppClient:
         }
 
         async with httpx.AsyncClient(timeout=10.0) as client:
-            resp = await client.post(url, json=payload, headers=self.headers)
-            return resp.json()
+            try:
+                resp = await client.post(url, json=payload, headers=self.headers)
+                return resp.json()
+            except Exception as e:
+                logger.error(f"WhatsApp API request failed: {e}")
+                return {"error": str(e), "status": "failed"}

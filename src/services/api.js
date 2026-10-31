@@ -414,4 +414,48 @@ export const RetailPulseApi = {
     await delay(50);
     return INITIAL_NOTIFICATIONS;
   },
+
+  // WhatsApp Assistant Simulation Endpoints
+  async simulateWhatsAppApproval({ decisionId, version = 1, optionChosen = 'INTER_STORE_TRANSFER', managerPhone = '+919843123456' }) {
+    try {
+      const res = await apiClient.post('/whatsapp/simulate-approval', {
+        decision_id: decisionId,
+        version: version,
+        option_chosen: optionChosen,
+        manager_phone: managerPhone
+      });
+      return res.data;
+    } catch (e) {
+      console.warn('Backend whatsapp approval fallback', e);
+      return {
+        simulation: 'MOCK_FALLBACK',
+        handler_result: {
+          status: 'approved_and_executed',
+          decision_id: decisionId,
+          action: optionChosen,
+          reply: 'Approval confirmed for ' + decisionId
+        }
+      };
+    }
+  },
+
+  async simulateWhatsAppQuery({ queryText, managerPhone = '+919843123456' }) {
+    try {
+      const res = await apiClient.post('/whatsapp/simulate-query', {
+        query_text: queryText,
+        manager_phone: managerPhone
+      });
+      return res.data;
+    } catch (e) {
+      console.warn('Backend whatsapp query fallback', e);
+      return {
+        simulation: 'MOCK_FALLBACK',
+        query: queryText,
+        handler_result: {
+          status: 'answered_query',
+          reply: 'Active across 5 Tamil Nadu clusters'
+        }
+      };
+    }
+  },
 };

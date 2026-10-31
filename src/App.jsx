@@ -14,6 +14,7 @@ import PromotionGuardian from './pages/PromotionGuardian';
 import HiddenDemandDetector from './pages/HiddenDemandDetector';
 import ImpactPerformance from './pages/ImpactPerformance';
 import DecisionHistory from './pages/DecisionHistory';
+import WhatsAppAssistant from './pages/WhatsAppAssistant';
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
             <Route path="network" element={<InventoryNetwork />} />
             <Route path="decisions" element={<AIDecisionCentre />} />
             <Route path="simulator" element={<DecisionRippleSimulator />} />
+            <Route path="whatsapp" element={<WhatsAppAssistant />} />
             <Route path="promotions" element={<PromotionGuardian />} />
             <Route path="hidden-demand" element={<HiddenDemandDetector />} />
             <Route path="impact" element={<ImpactPerformance />} />

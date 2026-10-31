@@ -78,17 +78,15 @@ class WhatsAppWebhookHandler:
         res = await self.session.execute(existing_appr_stmt)
         if res.scalar_one_or_none():
             logger.warning(f"[WhatsAppWebhook] Duplicate approval rejected for idempotency key: {idempotency_key}")
-            await self.client.send_text_message(
-                sender_phone,
-                f"ℹ️ Decision `{decision_id}` (v{version_num}) has already been approved and processed."
-            )
-            return {"status": "duplicate_ignored", "decision_id": decision_id}
+            dup_msg = f"ℹ️ Decision `{decision_id}` (v{version_num}) has already been approved and processed."
+            await self.client.send_text_message(sender_phone, dup_msg)
+            return {"status": "duplicate_ignored", "decision_id": decision_id, "reply": dup_msg}
 
         # 2. Validate Decision Record & Version Authorization
         dec_obj = await self.session.get(DecisionRecord, decision_id)
         if not dec_obj:
             logger.error(f"[WhatsAppWebhook] Decision {decision_id} not found.")
-            return {"status": "error", "reason": "decision_not_found"}
+            return {"status": "error", "reason": "decision_not_found", "reply": f"❌ Decision `{decision_id}` not found."}
 
         # Enforce that approval must match exact current version
         if dec_obj.current_version != version_num:
@@ -96,19 +94,15 @@ class WhatsAppWebhookHandler:
                 f"[WhatsAppWebhook] Obsolete version approval rejected: Manager sent approval for v{version_num}, "
                 f"but current decision version is v{dec_obj.current_version}."
             )
-            await self.client.send_text_message(
-                sender_phone,
-                f"❌ Approval Rejected: Plan Version {version_num} is obsolete. Please review revised Version {dec_obj.current_version}."
-            )
-            return {"status": "version_mismatch", "decision_id": decision_id}
+            v_msg = f"❌ Approval Rejected: Plan Version {version_num} is obsolete. Please review revised Version {dec_obj.current_version}."
+            await self.client.send_text_message(sender_phone, v_msg)
+            return {"status": "version_mismatch", "decision_id": decision_id, "reply": v_msg}
 
         # Check if decision was already rejected/expired
         if dec_obj.decision_status in ("REJECTED", "EXPIRED", "CANCELLED"):
-            await self.client.send_text_message(
-                sender_phone,
-                f"❌ Decision `{decision_id}` is {dec_obj.decision_status} and cannot be authorized."
-            )
-            return {"status": "invalid_status", "status": dec_obj.decision_status}
+            exp_msg = f"❌ Decision `{decision_id}` is {dec_obj.decision_status} and cannot be authorized."
+            await self.client.send_text_message(sender_phone, exp_msg)
+            return {"status": "invalid_status", "status": dec_obj.decision_status, "reply": exp_msg}
 
         # 3. Record Approval
         approval = ManagerApproval(
@@ -157,7 +151,7 @@ class WhatsAppWebhookHandler:
             f"Stock reservations and order logs have been recorded in the ERP ledger."
         )
         await self.client.send_text_message(sender_phone, ack_msg)
-        return {"status": "approved_and_executed", "decision_id": decision_id, "action": chosen_action}
+        return {"status": "approved_and_executed", "decision_id": decision_id, "action": chosen_action, "reply": ack_msg}
 
     async def _handle_text_query(self, query: str, sender_phone: str) -> Dict[str, Any]:
         """Answers natural language manager queries by querying real PostgreSQL records."""
