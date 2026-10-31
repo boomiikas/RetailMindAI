@@ -1,0 +1,33 @@
+{
+  "validation": {
+    "mae": 6.0561,
+    "rmse": 8.6216,
+    "wape": 10.459,
+    "forecast_bias": -0.6516,
+    "r2_score": 0.9199
+  },
+  "test": {
+    "mae": 9.2903,
+    "rmse": 18.0496,
+    "wape": 13.9258,
+    "forecast_bias": -6.5327,
+    "r2_score": 0.8479
+  },
+  "feature_importance": {
+    "store_id_enc": 1.0664,
+    "product_id_enc": 0.5682,
+    "day_of_week": 5.4958,
+    "day_of_month": 1.1338,
+    "month": 0.0,
+    "is_weekend": 0.0,
+    "promotional_flag": 2.7086,
+    "festival_flag": 6.5117,
+    "unit_price": 1.8726,
+    "sales_lag_1": 3.4932,
+    "sales_lag_7": 0.8132,
+    "sales_lag_14": 2.4757,
+    "rolling_mean_7": 9.7124,
+    "rolling_std_7": 0.6556,
+    "rolling_mean_14": 4.4818
+  }
+}

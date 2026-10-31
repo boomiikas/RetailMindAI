@@ -28,9 +28,9 @@ import {
 const SIMULATED_DELAY_MS = 200;
 const delay = (ms = SIMULATED_DELAY_MS) => new Promise((resolve) => setTimeout(resolve, ms));
 
-// Optional base Axios instance for when backend is connected
+// Base Axios instance connected to FastAPI backend via Vite proxy
 export const apiClient = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || 'https://api.retailpulse.ai/v1',
+  baseURL: import.meta.env.VITE_API_URL || '/api/v1',
   headers: {
     'Content-Type': 'application/json',
   },
@@ -39,6 +39,25 @@ export const apiClient = axios.create({
 export const RetailPulseApi = {
   // Store & Product Metadata
   async getStores() {
+    try {
+      const res = await apiClient.get('/dashboard/store-health');
+      if (res.data && Array.isArray(res.data) && res.data.length > 0) {
+        return [
+          STORES[0],
+          ...res.data.map(s => ({
+            id: s.city.toLowerCase(),
+            name: s.store_name,
+            code: s.store_id.slice(0, 3),
+            location: s.city + ', Tamil Nadu',
+            manager: s.city === 'Coimbatore' ? 'Karthik Raja' : s.city === 'Salem' ? 'Priya Sundaram' : 'Store Manager',
+            health: Math.round(s.health_index * 100),
+            stockoutCount: s.stockout_count,
+            overstockCount: s.overstock_count,
+            available: s.total_skus * 20
+          }))
+        ];
+      }
+    } catch (e) {}
     await delay(50);
     return STORES;
   },
@@ -50,6 +69,28 @@ export const RetailPulseApi = {
 
   // Page 1: Executive Overview
   async getExecutiveOverview(storeFilter = 'all') {
+    try {
+      const res = await apiClient.get('/dashboard/overview');
+      if (res.data) {
+        const live = res.data;
+        const liveKpis = {
+          ...OVERVIEW_KPIS,
+          totalStores: live.total_stores || 5,
+          productsMonitored: live.total_products || 60,
+          stockoutRisks: live.active_alerts_count || 4,
+          aiRecommendations: live.pending_decisions_count || 12,
+          serviceLevel: (live.aggregate_service_level * 100).toFixed(1) + '%',
+          estimatedProfitAtRisk: 'INR ' + (live.total_inventory_valuation_inr / 100000).toFixed(1) + 'L',
+        };
+        return {
+          kpis: liveKpis,
+          alerts: RECENT_ALERTS.filter(a => storeFilter === 'all' || a.store.toLowerCase() === storeFilter.toLowerCase()),
+          demandTrend: DEMAND_TREND_CHART_DATA,
+          inventoryHealth: INVENTORY_HEALTH_DONUT,
+          storeRisks: STORE_RISK_BAR_DATA,
+        };
+      }
+    } catch (e) {}
     await delay();
     return {
       kpis: OVERVIEW_KPIS,

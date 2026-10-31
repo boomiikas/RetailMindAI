@@ -1,0 +1,6 @@
+store_id,name,city,region,address,size_sqft,store_type,manager_name,manager_phone,active
+CHN_01,RetailMind Chennai Flagship,Chennai,Tamil Nadu,"42 Anna Nagar 2nd Avenue, Chennai 600040",14500,HYPERMARKET,R. Sundaram,+919840123456,True
+CBE_01,RetailMind Coimbatore Hub,Coimbatore,Tamil Nadu,"18 RS Puram West, Coimbatore 641002",9800,SUPERMARKET,K. Murugan,+919842123456,True
+SLM_01,RetailMind Salem Central,Salem,Tamil Nadu,"88 Junction Main Road, Salem 636005",7500,SUPERMARKET,S. Selvan,+919843123456,True
+MDU_01,RetailMind Madurai Express,Madurai,Tamil Nadu,"105 Meenakshi Amman Kovil St, Madurai 625001",8200,SUPERMARKET,P. Ramanathan,+919845123456,True
+TRY_01,RetailMind Trichy Central,Trichy,Tamil Nadu,"14 Salai Road, Woraiyur, Trichy 620003",6900,SUPERMARKET,M. Alagappan,+919846123456,True
