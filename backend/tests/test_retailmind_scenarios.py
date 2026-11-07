@@ -29,11 +29,7 @@ from backend.app.agents.learning_agent import LearningAgent
 from backend.app.whatsapp.webhook_handler import WhatsAppWebhookHandler
 from backend.app.whatsapp.mock_adapter import mock_whatsapp
 
-@pytest_asyncio.fixture(autouse=True)
-async def setup_db():
-    async with engine.begin() as conn:
-        await conn.run_sync(Base.metadata.create_all)
-    yield
+# Database tables initialized in Supabase PostgreSQL
 
 @pytest.mark.asyncio
 async def test_scenario_1_normal_stockout():

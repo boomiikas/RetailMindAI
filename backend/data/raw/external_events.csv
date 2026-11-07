@@ -1,42 +1,61 @@
 event_id,store_id,event_type,event_date,description,impact_factor
-EVT_DIWALI_2025-11-01,,FESTIVAL_DIWALI,2025-11-01,Diwali Festival of Lights shopping peak,2.5
-EVT_DIWALI_2025-11-02,,FESTIVAL_DIWALI,2025-11-02,Diwali Festival of Lights shopping peak,2.5
-EVT_MONSOON_2025-11-08,CHN_01,WEATHER_MONSOON,2025-11-08,Northeast Monsoon heavy rains and delivery delays,0.75
-EVT_MONSOON_2025-11-09,CHN_01,WEATHER_MONSOON,2025-11-09,Northeast Monsoon heavy rains and delivery delays,0.75
-EVT_MONSOON_2025-11-10,CHN_01,WEATHER_MONSOON,2025-11-10,Northeast Monsoon heavy rains and delivery delays,0.75
-EVT_MONSOON_2025-11-11,CHN_01,WEATHER_MONSOON,2025-11-11,Northeast Monsoon heavy rains and delivery delays,0.75
-EVT_MONSOON_2025-11-12,CHN_01,WEATHER_MONSOON,2025-11-12,Northeast Monsoon heavy rains and delivery delays,0.75
-EVT_MONSOON_2025-11-13,CHN_01,WEATHER_MONSOON,2025-11-13,Northeast Monsoon heavy rains and delivery delays,0.75
-EVT_MONSOON_2025-11-14,CHN_01,WEATHER_MONSOON,2025-11-14,Northeast Monsoon heavy rains and delivery delays,0.75
-EVT_MONSOON_2025-11-15,CHN_01,WEATHER_MONSOON,2025-11-15,Northeast Monsoon heavy rains and delivery delays,0.75
-EVT_MONSOON_2025-11-16,CHN_01,WEATHER_MONSOON,2025-11-16,Northeast Monsoon heavy rains and delivery delays,0.75
-EVT_MONSOON_2025-11-17,CHN_01,WEATHER_MONSOON,2025-11-17,Northeast Monsoon heavy rains and delivery delays,0.75
-EVT_MONSOON_2025-11-18,CHN_01,WEATHER_MONSOON,2025-11-18,Northeast Monsoon heavy rains and delivery delays,0.75
-EVT_PONGAL_2026-01-13,,FESTIVAL_PONGAL,2026-01-13,Pongal Harvest Festival across Tamil Nadu,2.2
-EVT_PONGAL_2026-01-14,,FESTIVAL_PONGAL,2026-01-14,Pongal Harvest Festival across Tamil Nadu,2.2
-EVT_PONGAL_2026-01-15,,FESTIVAL_PONGAL,2026-01-15,Pongal Harvest Festival across Tamil Nadu,2.2
-EVT_PONGAL_2026-01-16,,FESTIVAL_PONGAL,2026-01-16,Pongal Harvest Festival across Tamil Nadu,2.2
-EVT_PONGAL_2026-01-17,,FESTIVAL_PONGAL,2026-01-17,Pongal Harvest Festival across Tamil Nadu,2.2
-EVT_TAMIL_NEW_YEAR_2026-04-13,,FESTIVAL_NEW_YEAR,2026-04-13,Tamil New Year / Chithirai celebration,1.7
-EVT_TAMIL_NEW_YEAR_2026-04-14,,FESTIVAL_NEW_YEAR,2026-04-14,Tamil New Year / Chithirai celebration,1.7
-EVT_TAMIL_NEW_YEAR_2026-04-15,,FESTIVAL_NEW_YEAR,2026-04-15,Tamil New Year / Chithirai celebration,1.7
-EVT_HEATWAVE_2026-05-10,,WEATHER_HEATWAVE,2026-05-10,Agni Nakshatram Summer Heatwave (High dairy/beverage demand),1.4
-EVT_HEATWAVE_2026-05-11,,WEATHER_HEATWAVE,2026-05-11,Agni Nakshatram Summer Heatwave (High dairy/beverage demand),1.4
-EVT_HEATWAVE_2026-05-12,,WEATHER_HEATWAVE,2026-05-12,Agni Nakshatram Summer Heatwave (High dairy/beverage demand),1.4
-EVT_HEATWAVE_2026-05-13,,WEATHER_HEATWAVE,2026-05-13,Agni Nakshatram Summer Heatwave (High dairy/beverage demand),1.4
-EVT_HEATWAVE_2026-05-14,,WEATHER_HEATWAVE,2026-05-14,Agni Nakshatram Summer Heatwave (High dairy/beverage demand),1.4
-EVT_HEATWAVE_2026-05-15,,WEATHER_HEATWAVE,2026-05-15,Agni Nakshatram Summer Heatwave (High dairy/beverage demand),1.4
-EVT_HEATWAVE_2026-05-16,,WEATHER_HEATWAVE,2026-05-16,Agni Nakshatram Summer Heatwave (High dairy/beverage demand),1.4
-EVT_HEATWAVE_2026-05-17,,WEATHER_HEATWAVE,2026-05-17,Agni Nakshatram Summer Heatwave (High dairy/beverage demand),1.4
-EVT_HEATWAVE_2026-05-18,,WEATHER_HEATWAVE,2026-05-18,Agni Nakshatram Summer Heatwave (High dairy/beverage demand),1.4
-EVT_HEATWAVE_2026-05-19,,WEATHER_HEATWAVE,2026-05-19,Agni Nakshatram Summer Heatwave (High dairy/beverage demand),1.4
-EVT_HEATWAVE_2026-05-20,,WEATHER_HEATWAVE,2026-05-20,Agni Nakshatram Summer Heatwave (High dairy/beverage demand),1.4
-EVT_HEATWAVE_2026-05-21,,WEATHER_HEATWAVE,2026-05-21,Agni Nakshatram Summer Heatwave (High dairy/beverage demand),1.4
-EVT_HEATWAVE_2026-05-22,,WEATHER_HEATWAVE,2026-05-22,Agni Nakshatram Summer Heatwave (High dairy/beverage demand),1.4
-EVT_HEATWAVE_2026-05-23,,WEATHER_HEATWAVE,2026-05-23,Agni Nakshatram Summer Heatwave (High dairy/beverage demand),1.4
-EVT_HEATWAVE_2026-05-24,,WEATHER_HEATWAVE,2026-05-24,Agni Nakshatram Summer Heatwave (High dairy/beverage demand),1.4
-EVT_HEATWAVE_2026-05-25,,WEATHER_HEATWAVE,2026-05-25,Agni Nakshatram Summer Heatwave (High dairy/beverage demand),1.4
-EVT_DIWALI_2026-10-28,,FESTIVAL_DIWALI,2026-10-28,Diwali Festival of Lights shopping peak,2.5
-EVT_DIWALI_2026-10-29,,FESTIVAL_DIWALI,2026-10-29,Diwali Festival of Lights shopping peak,2.5
-EVT_DIWALI_2026-10-30,,FESTIVAL_DIWALI,2026-10-30,Diwali Festival of Lights shopping peak,2.5
-EVT_DIWALI_2026-10-31,,FESTIVAL_DIWALI,2026-10-31,Diwali Festival of Lights shopping peak,2.5
+EVT_DIWALI_2025-11-01,,FESTIVAL_DIWALI,2025-11-01,"Diwali Festival of Lights shopping peak (High Ghee, Sweets, Personal Care gift demand)",2.5
+EVT_DIWALI_2025-11-02,,FESTIVAL_DIWALI,2025-11-02,"Diwali Festival of Lights shopping peak (High Ghee, Sweets, Personal Care gift demand)",2.5
+EVT_MONSOON_2025-11-03,CHN_01,WEATHER_MONSOON,2025-11-03,Northeast Monsoon heavy rains and delivery logistics delays,0.75
+EVT_MONSOON_2025-11-04,CHN_01,WEATHER_MONSOON,2025-11-04,Northeast Monsoon heavy rains and delivery logistics delays,0.75
+EVT_MONSOON_2025-11-05,CHN_01,WEATHER_MONSOON,2025-11-05,Northeast Monsoon heavy rains and delivery logistics delays,0.75
+EVT_MONSOON_2025-11-06,CHN_01,WEATHER_MONSOON,2025-11-06,Northeast Monsoon heavy rains and delivery logistics delays,0.75
+EVT_MONSOON_2025-11-07,CHN_01,WEATHER_MONSOON,2025-11-07,Northeast Monsoon heavy rains and delivery logistics delays,0.75
+EVT_MONSOON_2025-11-08,CHN_01,WEATHER_MONSOON,2025-11-08,Northeast Monsoon heavy rains and delivery logistics delays,0.75
+EVT_MONSOON_2025-11-09,CHN_01,WEATHER_MONSOON,2025-11-09,Northeast Monsoon heavy rains and delivery logistics delays,0.75
+EVT_MONSOON_2025-11-10,CHN_01,WEATHER_MONSOON,2025-11-10,Northeast Monsoon heavy rains and delivery logistics delays,0.75
+EVT_MONSOON_2025-11-11,CHN_01,WEATHER_MONSOON,2025-11-11,Northeast Monsoon heavy rains and delivery logistics delays,0.75
+EVT_MONSOON_2025-11-12,CHN_01,WEATHER_MONSOON,2025-11-12,Northeast Monsoon heavy rains and delivery logistics delays,0.75
+EVT_MONSOON_2025-11-13,CHN_01,WEATHER_MONSOON,2025-11-13,Northeast Monsoon heavy rains and delivery logistics delays,0.75
+EVT_MONSOON_2025-11-14,CHN_01,WEATHER_MONSOON,2025-11-14,Northeast Monsoon heavy rains and delivery logistics delays,0.75
+EVT_MONSOON_2025-11-15,CHN_01,WEATHER_MONSOON,2025-11-15,Northeast Monsoon heavy rains and delivery logistics delays,0.75
+EVT_MONSOON_2025-11-16,CHN_01,WEATHER_MONSOON,2025-11-16,Northeast Monsoon heavy rains and delivery logistics delays,0.75
+EVT_MONSOON_2025-11-17,CHN_01,WEATHER_MONSOON,2025-11-17,Northeast Monsoon heavy rains and delivery logistics delays,0.75
+EVT_MONSOON_2025-11-18,CHN_01,WEATHER_MONSOON,2025-11-18,Northeast Monsoon heavy rains and delivery logistics delays,0.75
+EVT_MONSOON_2025-11-19,CHN_01,WEATHER_MONSOON,2025-11-19,Northeast Monsoon heavy rains and delivery logistics delays,0.75
+EVT_MONSOON_2025-11-20,CHN_01,WEATHER_MONSOON,2025-11-20,Northeast Monsoon heavy rains and delivery logistics delays,0.75
+EVT_PONGAL_2026-01-13,,FESTIVAL_PONGAL,2026-01-13,"Pongal Harvest Festival across Tamil Nadu (High Jaggery, Rice, Ghee, Milk demand)",2.2
+EVT_PONGAL_2026-01-14,,FESTIVAL_PONGAL,2026-01-14,"Pongal Harvest Festival across Tamil Nadu (High Jaggery, Rice, Ghee, Milk demand)",2.2
+EVT_PONGAL_2026-01-15,,FESTIVAL_PONGAL,2026-01-15,"Pongal Harvest Festival across Tamil Nadu (High Jaggery, Rice, Ghee, Milk demand)",2.2
+EVT_PONGAL_2026-01-16,,FESTIVAL_PONGAL,2026-01-16,"Pongal Harvest Festival across Tamil Nadu (High Jaggery, Rice, Ghee, Milk demand)",2.2
+EVT_PONGAL_2026-01-17,,FESTIVAL_PONGAL,2026-01-17,"Pongal Harvest Festival across Tamil Nadu (High Jaggery, Rice, Ghee, Milk demand)",2.2
+EVT_TAMIL_NEW_YEAR_2026-04-13,,FESTIVAL_NEW_YEAR,2026-04-13,Tamil New Year / Chithirai festival celebrations,1.7
+EVT_TAMIL_NEW_YEAR_2026-04-14,,FESTIVAL_NEW_YEAR,2026-04-14,Tamil New Year / Chithirai festival celebrations,1.7
+EVT_TAMIL_NEW_YEAR_2026-04-15,,FESTIVAL_NEW_YEAR,2026-04-15,Tamil New Year / Chithirai festival celebrations,1.7
+EVT_HEATWAVE_2026-05-01,,WEATHER_HEATWAVE,2026-05-01,"Agni Nakshatram Summer Heatwave (High beverage, curd, ice cream & frozen demand)",1.5
+EVT_HEATWAVE_2026-05-02,,WEATHER_HEATWAVE,2026-05-02,"Agni Nakshatram Summer Heatwave (High beverage, curd, ice cream & frozen demand)",1.5
+EVT_HEATWAVE_2026-05-03,,WEATHER_HEATWAVE,2026-05-03,"Agni Nakshatram Summer Heatwave (High beverage, curd, ice cream & frozen demand)",1.5
+EVT_HEATWAVE_2026-05-04,,WEATHER_HEATWAVE,2026-05-04,"Agni Nakshatram Summer Heatwave (High beverage, curd, ice cream & frozen demand)",1.5
+EVT_HEATWAVE_2026-05-05,,WEATHER_HEATWAVE,2026-05-05,"Agni Nakshatram Summer Heatwave (High beverage, curd, ice cream & frozen demand)",1.5
+EVT_HEATWAVE_2026-05-06,,WEATHER_HEATWAVE,2026-05-06,"Agni Nakshatram Summer Heatwave (High beverage, curd, ice cream & frozen demand)",1.5
+EVT_HEATWAVE_2026-05-07,,WEATHER_HEATWAVE,2026-05-07,"Agni Nakshatram Summer Heatwave (High beverage, curd, ice cream & frozen demand)",1.5
+EVT_HEATWAVE_2026-05-08,,WEATHER_HEATWAVE,2026-05-08,"Agni Nakshatram Summer Heatwave (High beverage, curd, ice cream & frozen demand)",1.5
+EVT_HEATWAVE_2026-05-09,,WEATHER_HEATWAVE,2026-05-09,"Agni Nakshatram Summer Heatwave (High beverage, curd, ice cream & frozen demand)",1.5
+EVT_HEATWAVE_2026-05-10,,WEATHER_HEATWAVE,2026-05-10,"Agni Nakshatram Summer Heatwave (High beverage, curd, ice cream & frozen demand)",1.5
+EVT_HEATWAVE_2026-05-11,,WEATHER_HEATWAVE,2026-05-11,"Agni Nakshatram Summer Heatwave (High beverage, curd, ice cream & frozen demand)",1.5
+EVT_HEATWAVE_2026-05-12,,WEATHER_HEATWAVE,2026-05-12,"Agni Nakshatram Summer Heatwave (High beverage, curd, ice cream & frozen demand)",1.5
+EVT_HEATWAVE_2026-05-13,,WEATHER_HEATWAVE,2026-05-13,"Agni Nakshatram Summer Heatwave (High beverage, curd, ice cream & frozen demand)",1.5
+EVT_HEATWAVE_2026-05-14,,WEATHER_HEATWAVE,2026-05-14,"Agni Nakshatram Summer Heatwave (High beverage, curd, ice cream & frozen demand)",1.5
+EVT_HEATWAVE_2026-05-15,,WEATHER_HEATWAVE,2026-05-15,"Agni Nakshatram Summer Heatwave (High beverage, curd, ice cream & frozen demand)",1.5
+EVT_HEATWAVE_2026-05-16,,WEATHER_HEATWAVE,2026-05-16,"Agni Nakshatram Summer Heatwave (High beverage, curd, ice cream & frozen demand)",1.5
+EVT_HEATWAVE_2026-05-17,,WEATHER_HEATWAVE,2026-05-17,"Agni Nakshatram Summer Heatwave (High beverage, curd, ice cream & frozen demand)",1.5
+EVT_HEATWAVE_2026-05-18,,WEATHER_HEATWAVE,2026-05-18,"Agni Nakshatram Summer Heatwave (High beverage, curd, ice cream & frozen demand)",1.5
+EVT_HEATWAVE_2026-05-19,,WEATHER_HEATWAVE,2026-05-19,"Agni Nakshatram Summer Heatwave (High beverage, curd, ice cream & frozen demand)",1.5
+EVT_HEATWAVE_2026-05-20,,WEATHER_HEATWAVE,2026-05-20,"Agni Nakshatram Summer Heatwave (High beverage, curd, ice cream & frozen demand)",1.5
+EVT_HEATWAVE_2026-05-21,,WEATHER_HEATWAVE,2026-05-21,"Agni Nakshatram Summer Heatwave (High beverage, curd, ice cream & frozen demand)",1.5
+EVT_HEATWAVE_2026-05-22,,WEATHER_HEATWAVE,2026-05-22,"Agni Nakshatram Summer Heatwave (High beverage, curd, ice cream & frozen demand)",1.5
+EVT_HEATWAVE_2026-05-23,,WEATHER_HEATWAVE,2026-05-23,"Agni Nakshatram Summer Heatwave (High beverage, curd, ice cream & frozen demand)",1.5
+EVT_HEATWAVE_2026-05-24,,WEATHER_HEATWAVE,2026-05-24,"Agni Nakshatram Summer Heatwave (High beverage, curd, ice cream & frozen demand)",1.5
+EVT_HEATWAVE_2026-05-25,,WEATHER_HEATWAVE,2026-05-25,"Agni Nakshatram Summer Heatwave (High beverage, curd, ice cream & frozen demand)",1.5
+EVT_MONSOON_2026-10-25,CHN_01,WEATHER_MONSOON,2026-10-25,Northeast Monsoon heavy rains and delivery logistics delays,0.75
+EVT_MONSOON_2026-10-26,CHN_01,WEATHER_MONSOON,2026-10-26,Northeast Monsoon heavy rains and delivery logistics delays,0.75
+EVT_MONSOON_2026-10-27,CHN_01,WEATHER_MONSOON,2026-10-27,Northeast Monsoon heavy rains and delivery logistics delays,0.75
+EVT_DIWALI_2026-10-28,,FESTIVAL_DIWALI,2026-10-28,"Diwali Festival of Lights shopping peak (High Ghee, Sweets, Personal Care gift demand)",2.5
+EVT_DIWALI_2026-10-29,,FESTIVAL_DIWALI,2026-10-29,"Diwali Festival of Lights shopping peak (High Ghee, Sweets, Personal Care gift demand)",2.5
+EVT_DIWALI_2026-10-30,,FESTIVAL_DIWALI,2026-10-30,"Diwali Festival of Lights shopping peak (High Ghee, Sweets, Personal Care gift demand)",2.5
+EVT_DIWALI_2026-10-31,,FESTIVAL_DIWALI,2026-10-31,"Diwali Festival of Lights shopping peak (High Ghee, Sweets, Personal Care gift demand)",2.5

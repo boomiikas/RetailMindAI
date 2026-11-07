@@ -91,16 +91,16 @@ class RiskDetectionService:
                 })
 
             # 2. Overstock Check
-            # Days of supply > 15 days and inventory > 50 units
-            elif days_supply > 15.0 and inv.available_stock > 50:
-                excess_units = int(inv.available_stock - (avg_daily_demand * 10))
-                holding_exposure = round(excess_units * float(prod.holding_cost_per_day) * 30, 2)
+            # Days of supply > 10 days or stock > 3x safety stock and stock > 50 units
+            elif (days_supply > 10.0 or inv.available_stock > (inv.safety_stock * 3)) and inv.available_stock > 50:
+                excess_units = max(20, int(inv.available_stock - (avg_daily_demand * 7)))
+                holding_exposure = max(100.0, round(excess_units * float(prod.holding_cost_per_day) * 30, 2))
                 risk_id = f"RSK_OVERSTOCK_{inv.store_id}_{inv.product_id}_{today.isoformat()}"
 
                 detected_risks.append({
                     "risk_id": risk_id,
                     "risk_type": "OVERSTOCK",
-                    "severity": "MEDIUM" if days_supply < 35.0 else "HIGH",
+                    "severity": "MEDIUM" if days_supply < 25.0 else "HIGH",
                     "store_id": inv.store_id,
                     "product_id": inv.product_id,
                     "affected_quantity": excess_units,
@@ -182,12 +182,11 @@ class RiskDetectionService:
                 "city": s.city,
                 "product_id": r.product_id,
                 "product_name": p.name,
-                "category": p.category,
                 "affected_quantity": r.affected_quantity,
                 "expected_occurrence": r.expected_occurrence.isoformat(),
                 "financial_impact_est": float(r.financial_impact_est),
                 "root_cause": r.root_cause,
                 "status": r.status,
-                "detected_at": r.detected_at.isoformat(),
+                "detected_at": r.detected_at.isoformat()
             })
         return risks

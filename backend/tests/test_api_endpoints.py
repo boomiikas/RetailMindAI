@@ -22,7 +22,7 @@ async def test_dashboard_overview_endpoint():
         assert resp.status_code == 200
         data = resp.json()
         assert data["total_stores"] == 5
-        assert data["total_products"] == 60
+        assert data["total_products"] == 88
 
 @pytest.mark.asyncio
 async def test_inventory_list_endpoint():
@@ -43,6 +43,30 @@ async def test_forecast_endpoint():
         data = resp.json()
         assert data["store_id"] == "SLM_01"
         assert len(data["daily_forecasts"]) == 7
+
+@pytest.mark.asyncio
+async def test_forecast_compare_models_endpoint():
+    transport = ASGITransport(app=app)
+    async with AsyncClient(transport=transport, base_url="http://test") as ac:
+        resp = await ac.get("/api/v1/forecasts/compare-models")
+        assert resp.status_code == 200
+        data = resp.json()
+        assert "models_compared" in data
+        assert len(data["models_compared"]) == 5
+
+@pytest.mark.asyncio
+async def test_copilot_chat_endpoint():
+    transport = ASGITransport(app=app)
+    async with AsyncClient(transport=transport, base_url="http://test") as ac:
+        payload = {
+            "message": "Which products are running low in Salem store?",
+            "store_id": "SLM_01"
+        }
+        resp = await ac.post("/api/v1/chat", json=payload)
+        assert resp.status_code == 200
+        data = resp.json()
+        assert data["is_domain_relevant"] is True
+        assert len(data["reply"]) > 0
 
 @pytest.mark.asyncio
 async def test_simulate_whatsapp_query_endpoint():

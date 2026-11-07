@@ -1,61 +1,89 @@
 product_id,sku,name,category,subcategory,unit_cost,base_price,min_safety_stock,shelf_life_days,holding_cost_per_day,active
-MILK_001,SKU-D01,Aavin Toned Fresh Milk 500ml,DAIRY,Fresh Milk,20.0,24.0,25,2,0.1,True
-MILK_002,SKU-D02,Aavin Full Cream Milk 500ml,DAIRY,Fresh Milk,26.0,30.0,20,2,0.1,True
-MILK_003,SKU-D03,Milma Homogenised Milk 500ml,DAIRY,Fresh Milk,21.0,25.0,15,2,0.1,True
-CURD_001,SKU-D04,Aavin Farm Fresh Curd 500g,DAIRY,Curd & Yogurt,28.0,35.0,20,5,0.12,True
-CURD_002,SKU-D05,Milma Thick Set Curd 500g,DAIRY,Curd & Yogurt,30.0,38.0,15,5,0.12,True
-PANEER_01,SKU-D06,Fresh Malai Paneer 200g,DAIRY,Cheese & Paneer,75.0,95.0,10,10,0.2,True
-BUTTER_01,SKU-D07,Aavin Salted Butter 500g,DAIRY,Butter,210.0,260.0,10,60,0.3,True
-GHEE_001,SKU-D08,Aavin Pure Cow Ghee 500ml,DAIRY,Ghee,320.0,395.0,15,180,0.25,True
-GHEE_002,SKU-D09,Aavin Pure Cow Ghee 1L,DAIRY,Ghee,610.0,760.0,10,180,0.4,True
-CHEESE_01,SKU-D10,Cheddar Cheese Slices 200g,DAIRY,Cheese & Paneer,110.0,145.0,10,90,0.2,True
-BUTTERMILK_1,SKU-D11,Spiced Buttermilk 200ml,DAIRY,Flavored Milk,10.0,15.0,30,3,0.05,True
-LOBUTTER_1,SKU-D12,Aavin Cooking Butter 500g,DAIRY,Butter,200.0,250.0,10,45,0.25,True
-RICE_001,SKU-S01,Ponni Boiled Rice 5kg,STAPLES,Rice & Grains,260.0,325.0,20,365,0.05,True
-RICE_002,SKU-S02,Sona Masoori Raw Rice 5kg,STAPLES,Rice & Grains,280.0,350.0,20,365,0.05,True
-RICE_003,SKU-S03,Basmati Premium Rice 5kg,STAPLES,Rice & Grains,550.0,720.0,10,365,0.08,True
-DAL_001,SKU-S04,Toor Dal Premium 1kg,STAPLES,Pulses & Dals,130.0,165.0,25,180,0.05,True
-DAL_002,SKU-S05,Moong Dal Washed 1kg,STAPLES,Pulses & Dals,105.0,135.0,20,180,0.05,True
-DAL_003,SKU-S06,Urad Dal Gota 1kg,STAPLES,Pulses & Dals,125.0,160.0,25,180,0.05,True
-WHEAT_001,SKU-S07,Chakki Fresh Atta 5kg,STAPLES,Flours,195.0,250.0,20,90,0.05,True
-OIL_001,SKU-S08,Refined Sunflower Oil 1L,STAPLES,Edible Oils,115.0,145.0,30,270,0.05,True
-OIL_002,SKU-S09,Pure Gingelly (Sesame) Oil 1L,STAPLES,Edible Oils,280.0,360.0,15,270,0.08,True
-OIL_003,SKU-S10,Cold Pressed Groundnut Oil 1L,STAPLES,Edible Oils,210.0,270.0,15,270,0.08,True
-SUGAR_001,SKU-S11,Refined White Sugar 1kg,STAPLES,Sugar & Jaggery,38.0,48.0,40,365,0.02,True
-JAGGERY_01,SKU-S12,Organic Round Jaggery 1kg,STAPLES,Sugar & Jaggery,60.0,85.0,20,180,0.04,True
-PROD_001,SKU-P01,Fresh Country Onions 1kg,PRODUCE,Vegetables,30.0,45.0,50,14,0.15,True
-PROD_002,SKU-P02,Fresh Red Tomatoes 1kg,PRODUCE,Vegetables,25.0,40.0,40,7,0.2,True
-PROD_003,SKU-P03,Baby Potatoes 1kg,PRODUCE,Vegetables,28.0,42.0,40,30,0.1,True
-PROD_004,SKU-P04,Green Chillies 250g,PRODUCE,Vegetables,12.0,20.0,30,5,0.1,True
-PROD_005,SKU-P05,Fresh Ginger 250g,PRODUCE,Vegetables,22.0,35.0,25,14,0.1,True
-PROD_006,SKU-P06,Fresh Garlic 250g,PRODUCE,Vegetables,35.0,55.0,25,30,0.1,True
-PROD_007,SKU-P07,Robusta Bananas 1 Dozen,PRODUCE,Fruits,40.0,60.0,30,4,0.15,True
-PROD_008,SKU-P08,Yelakki Sweet Bananas 1 Dozen,PRODUCE,Fruits,55.0,80.0,25,4,0.15,True
-PROD_009,SKU-P09,Shimla Crisp Apples 1kg,PRODUCE,Fruits,140.0,195.0,20,14,0.25,True
-PROD_010,SKU-P10,Nagpur Oranges 1kg,PRODUCE,Fruits,65.0,95.0,20,10,0.2,True
-PROD_011,SKU-P11,Fresh Coconut 1 Pc,PRODUCE,Vegetables,22.0,32.0,40,20,0.08,True
-PROD_012,SKU-P12,Coriander & Curry Leaves Bunch,PRODUCE,Herbs,8.0,15.0,50,3,0.1,True
-PKG_001,SKU-K01,Masala Instant Noodles 4-Pack,PACKAGED,Noodles & Pasta,48.0,60.0,30,270,0.03,True
-PKG_002,SKU-K02,Wheat Rava Upma Mix 500g,PACKAGED,Breakfast Mixes,45.0,60.0,20,180,0.03,True
-PKG_003,SKU-K03,Instant Idli/Dosa Batter 1kg,PACKAGED,Fresh Batter,35.0,50.0,30,4,0.1,True
-PKG_004,SKU-K04,South Indian Filter Coffee 250g,PACKAGED,Beverages,120.0,160.0,25,270,0.04,True
-PKG_005,SKU-K05,Dust Tea Powder 500g,PACKAGED,Beverages,140.0,185.0,25,365,0.04,True
-PKG_006,SKU-K06,Butter Crunch Biscuits 200g,PACKAGED,Biscuits & Cookies,28.0,40.0,35,180,0.03,True
-PKG_007,SKU-K07,Marie Light Biscuits 300g,PACKAGED,Biscuits & Cookies,32.0,45.0,35,180,0.03,True
-PKG_008,SKU-K08,Roasted Salted Peanuts 200g,PACKAGED,Snacks,35.0,50.0,20,120,0.03,True
-PKG_009,SKU-K09,Murukku Traditional Snack 200g,PACKAGED,Snacks,40.0,60.0,20,90,0.04,True
-PKG_010,SKU-K10,Tomato Ketchup Easy Squeeze 500g,PACKAGED,Condiments,80.0,110.0,20,270,0.04,True
-PKG_011,SKU-K11,Mixed Fruit Jam 500g,PACKAGED,Condiments,95.0,130.0,15,270,0.04,True
-PKG_012,SKU-K12,Sambar Powder Authentic 200g,PACKAGED,Spices & Masalas,55.0,75.0,25,270,0.03,True
-HOME_001,SKU-H01,Bathing Soap Neem & Turmeric 125g,PERSONAL_HOME,Bath & Body,28.0,40.0,35,730,0.02,True
-HOME_002,SKU-H02,Sandalwood Luxury Soap 125g,PERSONAL_HOME,Bath & Body,42.0,60.0,25,730,0.02,True
-HOME_003,SKU-H03,Herbal Anti-Dandruff Shampoo 340ml,PERSONAL_HOME,Hair Care,145.0,210.0,20,730,0.03,True
-HOME_004,SKU-H04,Ayurvedic Toothpaste 200g,PERSONAL_HOME,Oral Care,65.0,95.0,30,730,0.02,True
-HOME_005,SKU-H05,Washing Detergent Powder 1kg,PERSONAL_HOME,Laundry,95.0,135.0,30,730,0.03,True
-HOME_006,SKU-H06,Liquid Fabric Conditioner 1L,PERSONAL_HOME,Laundry,150.0,220.0,15,730,0.04,True
-HOME_007,SKU-H07,Lemon Dishwash Gel 500ml,PERSONAL_HOME,Kitchen Hygiene,75.0,105.0,25,730,0.03,True
-HOME_008,SKU-H08,Citrus Surface Floor Cleaner 1L,PERSONAL_HOME,Home Care,90.0,130.0,20,730,0.03,True
-HOME_009,SKU-H09,Toilet Cleaner Liquid 1L,PERSONAL_HOME,Home Care,95.0,140.0,20,730,0.03,True
-HOME_010,SKU-H10,Mosquito Vaporizer Refill 45ml,PERSONAL_HOME,Pest Control,60.0,85.0,25,730,0.02,True
-HOME_011,SKU-H11,Kitchen Paper Towel 2 Rolls,PERSONAL_HOME,Paper Products,75.0,110.0,20,730,0.03,True
-HOME_012,SKU-H12,Biodegradable Garbage Bags 30s,PERSONAL_HOME,Home Care,65.0,95.0,20,730,0.02,True
+RICE_001,SKU-ST01,Ponni Boiled Rice 5kg,Staples & Grains,Rice & Grains,260.0,325.0,20,365,0.05,True
+RICE_002,SKU-ST02,Sona Masoori Raw Rice 5kg,Staples & Grains,Rice & Grains,280.0,350.0,20,365,0.05,True
+RICE_003,SKU-ST03,Basmati Premium Rice 5kg,Staples & Grains,Rice & Grains,550.0,720.0,10,365,0.08,True
+DAL_001,SKU-ST04,Premium Toor Dal 1kg,Staples & Grains,Pulses & Dals,130.0,165.0,25,180,0.05,True
+DAL_002,SKU-ST05,Washed Moong Dal 1kg,Staples & Grains,Pulses & Dals,105.0,135.0,20,180,0.05,True
+DAL_003,SKU-ST06,Urad Dal Gota (Idli Special) 1kg,Staples & Grains,Pulses & Dals,125.0,160.0,25,180,0.05,True
+FLR_001,SKU-ST07,Chakki Fresh Whole Wheat Atta 5kg,Staples & Grains,Flours,195.0,250.0,20,90,0.05,True
+FLR_002,SKU-ST08,Premium Maida Flour 1kg,Staples & Grains,Flours,42.0,55.0,25,90,0.03,True
+OIL_001,SKU-ST09,Refined Sunflower Cooking Oil 1L,Staples & Grains,Edible Oils,115.0,145.0,30,270,0.05,True
+OIL_002,SKU-ST10,Pure Gingelly (Sesame) Oil 1L,Staples & Grains,Edible Oils,280.0,360.0,15,270,0.08,True
+OIL_003,SKU-ST11,Cold Pressed Groundnut Oil 1L,Staples & Grains,Edible Oils,210.0,270.0,15,270,0.08,True
+SW_001,SKU-ST12,Organic Round Jaggery 1kg,Staples & Grains,Sugar & Jaggery,60.0,85.0,20,180,0.04,True
+MILK_001,SKU-DB01,Aavin Toned Fresh Milk 500ml,Dairy & Bakery,Fresh Milk,20.0,24.0,25,2,0.1,True
+MILK_002,SKU-DB02,Aavin Full Cream Milk 500ml,Dairy & Bakery,Fresh Milk,26.0,30.0,20,2,0.1,True
+CURD_001,SKU-DB03,Farm Fresh Set Curd 500g,Dairy & Bakery,Curd & Yogurt,28.0,35.0,20,5,0.12,True
+PNR_001,SKU-DB04,Fresh Malai Paneer 200g,Dairy & Bakery,Cheese & Paneer,75.0,95.0,10,10,0.2,True
+BTR_001,SKU-DB05,Salted Table Butter 500g,Dairy & Bakery,Butter,210.0,260.0,10,60,0.3,True
+GHEE_001,SKU-DB06,Aavin Pure Cow Ghee 500ml,Dairy & Bakery,Ghee,320.0,395.0,15,180,0.25,True
+GHEE_002,SKU-DB07,Aavin Pure Cow Ghee 1L Tin,Dairy & Bakery,Ghee,610.0,760.0,10,180,0.4,True
+CHS_001,SKU-DB08,Cheddar Cheese Slices 200g,Dairy & Bakery,Cheese & Paneer,110.0,145.0,10,90,0.2,True
+BRD_001,SKU-DB09,Fresh Sandwich White Bread 400g,Dairy & Bakery,Breads,28.0,40.0,30,4,0.08,True
+BRD_002,SKU-DB10,100% Whole Wheat Brown Bread 400g,Dairy & Bakery,Breads,35.0,50.0,20,4,0.08,True
+RSK_001,SKU-DB11,Crispy Elaichi Milk Rusk 300g,Dairy & Bakery,Bakery Snacks,38.0,55.0,25,120,0.03,True
+BTM_001,SKU-DB12,Spiced Masala Buttermilk 200ml,Dairy & Bakery,Flavored Milk,10.0,15.0,30,3,0.05,True
+VEG_001,SKU-FV01,Fresh Country Onions 1kg,Fruits & Vegetables,Vegetables,30.0,45.0,50,14,0.15,True
+VEG_002,SKU-FV02,Fresh Hybrid Tomatoes 1kg,Fruits & Vegetables,Vegetables,25.0,40.0,40,7,0.2,True
+VEG_003,SKU-FV03,Jyoti Potatoes 1kg,Fruits & Vegetables,Vegetables,28.0,42.0,40,30,0.1,True
+VEG_004,SKU-FV04,Spicy Green Chillies 250g,Fruits & Vegetables,Vegetables,12.0,20.0,30,5,0.1,True
+VEG_005,SKU-FV05,Fresh Old Ginger 250g,Fruits & Vegetables,Vegetables,22.0,35.0,25,14,0.1,True
+VEG_006,SKU-FV06,Ooty Garlic Pods 250g,Fruits & Vegetables,Vegetables,35.0,55.0,25,30,0.1,True
+FRT_001,SKU-FV07,Robusta Bananas 1 Dozen,Fruits & Vegetables,Fruits,40.0,60.0,30,4,0.15,True
+FRT_002,SKU-FV08,Yelakki Sweet Bananas 1 Dozen,Fruits & Vegetables,Fruits,55.0,80.0,25,4,0.15,True
+FRT_003,SKU-FV09,Shimla Royal Gala Apples 1kg,Fruits & Vegetables,Fruits,140.0,195.0,20,14,0.25,True
+FRT_004,SKU-FV10,Sweet Nagpur Oranges 1kg,Fruits & Vegetables,Fruits,65.0,95.0,20,10,0.2,True
+VEG_007,SKU-FV11,Pollachi Fresh Coconut 1 Pc,Fruits & Vegetables,Vegetables,22.0,32.0,40,20,0.08,True
+VEG_008,SKU-FV12,Fresh Coriander & Curry Leaves Bunch,Fruits & Vegetables,Herbs,8.0,15.0,50,3,0.1,True
+BEV_001,SKU-BV01,South Indian Filter Coffee (80:20) 250g,Beverages,Coffee,120.0,160.0,25,270,0.04,True
+BEV_002,SKU-BV02,Premium Dust Strong Tea 500g,Beverages,Tea,140.0,185.0,25,365,0.04,True
+BEV_003,SKU-BV03,Masala Cardamom Tea 250g,Beverages,Tea,85.0,120.0,20,365,0.04,True
+BEV_004,SKU-BV04,Bovonto Grape Flavored Soda 750ml,Beverages,Cold Drinks,28.0,40.0,30,180,0.05,True
+BEV_005,SKU-BV05,Traditional Nannari Sarbath Syrup 750ml,Beverages,Syrups,80.0,115.0,20,270,0.05,True
+BEV_006,SKU-BV06,Natural Mineral Spring Water 1L,Beverages,Water,10.0,20.0,50,365,0.02,True
+BEV_007,SKU-BV07,Alphonso Mango Pulp Drink 1L,Beverages,Juices,60.0,85.0,25,180,0.04,True
+BEV_008,SKU-BV08,Natural Tender Coconut Water 200ml,Beverages,Juices,32.0,45.0,30,180,0.04,True
+BEV_009,SKU-BV09,Rose Milk Flavored Drink Syrup 500ml,Beverages,Syrups,65.0,95.0,20,270,0.05,True
+BEV_010,SKU-BV10,Sparkling Lemon Lime Soda 600ml,Beverages,Cold Drinks,25.0,38.0,30,180,0.04,True
+PKG_001,SKU-PF01,Masala Instant Noodles 4-Pack,Packaged Foods,Noodles & Pasta,48.0,60.0,30,270,0.03,True
+PKG_002,SKU-PF02,Roasted Wheat Rava Upma Mix 500g,Packaged Foods,Breakfast Mixes,45.0,60.0,20,180,0.03,True
+PKG_003,SKU-PF03,Wet Rice & Urad Idli Batter 1kg,Packaged Foods,Fresh Batter,35.0,50.0,30,4,0.1,True
+PKG_004,SKU-PF04,Traditional South Indian Mixture 200g,Packaged Foods,Snacks,38.0,55.0,25,90,0.04,True
+PKG_005,SKU-PF05,Kai Murukku Traditional Snack 200g,Packaged Foods,Snacks,40.0,60.0,20,90,0.04,True
+PKG_006,SKU-PF06,Butter Crunch Biscuits 200g,Packaged Foods,Biscuits & Cookies,28.0,40.0,35,180,0.03,True
+PKG_007,SKU-PF07,Marie Light Tea Biscuits 300g,Packaged Foods,Biscuits & Cookies,32.0,45.0,35,180,0.03,True
+PKG_008,SKU-PF08,Roasted Salted Peanuts 200g,Packaged Foods,Snacks,35.0,50.0,20,120,0.03,True
+PKG_009,SKU-PF09,Authentic Sambar Powder 200g,Packaged Foods,Spices & Masalas,55.0,75.0,25,270,0.03,True
+PKG_010,SKU-PF10,Pepper Rasam Powder 200g,Packaged Foods,Spices & Masalas,50.0,70.0,25,270,0.03,True
+PKG_011,SKU-PF11,Tomato Ketchup Squeeze Bottle 500g,Packaged Foods,Condiments,80.0,110.0,20,270,0.04,True
+PKG_012,SKU-PF12,Urad Dal Appalam Papad 100g,Packaged Foods,Papad,25.0,38.0,30,180,0.03,True
+PER_001,SKU-PC01,Neem & Turmeric Grade-1 Soap 125g,Personal Care,Bath & Body,28.0,40.0,35,730,0.02,True
+PER_002,SKU-PC02,Mysore Pure Sandalwood Soap 125g,Personal Care,Bath & Body,42.0,60.0,25,730,0.02,True
+PER_003,SKU-PC03,Ayurvedic Herbal Anti-Dandruff Shampoo 340ml,Personal Care,Hair Care,145.0,210.0,20,730,0.03,True
+PER_004,SKU-PC04,Pure Coconut Hair Oil 500ml,Personal Care,Hair Care,125.0,175.0,20,730,0.03,True
+PER_005,SKU-PC05,Ayurvedic Clove Toothpaste 200g,Personal Care,Oral Care,65.0,95.0,30,730,0.02,True
+PER_006,SKU-PC06,Refreshing Talcum Powder 250g,Personal Care,Body Care,75.0,110.0,20,730,0.03,True
+PER_007,SKU-PC07,Antibacterial Liquid Handwash 500ml,Personal Care,Hand Hygiene,85.0,125.0,25,730,0.03,True
+PER_008,SKU-PC08,Herbal Shaving Cream Menthol 100g,Personal Care,Men's Grooming,55.0,80.0,20,730,0.02,True
+PER_009,SKU-PC09,Deep Nourishing Body Lotion 200ml,Personal Care,Skin Care,110.0,165.0,15,730,0.03,True
+PER_010,SKU-PC10,Ultra Comfort Sanitary Pads 15s,Personal Care,Feminine Hygiene,90.0,135.0,30,730,0.02,True
+HSD_001,SKU-HP01,Washing Detergent Powder 1kg,Household Products,Laundry,95.0,135.0,30,730,0.03,True
+HSD_002,SKU-HP02,Concentrated Fabric Conditioner 1L,Household Products,Laundry,150.0,220.0,15,730,0.04,True
+HSD_003,SKU-HP03,Lemon Grease Dishwash Gel 500ml,Household Products,Dishwashing,75.0,105.0,25,730,0.03,True
+HSD_004,SKU-HP04,Citrus Disinfectant Floor Cleaner 1L,Household Products,Surface Cleaners,90.0,130.0,20,730,0.03,True
+HSD_005,SKU-HP05,Extra Power Toilet Cleaner 1L,Household Products,Surface Cleaners,95.0,140.0,20,730,0.03,True
+HSD_006,SKU-HP06,Mosquito Vaporizer Machine + Refill 45ml,Household Products,Pest Control,70.0,105.0,25,730,0.02,True
+HSD_007,SKU-HP07,High Absorbent Kitchen Towel 2-Pack,Household Products,Paper Goods,75.0,110.0,20,730,0.03,True
+HSD_008,SKU-HP08,Heavy Duty Garbage Bags Large 30s,Household Products,Waste Management,65.0,95.0,20,730,0.02,True
+HSD_009,SKU-HP09,Steel Wire Scrubber 3-Pack,Household Products,Dishwashing,30.0,45.0,30,730,0.02,True
+HSD_010,SKU-HP10,Herbal Mosquito Coil 10s,Household Products,Pest Control,35.0,50.0,25,730,0.02,True
+FRZ_001,SKU-FR01,Tender Frozen Green Peas 500g,Frozen & Ready-to-Eat,Frozen Vegetables,65.0,95.0,20,365,0.05,True
+FRZ_002,SKU-FR02,Sweet Golden Corn Kernels 500g,Frozen & Ready-to-Eat,Frozen Vegetables,70.0,100.0,20,365,0.05,True
+FRZ_003,SKU-FR03,Malabar Multi-Layer Parotta 5s (Frozen),Frozen & Ready-to-Eat,Ready Meals,60.0,90.0,25,180,0.06,True
+FRZ_004,SKU-FR04,Ready-to-Steam Idiyappam 10s (Frozen),Frozen & Ready-to-Eat,Ready Meals,55.0,80.0,20,180,0.06,True
+FRZ_005,SKU-FR05,Crispy Vegetable Spring Rolls 6s,Frozen & Ready-to-Eat,Frozen Snacks,85.0,125.0,15,270,0.06,True
+FRZ_006,SKU-FR06,Spiced Paneer Tikka Pops 250g,Frozen & Ready-to-Eat,Frozen Snacks,110.0,160.0,15,270,0.08,True
+FRZ_007,SKU-FR07,Crispy French Fries 400g,Frozen & Ready-to-Eat,Frozen Snacks,75.0,110.0,20,365,0.06,True
+FRZ_008,SKU-FR08,Diced Mixed Vegetable Mix 500g,Frozen & Ready-to-Eat,Frozen Vegetables,60.0,88.0,20,365,0.05,True
+FRZ_009,SKU-FR09,Traditional Malai Kulfi Bar (Frozen),Frozen & Ready-to-Eat,Ice Creams & Desserts,25.0,40.0,30,180,0.05,True
+FRZ_010,SKU-FR10,Fresh Grated Coconut Frozen 200g,Frozen & Ready-to-Eat,Frozen Ingredients,40.0,60.0,25,180,0.05,True

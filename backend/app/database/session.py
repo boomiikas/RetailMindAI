@@ -8,17 +8,25 @@ from backend.app.core.logging import logger
 class Base(DeclarativeBase):
     pass
 
-# Configure async engine
-# Note: For SQLite async, connect_args check_same_thread=False is needed.
 connect_args = {}
+engine_kwargs = {
+    "echo": settings.DATABASE_ECHO,
+    "future": True,
+}
+
 if "sqlite" in settings.DATABASE_URL:
     connect_args["check_same_thread"] = False
+elif "postgresql" in settings.DATABASE_URL:
+    connect_args["statement_cache_size"] = 0
+    engine_kwargs["pool_size"] = 10
+    engine_kwargs["max_overflow"] = 5
+    engine_kwargs["pool_pre_ping"] = True
+    engine_kwargs["pool_recycle"] = 300
 
 engine = create_async_engine(
     settings.DATABASE_URL,
-    echo=settings.DATABASE_ECHO,
-    future=True,
-    connect_args=connect_args
+    connect_args=connect_args,
+    **engine_kwargs
 )
 
 AsyncSessionLocal = async_sessionmaker(

@@ -1,33 +1,33 @@
 {
   "validation": {
-    "mae": 6.0561,
-    "rmse": 8.6216,
-    "wape": 10.459,
-    "forecast_bias": -0.6516,
-    "r2_score": 0.9199
+    "mae": 5.8081,
+    "rmse": 8.3162,
+    "wape": 10.5849,
+    "forecast_bias": -0.7351,
+    "r2_score": 0.918
   },
   "test": {
-    "mae": 9.2903,
-    "rmse": 18.0496,
-    "wape": 13.9258,
-    "forecast_bias": -6.5327,
-    "r2_score": 0.8479
+    "mae": 8.6671,
+    "rmse": 17.5278,
+    "wape": 13.9755,
+    "forecast_bias": -5.7687,
+    "r2_score": 0.8406
   },
   "feature_importance": {
-    "store_id_enc": 1.0664,
-    "product_id_enc": 0.5682,
-    "day_of_week": 5.4958,
-    "day_of_month": 1.1338,
+    "store_id_enc": 0.6736,
+    "product_id_enc": 0.5466,
+    "day_of_week": 5.1289,
+    "day_of_month": 0.7041,
     "month": 0.0,
     "is_weekend": 0.0,
-    "promotional_flag": 2.7086,
-    "festival_flag": 6.5117,
-    "unit_price": 1.8726,
-    "sales_lag_1": 3.4932,
-    "sales_lag_7": 0.8132,
-    "sales_lag_14": 2.4757,
-    "rolling_mean_7": 9.7124,
-    "rolling_std_7": 0.6556,
-    "rolling_mean_14": 4.4818
+    "promotional_flag": 2.0747,
+    "festival_flag": 4.5495,
+    "unit_price": 1.1452,
+    "sales_lag_1": 4.1684,
+    "sales_lag_7": 1.9115,
+    "sales_lag_14": 1.8856,
+    "rolling_mean_7": 8.9457,
+    "rolling_std_7": 0.435,
+    "rolling_mean_14": 4.1838
   }
 }

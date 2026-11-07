@@ -16,6 +16,17 @@ BASE_DIR = Path(__file__).resolve().parent.parent.parent
 DATA_RAW = BASE_DIR / "data" / "raw"
 DATA_PROCESSED = BASE_DIR / "data" / "processed"
 
+EXPECTED_CATEGORIES = {
+    "Staples & Grains",
+    "Dairy & Bakery",
+    "Fruits & Vegetables",
+    "Beverages",
+    "Packaged Foods",
+    "Personal Care",
+    "Household Products",
+    "Frozen & Ready-to-Eat",
+}
+
 def validate_datasets() -> bool:
     print("=" * 70)
     print(" RetailMind AI: Dataset Validation & Quality Assurance")
@@ -51,24 +62,31 @@ def validate_datasets() -> bool:
     else:
         print(f"[PASS] Stores count: 5 stores verified.")
 
-    if len(df_products) != 60:
-        print(f"[FAIL] Expected 60 products, got {len(df_products)}")
+    if len(df_products) != 88:
+        print(f"[FAIL] Expected 88 products, got {len(df_products)}")
         passed = False
     else:
-        print(f"[PASS] Products count: 60 products across 5 categories verified.")
+        print(f"[PASS] Products count: 88 products verified.")
 
-    if len(df_suppliers) != 8:
-        print(f"[FAIL] Expected 8 suppliers, got {len(df_suppliers)}")
+    found_cats = set(df_products["category"].unique())
+    if found_cats != EXPECTED_CATEGORIES:
+        print(f"[FAIL] Categories mismatch. Found: {found_cats}")
         passed = False
     else:
-        print(f"[PASS] Suppliers count: 8 suppliers verified.")
+        print(f"[PASS] Categories: All 8 retail categories verified ({', '.join(sorted(found_cats))}).")
 
-    expected_sales = 365 * 5 * 60 # 109,500
+    if len(df_suppliers) != 12:
+        print(f"[FAIL] Expected 12 suppliers, got {len(df_suppliers)}")
+        passed = False
+    else:
+        print(f"[PASS] Suppliers count: 12 regional suppliers verified.")
+
+    expected_sales = 365 * 5 * 88 # 160,600
     if len(df_sales) != expected_sales:
         print(f"[FAIL] Expected {expected_sales:,} sales records, got {len(df_sales):,}")
         passed = False
     else:
-        print(f"[PASS] Daily Sales: Exactly {len(df_sales):,} records (365 days x 5 stores x 60 products).")
+        print(f"[PASS] Daily Sales: Exactly {len(df_sales):,} records (365 days x 5 stores x 88 products).")
 
     # 4. Referential Integrity
     store_ids = set(df_stores["store_id"])
@@ -119,13 +137,16 @@ def validate_datasets() -> bool:
         print(f"[FAIL] Data leakage in chronological splits! Train max: {max_train_date}, Val min: {min_val_date}, Val max: {max_val_date}, Test min: {min_test_date}")
         passed = False
     else:
-        print(f"[PASS] Chronological splits disjoint & leak-free: Train ({df_train['sale_date'].min()} to {max_train_date}) < Val ({min_val_date} to {max_val_date}) < Test ({min_test_date} to {df_test['sale_date'].max()}).")
+        print(f"[PASS] Temporal isolation: Chronological splits are strictly non-overlapping.")
+        print(f"       Train: {df_train['sale_date'].min()} to {max_train_date}")
+        print(f"       Val:   {min_val_date} to {max_val_date}")
+        print(f"       Test:  {min_test_date} to {df_test['sale_date'].max()}")
 
     print("=" * 70)
     if passed:
-        print(" ALL 7 VALIDATION CHECKS PASSED WITH ZERO ERRORS!")
+        print(" ALL DATASET INTEGRITY CHECKS PASSED [OK]")
     else:
-        print(" VALIDATION FAILED! Please review errors above.")
+        print(" DATASET VALIDATION FAILED [ERROR]")
     print("=" * 70)
     return passed
 

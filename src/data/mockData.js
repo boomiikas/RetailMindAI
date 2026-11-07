@@ -13,14 +13,14 @@ export const STORES = [
 ];
 
 export const PRODUCTS = [
-  { id: 'SKU-OIL-101', name: '1L Sunflower Cooking Oil', category: 'Cooking Essentials', price: 165, leadTimeDays: 4, safetyStock: 40 },
-  { id: 'SKU-MLK-202', name: 'Fresh Farm Milk 500ml', category: 'Dairy & Fresh', price: 32, leadTimeDays: 1, safetyStock: 60 },
-  { id: 'SKU-BSC-303', name: 'Premium Digestive Biscuits 200g', category: 'Bakery & Snacks', price: 45, leadTimeDays: 5, safetyStock: 30 },
-  { id: 'SKU-DRK-404', name: 'Sparkling Citrus Drink 750ml', category: 'Beverages', price: 50, leadTimeDays: 3, safetyStock: 50 },
-  { id: 'SKU-RIC-505', name: 'Basmati Super Rice 5kg', category: 'Staples', price: 480, leadTimeDays: 6, safetyStock: 25 },
-  { id: 'SKU-UMB-606', name: 'Monsoon Windproof Umbrella', category: 'Seasonal', price: 320, leadTimeDays: 7, safetyStock: 15 },
-  { id: 'SKU-ATT-707', name: 'Aashirvaad Whole Wheat Atta 5kg', category: 'Staples', price: 275, leadTimeDays: 4, safetyStock: 35 },
-  { id: 'SKU-TEA-909', name: 'Organic Darjeeling Green Tea 100g', category: 'Beverages', price: 180, leadTimeDays: 8, safetyStock: 20 },
+  { id: 'RICE_001', name: 'Ponni Boiled Rice 5kg', category: 'Staples & Grains', price: 325, leadTimeDays: 3, safetyStock: 20 },
+  { id: 'MILK_001', name: 'Aavin Toned Fresh Milk 500ml', category: 'Dairy & Bakery', price: 24, leadTimeDays: 1, safetyStock: 25 },
+  { id: 'VEG_001', name: 'Fresh Country Onions 1kg', category: 'Fruits & Vegetables', price: 45, leadTimeDays: 2, safetyStock: 50 },
+  { id: 'BEV_001', name: 'South Indian Filter Coffee (80:20) 250g', category: 'Beverages', price: 160, leadTimeDays: 2, safetyStock: 25 },
+  { id: 'PKG_006', name: 'Butter Crunch Biscuits 200g', category: 'Packaged Foods', price: 40, leadTimeDays: 3, safetyStock: 35 },
+  { id: 'PER_001', name: 'Neem & Turmeric Grade-1 Soap 125g', category: 'Personal Care', price: 40, leadTimeDays: 3, safetyStock: 35 },
+  { id: 'HSD_001', name: 'Washing Detergent Powder 1kg', category: 'Household Products', price: 135, leadTimeDays: 4, safetyStock: 30 },
+  { id: 'FRZ_003', name: 'Malabar Multi-Layer Parotta 5s (Frozen)', category: 'Frozen & Ready-to-Eat', price: 90, leadTimeDays: 2, safetyStock: 25 },
 ];
 
 export const OVERVIEW_KPIS = {

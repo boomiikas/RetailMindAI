@@ -1,9 +1,13 @@
 supplier_id,name,contact_phone,email,lead_time_days,reliability_score,min_order_qty,max_order_qty
-SUP_01,Aavin Dairy Co-operative,+919444011111,orders@aavin.tn.gov.in,1,0.94,50,3000
-SUP_02,Milma Fresh Dairy,+919444022222,supply@milmadairy.in,2,0.88,40,2000
+SUP_01,Aavin Dairy Co-operative,+919444011111,orders@aavin.tn.gov.in,1,0.95,50,3500
+SUP_02,Nilgiri & Modern Bakers,+919444022222,supply@nilgiribakers.in,2,0.91,40,2000
 SUP_03,Tamil Nadu Agro Staples Ltd,+919444033333,sales@tnagro.com,3,0.96,100,5000
-SUP_04,Kaveri Grain Mills,+919444044444,kaveri@grainmills.co.in,4,0.91,80,4000
-SUP_05,Nilgiri Horticulture Growers,+919444055555,orders@nilgirifresh.org,1,0.86,30,1500
-SUP_06,Koyambedu Fresh Traders,+919444066666,koyambedu@freshtraders.in,2,0.92,50,2500
+SUP_04,Kaveri Grain Mills,+919444044444,kaveri@grainmills.co.in,4,0.93,80,4000
+SUP_05,Nilgiri Horticulture Growers,+919444055555,orders@nilgirifresh.org,1,0.88,30,1500
+SUP_06,Koyambedu Wholesale Traders,+919444066666,koyambedu@freshtraders.in,2,0.92,50,3000
 SUP_07,South India Packaged Foods Co,+919444077777,distribution@sipackaged.in,3,0.97,60,3500
-SUP_08,Apex Home & Hygiene Products,+919444088888,b2b@apexhygiene.com,4,0.95,50,3000
+SUP_08,CavinKare Personal Care Ltd,+919444088888,b2b@cavinkare.in,3,0.95,40,2500
+SUP_09,Kannan Jubilee & Tata Beverages,+919444099999,supply@tatabev.co.in,2,0.94,50,3000
+SUP_10,Bovonto South Beverages,+919444100000,orders@bovontosouth.in,2,0.9,50,2500
+SUP_11,Apex Home & Hygiene Products,+919444111111,b2b@apexhygiene.com,4,0.94,50,3000
+SUP_12,Sumeru Frozen & Cold Chain Ltd,+919444122222,logistics@sumerufrozen.com,2,0.89,30,2000

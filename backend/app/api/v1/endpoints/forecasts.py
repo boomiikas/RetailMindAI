@@ -18,12 +18,13 @@ METRICS_PATH = BASE_DIR / "ml" / "saved_models" / "model_metrics.json"
 async def get_forecast(
     store_id: str = Query("SLM_01", description="Store ID"),
     product_id: str = Query("MILK_001", description="Product ID"),
-    horizon_days: int = Query(7, ge=1, le=30, description="Forecast horizon in days")
+    horizon_days: int = Query(7, ge=1, le=30, description="Forecast horizon in days"),
+    method: Optional[str] = Query(None, description="'statistical' (SDOWF default) or 'hgb' (HistGradientBoosting)")
 ):
-    """Generates P10, P50, and P90 quantile demand forecasts with SHAP attribution."""
+    """Generates P10, P50, and P90 quantile demand forecasts with feature attribution."""
     try:
         predictor = get_demand_predictor()
-        fc = predictor.predict(store_id=store_id, product_id=product_id, horizon_days=horizon_days)
+        fc = predictor.predict(store_id=store_id, product_id=product_id, horizon_days=horizon_days, method=method)
         return fc
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
@@ -89,3 +90,9 @@ async def get_forecast_accuracy():
             for k, v in data.get("feature_importance", {}).items()
         ][:5]
     )
+
+@router.get("/compare-models")
+async def compare_forecasting_models():
+    """Returns empirical comparison across statistical baselines (SMA, WMA, SES, SDOWF) vs HistGradientBoosting."""
+    predictor = get_demand_predictor()
+    return predictor.evaluate_model_benchmarks()

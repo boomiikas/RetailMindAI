@@ -4,6 +4,7 @@ Processes Meta WhatsApp Cloud API webhooks:
 - Verification challenge
 - Interactive button approvals with strict idempotency and version authorization
 - Natural language inventory and forecasting queries against real DB data
+- Open-ended conversational inquiries delegated to DecisionCommunicationAgent
 """
 
 from datetime import datetime, timezone
@@ -16,7 +17,8 @@ from backend.app.models import (
     Store, Product, Inventory, DecisionRecord, DecisionVersion, ManagerApproval, RiskEvent
 )
 from backend.app.whatsapp.client import WhatsAppClient
-from backend.app.agents.execution_agent import ExecutionAgent
+from backend.app.services.execution.execution_service import ExecutionService
+from backend.app.agents.communication_agent import DecisionCommunicationAgent
 from backend.ml.inference.predictor import get_demand_predictor
 from backend.app.core.logging import logger
 
@@ -27,7 +29,8 @@ class WhatsAppWebhookHandler:
     def __init__(self, session: AsyncSession):
         self.session = session
         self.client = WhatsAppClient()
-        self.execution_agent = ExecutionAgent(session)
+        self.execution_service = ExecutionService(session)
+        self.communication_agent = DecisionCommunicationAgent(session)
 
     def verify_webhook(self, mode: Optional[str], token: Optional[str], challenge: Optional[str]) -> Optional[str]:
         """Validates Meta WhatsApp webhook verification request."""
@@ -59,7 +62,7 @@ class WhatsAppWebhookHandler:
         return {"status": "processed"}
 
     async def _handle_interactive_reply(self, msg: Dict[str, Any], sender_phone: str) -> Dict[str, Any]:
-        """Handles manager interactive approval button click."""
+        """Handles manager interactive approval button click deterministically without LLM overhead."""
         button_reply = msg.get("interactive", {}).get("button_reply", {})
         button_id = button_reply.get("id", "") # e.g. "DEC_123:v1:INTER_STORE_TRANSFER"
         
@@ -124,8 +127,7 @@ class WhatsAppWebhookHandler:
         dec_obj.updated_at = utc_now()
         await self.session.commit()
 
-        # 4. Trigger Execution Agent
-        # Retrieve version recommendation data
+        # 4. Trigger Deterministic Execution Service
         ver_stmt = select(DecisionVersion).where(
             DecisionVersion.decision_id == decision_id,
             DecisionVersion.version_number == version_num
@@ -141,7 +143,7 @@ class WhatsAppWebhookHandler:
             "idempotency_key": idempotency_key,
             "execution_logs": []
         }
-        await self.execution_agent.execute_approved_plan(exec_state)
+        await self.execution_service.execute_approved_plan(exec_state)
 
         # 5. Send Acknowledgment to Manager
         ack_msg = (
@@ -154,11 +156,11 @@ class WhatsAppWebhookHandler:
         return {"status": "approved_and_executed", "decision_id": decision_id, "action": chosen_action, "reply": ack_msg}
 
     async def _handle_text_query(self, query: str, sender_phone: str) -> Dict[str, Any]:
-        """Answers natural language manager queries by querying real PostgreSQL records."""
+        """Answers manager queries using direct DB queries for operational facts and Communication Agent for open dialogue."""
         q = query.lower().strip()
         logger.info(f"[WhatsAppWebhook] Answering query from {sender_phone}: '{query}'")
 
-        # 1. "Which products are running low?"
+        # 1. Low stock / Stockout alert
         if "low" in q or "stockout" in q or "shortage" in q:
             stmt = (
                 select(Inventory, Product, Store)
@@ -176,7 +178,7 @@ class WhatsAppWebhookHandler:
                     lines.append(f"• *{prod.name}* ({store.city}): {inv.available_stock} units left (Safety: {inv.safety_stock})")
                 reply = "\n".join(lines)
 
-        # 2. "What decisions are pending?"
+        # 2. Pending decisions
         elif "decision" in q or "pending" in q:
             stmt = select(DecisionRecord).where(DecisionRecord.decision_status == "PENDING").limit(5)
             decs = (await self.session.execute(stmt)).scalars().all()
@@ -189,7 +191,7 @@ class WhatsAppWebhookHandler:
                     lines.append(f"• `{d.decision_id}`: {rec.get('action_type', 'ACTION')} (Profit: INR {rec.get('expected_net_profit', 0):,.2f})")
                 reply = "\n".join(lines)
 
-        # 3. "Which store has excess rice / milk?"
+        # 3. Surplus check
         elif "excess" in q or "surplus" in q:
             target_prod = "RICE_001" if "rice" in q else "MILK_001"
             stmt = (
@@ -205,7 +207,7 @@ class WhatsAppWebhookHandler:
                 lines.append(f"• *{store.city}*: {inv.available_stock} on hand ({surplus} transferable surplus)")
             reply = "\n".join(lines)
 
-        # 4. "What is tomorrow's demand?"
+        # 4. Forecast demand query
         elif "demand" in q or "forecast" in q:
             predictor = get_demand_predictor()
             fc = predictor.predict("SLM_01", "MILK_001", horizon_days=3)
@@ -213,13 +215,12 @@ class WhatsAppWebhookHandler:
             reply = (
                 f"📈 *Demand Forecast (Aavin Milk - Salem)*:\n"
                 f"• Tomorrow ({d1['forecast_date']}): *{d1['p50']} units* (P10: {d1['p10']}, P90: {d1['p90']})\n"
-                f"• Top driver: Rolling 7-day sales mean (SHAP: 9.71)"
+                f"• Method: {fc.get('model_version', 'SDOWF')}\n"
+                f"• Top driver: {fc.get('feature_attribution', [{'feature': 'WMA-7'}])[0]['feature']}"
             )
 
-        # 5. Open-ended Retail Intelligence Query powered by Groq LLM
+        # 5. Open-ended conversational query routed to DecisionCommunicationAgent
         else:
-            from backend.app.services.llm.groq_service import groq_llm
-            # Fetch summary operational context
             low_stock_rows = (await self.session.execute(
                 select(Inventory.product_id, Inventory.available_stock, Inventory.safety_stock)
                 .where(Inventory.available_stock < Inventory.safety_stock).limit(3)
@@ -231,7 +232,7 @@ class WhatsAppWebhookHandler:
                 "active_stores": ["Chennai", "Coimbatore", "Salem", "Madurai", "Trichy"],
                 "channel": "WhatsApp Store Manager Assistant"
             }
-            reply = await groq_llm.answer_manager_query(query, context_data)
+            reply = await self.communication_agent.answer_manager_query(query, context_data)
 
         await self.client.send_text_message(sender_phone, reply)
         return {"status": "answered_query", "reply": reply}

@@ -5,14 +5,14 @@ Inventory, Demand, Revenue, and Profit. Traverses downstream paths to compute
 mathematical cascading financial loss, affected nodes, and structured rationale.
 """
 
-from datetime import datetime, timezone
+from datetime import datetime, timezone, date
 from typing import Dict, List, Any, Optional
 import networkx as nx
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from backend.app.models import (
-    Store, Product, Supplier, SupplierProduct, StoreRoute, Inventory, RippleImpact
+    Store, Product, Supplier, SupplierProduct, StoreRoute, Inventory, RippleImpact, RiskEvent
 )
 from backend.app.core.logging import logger
 
@@ -231,6 +231,25 @@ class RippleEffectService:
             n["id"]: {"type": n["type"], "status": "IMPACTED"}
             for n in nodes
         }
+
+        # Check if parent RiskEvent exists; if not, persist one to satisfy foreign key constraint
+        existing_risk = await self.session.get(RiskEvent, event_id)
+        if not existing_risk and affected_store_id and affected_product_id:
+            new_risk = RiskEvent(
+                risk_id=event_id,
+                risk_type=disruption_type,
+                severity="HIGH",
+                store_id=affected_store_id,
+                product_id=affected_product_id,
+                affected_quantity=lost_sales_units if lost_sales_units > 0 else 50,
+                expected_occurrence=utc_now().date(),
+                financial_impact_est=financial_loss,
+                root_cause=explanation,
+                status="ACTIVE",
+                detected_at=utc_now()
+            )
+            self.session.add(new_risk)
+            await self.session.flush()
 
         # Save or update RippleImpact record
         impact_id = f"RPL_{event_id}"
