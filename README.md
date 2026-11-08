@@ -137,8 +137,8 @@ PORT=8000
 HOST=0.0.0.0
 
 # Database (Supabase Cloud PostgreSQL)
-DATABASE_URL=postgresql+asyncpg://postgres:supa%40123%40supa@db.ocbrjixzawtvwrlwbrye.supabase.co:5432/postgres
-SYNC_DATABASE_URL=postgresql://postgres:supa%40123%40supa@db.ocbrjixzawtvwrlwbrye.supabase.co:5432/postgres
+DATABASE_URL=""
+SYNC_DATABASE_URL=""
 DATABASE_ECHO=false
 
 # Groq Cloud API
@@ -148,7 +148,7 @@ LLM_PROVIDER=groq
 LLM_TEMPERATURE=0.1
 
 # WhatsApp Meta Cloud API
-WHATSAPP_TOKEN=EAATCdZA8BNX4BS2xC521Gz522EVrWlssCE19iBZARTy1Yx2hZAFZCQbWQlIOh68BIosDZBVHQiAzgcwEzoibacGAOKbryJegRZBJVtdXJ1wDZCKlNUoa8rTsPzjyec3ccXSQZB6KJvqqFuG1EmqZBqZBjbxnwD0J9YYL9cN8QmZA2X1ZCTGzJgZBZBmUneYFOhIC394kKkSrMb7LbQfqPoZBALX9kvh4GZBhCA9aY8TcPGZCc9NZBPWexXmVNXqKouvY7l6HUYlFynqLCMcGbONK9Bq6CRKUQo9AZDZD
+WHATSAPP_TOKEN=""
 WHATSAPP_PHONE_NUMBER_ID=mock_phone_id
 WHATSAPP_VERIFY_TOKEN=retailmind_meta_webhook_verify_secret
 WHATSAPP_API_VERSION=v21.0
