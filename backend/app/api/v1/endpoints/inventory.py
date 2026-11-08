@@ -1,9 +1,11 @@
 """Inventory API endpoints for RetailMind AI."""
 from typing import List, Optional
 from fastapi import APIRouter, Depends, Query, HTTPException
+from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from backend.app.database.session import get_db
+from backend.app.models import Product
 from backend.app.schemas.contracts import InventoryItemResponse
 from backend.app.services.inventory.inventory_service import InventoryService
 
@@ -19,6 +21,22 @@ async def list_inventory(
     service = InventoryService(db)
     items = await service.get_store_inventory(store_id=store_id, category=category)
     return items
+
+@router.get("/all-products")
+async def list_all_products(db: AsyncSession = Depends(get_db)):
+    """Returns all monitored products in the catalog."""
+    prods = (await db.execute(select(Product))).scalars().all()
+    return [
+        {
+            "product_id": p.product_id,
+            "name": p.name,
+            "category": p.category,
+            "base_price": float(p.base_price),
+            "unit_cost": float(p.unit_cost),
+            "shelf_life_days": p.shelf_life_days
+        }
+        for p in prods
+    ]
 
 @router.get("/stores/{store_id}", response_model=List[InventoryItemResponse])
 async def get_store_inventory_details(

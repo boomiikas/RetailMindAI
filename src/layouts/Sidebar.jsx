@@ -6,32 +6,23 @@ import {
   AlertTriangle,
   Network,
   Cpu,
-  GitFork,
-  MessageSquare,
-  ShieldAlert,
-  Search,
   BarChart3,
-  History,
   Settings,
   HelpCircle,
   Sparkles,
-  X
+  X,
+  Activity
 } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 import Modal from '../components/common/Modal';
 
 const NAV_ITEMS = [
-  { path: '/', label: 'Overview', icon: LayoutDashboard },
+  { path: '/overview', label: 'Executive Overview', icon: LayoutDashboard },
   { path: '/demand', label: 'Demand Intelligence', icon: TrendingUp },
-  { path: '/risks', label: 'Risk Centre', icon: AlertTriangle, hasPill: true, pillKey: 'risks' },
-  { path: '/network', label: 'Inventory Network', icon: Network },
+  { path: '/risks', label: 'Risk & Alerts', icon: AlertTriangle, hasPill: true, pillKey: 'risks' },
+  { path: '/inventory', label: 'Inventory Network', icon: Network },
   { path: '/decisions', label: 'AI Decision Centre', icon: Cpu, hasPill: true, pillKey: 'pendingDecisions' },
-  { path: '/simulator', label: 'Decision Ripple Simulator', icon: GitFork, isSignature: true, badgeText: 'Sim' },
-  { path: '/whatsapp', label: 'WhatsApp Assistant', icon: MessageSquare, isSignature: true, badgeText: 'Live' },
-  { path: '/promotions', label: 'Promotion Guardian', icon: ShieldAlert },
-  { path: '/hidden-demand', label: 'Hidden Demand Detector', icon: Search },
-  { path: '/impact', label: 'Impact & Performance', icon: BarChart3 },
-  { path: '/history', label: 'Decision History', icon: History },
+  { path: '/performance', label: 'Impact & Performance', icon: BarChart3 },
 ];
 
 const Sidebar = () => {
@@ -61,9 +52,9 @@ const Sidebar = () => {
             </div>
             <div className="brand-info">
               <div className="brand-title">
-                RetailPulse <span className="ai-badge">AI</span>
+                RetailMind <span className="ai-badge">AI</span>
               </div>
-              <div className="brand-subtitle">Decision Intelligence</div>
+              <div className="brand-subtitle">Control Tower v2.4</div>
             </div>
             {isMobileSidebarOpen && (
               <button
@@ -77,7 +68,28 @@ const Sidebar = () => {
           </div>
         </div>
 
-        {/* Navigation Items */}
+        {/* Live Engine Status Indicator */}
+        <div style={{ padding: '0.75rem 1rem 0.25rem 1rem' }}>
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.5rem',
+              padding: '0.4rem 0.75rem',
+              borderRadius: '6px',
+              backgroundColor: 'rgba(22, 163, 74, 0.12)',
+              border: '1px solid rgba(34, 197, 94, 0.25)',
+              fontSize: '0.7rem',
+              color: '#4ADE80',
+              fontWeight: 600,
+            }}
+          >
+            <span className="pulse-dot" style={{ width: '6px', height: '6px' }} />
+            <span>Dual-Forecast & Optimizer: Live</span>
+          </div>
+        </div>
+
+        {/* Navigation Items (Consolidated into exactly 6 primary modules) */}
         <nav className="sidebar-nav-container">
           <div className="nav-section-title">Operational Navigation</div>
 
@@ -87,11 +99,10 @@ const Sidebar = () => {
               <NavLink
                 key={item.path}
                 to={item.path}
-                end={item.path === '/'}
                 className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}
                 onClick={() => setIsMobileSidebarOpen(false)}
               >
-                <Icon className="nav-icon" />
+                <Icon className="nav-icon" size={18} />
                 <span style={{ flex: 1, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                   {item.label}
                 </span>
@@ -102,23 +113,12 @@ const Sidebar = () => {
                   </span>
                 )}
                 {item.pillKey === 'risks' && (
-                  <span className="nav-pill-counter" style={{ backgroundColor: 'var(--color-warning)' }} title="18 active risk alerts">
-                    18
-                  </span>
-                )}
-                {item.isSignature && (
                   <span
-                    style={{
-                      fontSize: '0.65rem',
-                      fontWeight: 700,
-                      backgroundColor: item.badgeText === 'Live' ? 'rgba(37, 211, 102, 0.2)' : 'rgba(56, 189, 248, 0.2)',
-                      color: item.badgeText === 'Live' ? '#16A34A' : '#38BDF8',
-                      padding: '0.1rem 0.4rem',
-                      borderRadius: '4px',
-                      textTransform: 'uppercase',
-                    }}
+                    className="nav-pill-counter"
+                    style={{ backgroundColor: 'var(--color-warning)' }}
+                    title="18 active risk alerts"
                   >
-                    {item.badgeText || 'Sim'}
+                    18
                   </span>
                 )}
               </NavLink>
@@ -133,7 +133,7 @@ const Sidebar = () => {
             style={{ width: '100%', border: 'none', background: 'none' }}
             onClick={() => setIsSettingsOpen(true)}
           >
-            <Settings className="nav-icon" />
+            <Settings className="nav-icon" size={18} />
             <span>Settings</span>
           </button>
 
@@ -142,7 +142,7 @@ const Sidebar = () => {
             style={{ width: '100%', border: 'none', background: 'none' }}
             onClick={() => setIsHelpOpen(true)}
           >
-            <HelpCircle className="nav-icon" />
+            <HelpCircle className="nav-icon" size={18} />
             <span>Help & Docs</span>
           </button>
 
@@ -151,7 +151,7 @@ const Sidebar = () => {
             <div className="user-avatar">SR</div>
             <div className="user-details">
               <span className="user-name">S. Ramanathan</span>
-              <span className="user-role">Head of Retail Ops</span>
+              <span className="user-role">Head of Retail Operations</span>
             </div>
           </div>
         </div>
@@ -161,7 +161,7 @@ const Sidebar = () => {
       <Modal
         isOpen={isSettingsOpen}
         onClose={() => setIsSettingsOpen(false)}
-        title="Platform & Autonomous Engine Settings"
+        title="Control Tower Engine Settings"
         footer={
           <button className="btn btn-primary" onClick={() => setIsSettingsOpen(false)}>
             Save Configuration
@@ -174,12 +174,25 @@ const Sidebar = () => {
               Autonomous Execution Mode
             </label>
             <select style={{ width: '100%' }} defaultValue="supervised">
-              <option value="supervised">Human-in-the-loop (Manager Approval Required)</option>
+              <option value="supervised">Human-in-the-Loop (Manager Approval Required)</option>
               <option value="autonomous-low">Autonomous for Low-Risk Actions (&lt; ₹1,000 transfer)</option>
-              <option value="full">Full Autonomous Decision Execution</option>
+              <option value="full">Full Autonomous Multi-Agent Execution</option>
             </select>
-            <span style={{ fontSize: '0.75rem', color: 'var(--color-text-secondary)' }}>
-              Currently set to Supervised. High and Critical impact recommendations await human approval.
+            <span style={{ fontSize: '0.75rem', color: 'var(--color-text-secondary)', display: 'block', marginTop: '0.25rem' }}>
+              Currently set to Supervised. High and Critical impact recommendations await human confirmation.
+            </span>
+          </div>
+
+          <div>
+            <label style={{ fontWeight: 600, display: 'block', marginBottom: '0.35rem' }}>
+              Demand Forecasting Model Selection
+            </label>
+            <select style={{ width: '100%' }} defaultValue="statistical">
+              <option value="statistical">Lightweight Statistical Baseline (SDOWF - Seasonal Day-of-Week + Festival)</option>
+              <option value="hgb">HistGradientBoosting Precision ML Engine</option>
+            </select>
+            <span style={{ fontSize: '0.75rem', color: 'var(--color-text-secondary)', display: 'block', marginTop: '0.25rem' }}>
+              Pluggable dual-mode: Fast statistical baseline minimizes inference overhead with sub-15ms response.
             </span>
           </div>
 
@@ -191,19 +204,16 @@ const Sidebar = () => {
               <input type="range" min="70" max="99" defaultValue="85" style={{ flex: 1 }} />
               <span style={{ fontWeight: 700, fontSize: '0.9rem' }}>85%</span>
             </div>
-            <span style={{ fontSize: '0.75rem', color: 'var(--color-text-secondary)' }}>
-              Actions with confidence below 85% are automatically escalated to manual inspection.
-            </span>
           </div>
 
           <div>
             <label style={{ fontWeight: 600, display: 'block', marginBottom: '0.35rem' }}>
-              Regional Hub Center
+              Primary Regional Cross-Dock Hub
             </label>
             <select style={{ width: '100%' }} defaultValue="erode">
               <option value="erode">Erode Central Cross-Dock Warehouse (NH-544)</option>
               <option value="salem">Salem Junction Depot</option>
-              <option value="chennai">Chennai Coastal Port Facility</option>
+              <option value="coimbatore">Coimbatore Central Logistics Depot</option>
             </select>
           </div>
         </div>
@@ -213,7 +223,7 @@ const Sidebar = () => {
       <Modal
         isOpen={isHelpOpen}
         onClose={() => setIsHelpOpen(false)}
-        title="RetailPulse AI - Documentation & Architecture"
+        title="RetailMind AI - Architecture & User Guide"
         footer={
           <button className="btn btn-secondary" onClick={() => setIsHelpOpen(false)}>
             Close
@@ -222,19 +232,21 @@ const Sidebar = () => {
       >
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', lineHeight: 1.6 }}>
           <p>
-            <strong>RetailPulse AI</strong> is an autonomous retail decision intelligence platform designed to transition supermarket networks from passive forecasting to high-conviction business decisioning.
+            <strong>RetailMind AI Control Tower</strong> provides autonomous decision intelligence for retail networks across Tamil Nadu. It bridges predictive demand forecasting with deterministic optimization and multi-agent coordination.
           </p>
           <div style={{ padding: '0.85rem', backgroundColor: 'var(--color-surface-subtle)', borderRadius: '8px' }}>
-            <h4 style={{ fontSize: '0.85rem', fontWeight: 700, marginBottom: '0.25rem' }}>Key Capabilities:</h4>
+            <h4 style={{ fontSize: '0.85rem', fontWeight: 700, marginBottom: '0.25rem' }}>Consolidated Control Tower Modules:</h4>
             <ul style={{ paddingLeft: '1.25rem', fontSize: '0.8rem', color: 'var(--color-text-secondary)' }}>
-              <li><strong>Decision Ripple Simulator:</strong> Forecasts cascade effects (demand → stock → freight → margin → CSAT) before executing pricing or logistics moves.</li>
-              <li><strong>Inventory Rescue Network:</strong> Solves stockouts by rerouting excess stock between stores within 4 hours.</li>
-              <li><strong>Hidden Demand Detector:</strong> Surfaces unmet demand blinded by historic stockouts.</li>
-              <li><strong>Promotion Guardian:</strong> Halts risky discounts that create backroom stockouts.</li>
+              <li><strong>Executive Overview:</strong> High-level store health, urgent operational alerts, and network demand.</li>
+              <li><strong>Demand Intelligence:</strong> Quantile forecasting (P10/P50/P90), seasonal drivers, and Hidden Demand recovery.</li>
+              <li><strong>Risk & Alerts:</strong> Stockout radar, overstock buffers, and Promotion Guardian safety guards.</li>
+              <li><strong>Inventory Network:</strong> Live multi-store SVG topology, cross-dock route optimization, and transfers.</li>
+              <li><strong>AI Decision Centre:</strong> Autonomous recommendations, approval queue, Ripple Simulator, and dynamic replanning.</li>
+              <li><strong>Impact & Performance:</strong> Realized financial savings, benchmark audits, and SLA tracking.</li>
             </ul>
           </div>
           <p style={{ fontSize: '0.8rem', color: 'var(--color-text-secondary)' }}>
-            Core Motto: <em>"Don't just predict what will happen. Decide what the business should do next."</em>
+            Core Philosophy: <em>"Don't just predict what will happen. Prescribe and orchestrate what the retail enterprise must do next."</em>
           </p>
         </div>
       </Modal>

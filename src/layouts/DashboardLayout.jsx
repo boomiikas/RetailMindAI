@@ -3,12 +3,12 @@ import { Outlet } from 'react-router-dom';
 import Sidebar from './Sidebar';
 import TopNavbar from './TopNavbar';
 import NotificationPanel from '../components/common/NotificationPanel';
-import ChatbotWidget from '../components/common/ChatbotWidget';
+import FloatingAssistant from '../components/common/FloatingAssistant';
 
 const DashboardLayout = () => {
   return (
     <div className="app-container">
-      {/* Navigation Sidebar */}
+      {/* 6-Module Consolidated Navigation Sidebar */}
       <Sidebar />
 
       {/* Main Execution Area */}
@@ -19,11 +19,11 @@ const DashboardLayout = () => {
         </main>
       </div>
 
-      {/* Slide-over Notifications */}
+      {/* Slide-over Notifications Drawer */}
       <NotificationPanel />
 
-      {/* Real-time AI Copilot Chatbot */}
-      <ChatbotWidget />
+      {/* Persistent Floating AI Copilot & WhatsApp Assistant */}
+      <FloatingAssistant />
     </div>
   );
 };

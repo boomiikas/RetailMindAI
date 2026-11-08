@@ -14,17 +14,20 @@ import {
 import { useApp } from '../context/AppContext';
 
 const ROUTE_TITLES = {
-  '/': { title: 'Executive Overview', section: 'Decision Intelligence' },
-  '/overview': { title: 'Executive Overview', section: 'Decision Intelligence' },
+  '/': { title: 'Executive Overview', section: 'Decision Control' },
+  '/overview': { title: 'Executive Overview', section: 'Decision Control' },
   '/demand': { title: 'Demand Intelligence', section: 'Forecasting & Signals' },
-  '/risks': { title: 'Risk Centre', section: 'Vulnerability Radar' },
+  '/risks': { title: 'Risk & Alerts', section: 'Vulnerability Radar' },
+  '/inventory': { title: 'Inventory Network', section: 'Multi-Store Balancing' },
   '/network': { title: 'Inventory Network', section: 'Multi-Store Balancing' },
   '/decisions': { title: 'AI Decision Centre', section: 'Autonomous Recommendations' },
+  '/performance': { title: 'Impact & Performance', section: 'Business Value Realization' },
+  '/impact': { title: 'Impact & Performance', section: 'Business Value Realization' },
   '/simulator': { title: 'Decision Ripple Simulator', section: 'Consequence Modeling' },
   '/promotions': { title: 'Promotion Guardian', section: 'Operational Safety' },
   '/hidden-demand': { title: 'Hidden Demand Detector', section: 'Unmet Demand Analysis' },
-  '/impact': { title: 'Impact & Performance', section: 'Business Value Audit' },
   '/history': { title: 'Decision History', section: 'Audit Log & Accountability' },
+  '/whatsapp': { title: 'WhatsApp Manager Assistant', section: 'Mobile Approvals' },
 };
 
 const TopNavbar = () => {
@@ -45,7 +48,7 @@ const TopNavbar = () => {
   const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
 
   const currentRouteMeta = ROUTE_TITLES[location.pathname] || {
-    title: 'RetailPulse AI',
+    title: 'RetailMind AI',
     section: 'Intelligence Suite',
   };
 
@@ -63,7 +66,7 @@ const TopNavbar = () => {
 
         <div className="breadcrumb-area">
           <div className="breadcrumb-trail">
-            <span>RetailPulse</span>
+            <span>RetailMind AI</span>
             <span>/</span>
             <span>{currentRouteMeta.section}</span>
           </div>
@@ -78,7 +81,7 @@ const TopNavbar = () => {
           <input
             type="text"
             className="global-search-input"
-            placeholder="Search SKUs, stores, decisions..."
+            placeholder="Search SKUs, stores, decisions, or risk signals..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
@@ -165,7 +168,7 @@ const TopNavbar = () => {
                 position: 'absolute',
                 right: 0,
                 top: '110%',
-                width: 220,
+                width: 230,
                 zIndex: 60,
                 padding: '0.75rem',
                 display: 'flex',
@@ -176,9 +179,9 @@ const TopNavbar = () => {
             >
               <div style={{ paddingBottom: '0.5rem', borderBottom: '1px solid var(--color-border-subtle)' }}>
                 <div style={{ fontWeight: 600, fontSize: '0.85rem' }}>S. Ramanathan</div>
-                <div style={{ fontSize: '0.75rem', color: 'var(--color-text-secondary)' }}>ramanathan@retailpulse.ai</div>
+                <div style={{ fontSize: '0.75rem', color: 'var(--color-text-secondary)' }}>ramanathan@retailmind.ai</div>
                 <div className="badge badge-primary" style={{ marginTop: '0.35rem', fontSize: '0.65rem' }}>
-                  <ShieldCheck size={11} /> Regional Ops Lead
+                  <ShieldCheck size={11} /> Regional Operations Lead
                 </div>
               </div>
               <button

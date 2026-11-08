@@ -27,7 +27,9 @@ import {
   AlertTriangle,
   CheckCircle2,
   Clock,
-  Sparkles
+  Sparkles,
+  ShieldCheck,
+  Zap
 } from 'lucide-react';
 import KPICard from '../components/common/KPICard';
 import RiskBadge from '../components/common/RiskBadge';
@@ -70,27 +72,27 @@ const ExecutiveOverview = () => {
       {/* Header Banner */}
       <div className="page-header-row">
         <div>
-          <h2 className="page-title">Good morning, Retail Manager</h2>
-          <p className="page-subtitle">Here is your retail network's decision intelligence overview.</p>
+          <h2 className="page-title">Executive Control Tower</h2>
+          <p className="page-subtitle">Real-time autonomous decisioning & operational health across Tamil Nadu retail nodes.</p>
         </div>
-        <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
-          <span className="badge badge-success" style={{ padding: '0.4rem 0.75rem' }}>
-            <span className="pulse-dot" /> Autonomous Engine: Active (94.2% Accuracy)
+        <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center', flexWrap: 'wrap' }}>
+          <span className="badge badge-success" style={{ padding: '0.4rem 0.75rem', fontSize: '0.75rem' }}>
+            <span className="pulse-dot" /> Dual-Mode Engine: Active (96.2% Confidence)
           </span>
           <button className="btn btn-primary btn-sm" onClick={() => navigate('/decisions')}>
-            <Cpu size={15} /> Review All Decisions
+            <Cpu size={15} /> Open Decision Centre
           </button>
         </div>
       </div>
 
-      {/* KPI Cards Row */}
+      {/* KPI Cards Strip */}
       <div className="kpi-grid">
         <KPICard
           title="Total Stores"
           value={kpis.totalStores}
-          trend="+2 New"
+          trend="5 Hubs Active"
           trendDirection="positive"
-          subtitle="All Regional Hubs"
+          subtitle="TN Regional Network"
           icon={Store}
           iconColor="#2563EB"
           iconBg="#EFF6FF"
@@ -106,9 +108,9 @@ const ExecutiveOverview = () => {
         <KPICard
           title="Stockout Risks"
           value={kpis.stockoutRisks}
-          trend="+3 vs yesterday"
+          trend="+3 critical"
           trendDirection="negative"
-          subtitle="Requires attention"
+          subtitle="Immediate rebalance needed"
           icon={AlertOctagon}
           iconColor="#DC2626"
           iconBg="#FEE2E2"
@@ -116,9 +118,9 @@ const ExecutiveOverview = () => {
         <KPICard
           title="Overstock Risks"
           value={kpis.overstockRisks}
-          trend="-5 vs last week"
-          trendDirection="positive"
-          subtitle="Excess working capital"
+          trend="Capital bound"
+          trendDirection="warning"
+          subtitle="Surplus ready for transfer"
           icon={Boxes}
           iconColor="#F59E0B"
           iconBg="#FEF3C7"
@@ -126,21 +128,21 @@ const ExecutiveOverview = () => {
         <KPICard
           title="AI Recommendations"
           value={kpis.aiRecommendations}
-          subtitle="42 Optimizations ready"
+          subtitle="Automated & Supervised"
           icon={Cpu}
           iconColor="#7C3AED"
           iconBg="#F3E8FF"
-          badgeText="94% Confidence"
+          badgeText="96% Conviction"
         />
         <KPICard
-          title="Profit at Risk"
+          title="Margin at Risk"
           value={kpis.estimatedProfitAtRisk}
-          trend="8.4% of total margin"
-          trendDirection="negative"
-          subtitle="Recoverable by AI"
+          trend="Protected by AI"
+          trendDirection="positive"
+          subtitle="Recoverable via transfers"
           icon={IndianRupee}
-          iconColor="#B91C1C"
-          iconBg="#FEE2E2"
+          iconColor="#16A34A"
+          iconBg="#DCFCE7"
         />
       </div>
 
@@ -150,18 +152,18 @@ const ExecutiveOverview = () => {
           <div>
             <div className="section-card-title">
               <AlertTriangle size={18} color="var(--color-danger)" />
-              Business situations requiring attention
+              Prioritized Operational Situations Requiring Attention
             </div>
             <div className="section-card-subtitle">
-              Prioritized high-consequence operational bottlenecks identified across Tamil Nadu supermarket stores
+              Ranked bottlenecks with calculated consequence ripple across demand, logistics freight, and margin
             </div>
           </div>
           <button className="btn btn-secondary btn-sm" onClick={() => navigate('/risks')}>
-            View Risk Centre <ArrowRight size={14} />
+            View Risk & Alerts <ArrowRight size={14} />
           </button>
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1rem' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(290px, 1fr))', gap: '1rem' }}>
           {alerts.map((alert) => (
             <div key={alert.id} className={`alert-card-item ${alert.severity}`}>
               <div style={{ flex: 1 }}>
@@ -189,7 +191,7 @@ const ExecutiveOverview = () => {
                   }}
                 >
                   <Sparkles size={13} />
-                  <span>Action: {alert.actionRequired}</span>
+                  <span>Prescribed Action: {alert.actionRequired}</span>
                 </div>
               </div>
             </div>
@@ -205,10 +207,10 @@ const ExecutiveOverview = () => {
             <div>
               <div className="section-card-title">
                 <TrendingUp size={18} color="var(--color-primary)" />
-                Network Demand Forecast vs Historical Actuals
+                Network Demand Trajectory (Actuals vs Quantile Forecast)
               </div>
               <div className="section-card-subtitle">
-                Combined 14-day trailing actuals and 7-day forward predictive AI trajectory (Units)
+                Trailing sales synchronized with 7-day forward predictive baseline (Units)
               </div>
             </div>
             <span className="badge badge-primary">Model Confidence: 96.2%</span>
@@ -242,7 +244,7 @@ const ExecutiveOverview = () => {
                 <Line
                   type="monotone"
                   dataKey="predicted"
-                  name="AI Predicted Demand"
+                  name="AI Predicted Demand (P50)"
                   stroke="#7C3AED"
                   strokeWidth={2.5}
                   strokeDasharray="5 5"
@@ -265,8 +267,8 @@ const ExecutiveOverview = () => {
         <div className="section-card">
           <div className="section-card-header">
             <div>
-              <div className="section-card-title">Network Inventory Health</div>
-              <div className="section-card-subtitle">1,250 Monitored SKUs Distribution</div>
+              <div className="section-card-title">Inventory Health</div>
+              <div className="section-card-subtitle">1,250 Active SKUs</div>
             </div>
           </div>
 
@@ -310,9 +312,9 @@ const ExecutiveOverview = () => {
           <div className="section-card-header">
             <div>
               <div className="section-card-title">Store-Wise Stockout & Overstock Distribution</div>
-              <div className="section-card-subtitle">Active product count at risk by store location</div>
+              <div className="section-card-subtitle">Active product count at risk by store node</div>
             </div>
-            <button className="btn btn-secondary btn-sm" onClick={() => navigate('/network')}>
+            <button className="btn btn-secondary btn-sm" onClick={() => navigate('/inventory')}>
               Network Map <ArrowRight size={13} />
             </button>
           </div>
@@ -334,7 +336,7 @@ const ExecutiveOverview = () => {
           </div>
         </div>
 
-        {/* Recent AI Recommendations Snippet */}
+        {/* Recent AI Recommendations Snippet with 1-Click Approvals */}
         <div className="section-card">
           <div className="section-card-header">
             <div>
@@ -342,10 +344,10 @@ const ExecutiveOverview = () => {
                 <Sparkles size={18} color="var(--color-purple)" />
                 Recent AI Recommendations
               </div>
-              <div className="section-card-subtitle">Decisions awaiting executive review</div>
+              <div className="section-card-subtitle">High-conviction decisions awaiting approval</div>
             </div>
             <button className="btn btn-primary btn-sm" onClick={() => navigate('/decisions')}>
-              Open Decision Centre
+              Review All Queue
             </button>
           </div>
 
