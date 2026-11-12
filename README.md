@@ -1,18 +1,133 @@
-# RetailMind AI: Explainable, Adaptive Multi-Agent Retail Decision Intelligence Platform
+<div align="center">
 
-RetailMind AI is an enterprise-grade, agentic retail supply-chain decision intelligence platform built for multi-store supermarket networks across Tamil Nadu (**Chennai, Coimbatore, Madurai, Tiruppur, Salem**).
+# 🛒 RetailMind AI
 
-The platform bridges predictive analytics and autonomous execution. Rather than stopping at passive forecasting, RetailMind AI observes multi-store inventory, predicts granular quantile demand distributions ($P_{10}, P_{50}, P_{90}$), diagnoses supply-chain ripple effects across directed operational graphs, formulates and solves Mixed-Integer Linear Programs (MILP) to recommend the most profitable business interventions, seeks store manager approval via WhatsApp interactive messages, executes approved logistics actions, and **dynamically replans in real time when operating conditions change**.
+### Explainable, Adaptive Multi-Agent Retail Decision Intelligence Platform
+
+*From forecasting to autonomous execution — with a human in the loop.*
+
+![Python](https://img.shields.io/badge/Python-3.13-3776AB?logo=python&logoColor=white)
+![FastAPI](https://img.shields.io/badge/FastAPI-009688?logo=fastapi&logoColor=white)
+![React](https://img.shields.io/badge/React-18-61DAFB?logo=react&logoColor=black)
+![Vite](https://img.shields.io/badge/Vite-646CFF?logo=vite&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/Supabase-PostgreSQL-3ECF8E?logo=supabase&logoColor=white)
+![LangGraph](https://img.shields.io/badge/LangGraph-Agents-1C3C3C)
+![Groq](https://img.shields.io/badge/LLM-Groq-F55036)
+![Tests](https://img.shields.io/badge/tests-18%2F18%20passing-brightgreen)
+
+[Overview](#-overview) •
+[Features](#-key-features) •
+[Architecture](#-system-architecture) •
+[Tech Stack](#-tech-stack) •
+[Getting Started](#-getting-started) •
+[API](#-api--endpoints) •
+[Tests](#-testing)
+
+</div>
 
 ---
 
-## 1. Simplified System Architecture
+## 📖 Table of Contents
+
+1. [Overview](#-overview)
+2. [Problem & Solution](#-problem--solution)
+3. [Key Features](#-key-features)
+4. [System Architecture](#-system-architecture)
+5. [Tech Stack](#-tech-stack)
+6. [How It Works](#-how-it-works)
+7. [Getting Started](#-getting-started)
+8. [API & Endpoints](#-api--endpoints)
+9. [Testing](#-testing)
+10. [AI Copilot](#-ai-copilot)
+11. [Project Structure](#-project-structure)
+
+---
+
+## 🎯 Overview
+
+**RetailMind AI** is an enterprise-grade, agentic supply-chain decision intelligence platform built for multi-store supermarket networks across Tamil Nadu — **Chennai, Coimbatore, Madurai, Tiruppur and Salem**.
+
+Instead of stopping at passive forecasting, RetailMind AI closes the loop:
+
+> **Observe** inventory → **Predict** quantile demand (P10 / P50 / P90) → **Diagnose** ripple effects → **Optimize** with MILP → **Ask** the store manager on WhatsApp → **Execute** approved actions → **Replan** when conditions change.
+
+<!-- Add a hero screenshot or GIF of the dashboard here -->
+<!-- ![RetailMind AI Dashboard](docs/images/dashboard.png) -->
+
+---
+
+## 💡 Problem & Solution
+
+| The Problem | The RetailMind AI Approach |
+| --- | --- |
+| Stockouts and overstock across many stores | Quantile demand forecasts with per-store risk scanning |
+| Forecasts that nobody acts on | MILP optimizer recommends the most profitable intervention |
+| Supplier delays that silently cascade | Directed-graph ripple analysis down to net profit |
+| Plans that go stale before the truck leaves | Pre-dispatch replanning with V1 → V2 versioning |
+| LLMs are costly and unreliable for math | Deterministic core; LLMs only for language and explanation |
+| Managers don't want another dashboard | Approvals via interactive WhatsApp messages |
+
+---
+
+## ✨ Key Features
+
+### 📈 Dual-Mode Demand Forecasting
+- **Mode A — SDOWF (default):** Seasonal Day-of-Week + Festival model. Zero disk footprint, computes in under 1 ms. Captures the 14-day rolling baseline, weekend shopping peaks and Tamil Nadu festival surges (Pongal, Deepavali, Tamil New Year). Quantiles come from empirical residual uncertainty.
+- **Mode B — HistGradientBoosting (precision):** Quantile regression trained on **160,600 sales records** across 88 SKUs, 5 stores and 12 months.
+
+| Metric (Mode B) | Value |
+| --- | --- |
+| Validation R² | **0.918** |
+| WAPE | **10.58 %** |
+| MAE | **5.81** |
+
+- **Model comparison API** benchmarks SMA-7, WMA-7, SES, SDOWF and HistGradientBoosting side by side.
+- **Explainability** via SHAP TreeExplainer feature attribution.
+
+### 🕸️ Ripple Effect Graph Intelligence
+Supply chains are modelled as a directed graph (NetworkX):
+
+```
+Supplier → Product → Inventory Node → Store → Revenue → Net Profit
+```
+
+A supplier delay is traced through inventory burn, store stockout and lost margin automatically.
+
+### 🧮 Prescriptive MILP Optimization
+Pyomo + HiGHS evaluate six interventions and pick the most profitable one:
+
+| Action | Purpose |
+| --- | --- |
+| `REPLENISH_SUPPLIER` | Standard or expedited purchase order |
+| `INTER_STORE_TRANSFER` | Rebalance surplus from a neighbouring store (e.g. Coimbatore → Salem) |
+| `ALLOCATION_CHANGE` | Redirect an incoming cross-dock shipment |
+| `APPLY_MARKDOWN` | 10–30 % discount to clear stock before expiry |
+| `PROMOTION_ADJUST` | Suppress promotions when inventory is scarce |
+| `NO_ACTION` | Hold the baseline when intervention cost exceeds benefit |
+
+Source-store safety stock is **mathematically guaranteed never to be violated**.
+
+### 💬 WhatsApp Manager Assistant with Idempotent Approvals
+- Interactive buttons: **Transfer · Supplier Order · Markdown · Reject**
+- **Idempotency keys:** duplicate button taps return the cached confirmation.
+- **Version lock:** a V1 approval can never authorize an altered V2 order.
+
+### 🔄 Dynamic Replanning Engine
+Assumptions are re-validated before dispatch. *Example:* a Salem → Coimbatore transfer is approved (V1), then demand in Coimbatore spikes by 45 units before the truck leaves. The engine pauses V1, releases the stock reservations, re-optimizes, creates V2 and asks for fresh approval.
+
+### 💸 >90 % LLM Cost Reduction
+Risk scans, DAG cascades, optimization, button handling, stock reservations, order execution and replanning audits make **zero LLM calls**. The LLM is used only for conversation and plain-language explanation (~150–250 tokens per event).
+
+---
+
+## 🏗️ System Architecture
 
 RetailMind AI uses a **two-layer decoupled architecture**:
-1. **Deterministic Operational Core (Python 3.13 + Math + SQL)**: Handles 100% of telemetry, risk detection, forecasting, graph cascading, MILP optimization, ledger transactions, replanning, and KPI reporting. Zero LLM involvement for mission-critical calculations.
-2. **Cognitive Agent Layer (Max 2 LLM Agents)**:
-   - **`Retail Intelligence Agent`**: Unified LangGraph + Groq LLM brain handling Natural Language Understanding (NLU), analytical tool routing, grounded context retrieval, and decision/SHAP explanation.
-   - **`Decision Communication Agent`**: Specialized in store manager interaction over WhatsApp / Telegram, converting decision snapshots into interactive proposals and explaining revised plans ($v_1 \to v_2$).
+
+1. **Deterministic Operational Core** (Python 3.13 + Math + SQL) — telemetry, risk detection, forecasting, graph cascading, MILP optimization, ledger transactions, replanning and KPI reporting. No LLM in any mission-critical calculation.
+2. **Cognitive Agent Layer** (max 2 LLM agents)
+   - **Retail Intelligence Agent** — LangGraph + Groq brain for NLU, tool routing, grounded retrieval and SHAP/decision explanation.
+   - **Decision Communication Agent** — handles WhatsApp / Telegram, turns decision snapshots into interactive proposals and explains revised plans (V1 → V2).
 
 ```mermaid
 flowchart TD
@@ -22,115 +137,93 @@ flowchart TD
     end
 
     subgraph AgentLayer ["Cognitive Agent Layer (Max 2 LLM Agents)"]
-        RIA["Retail Intelligence Agent\n(NLU, Analytical Tool Calling, SHAP & Optimization Synthesis)"]
-        DCA["Decision Communication Agent\n(Proposal Messaging, Manager Clarification & Feedback)"]
+        RIA["Retail Intelligence Agent\n(NLU, Tool Calling, SHAP & Optimization Synthesis)"]
+        DCA["Decision Communication Agent\n(Proposal Messaging, Clarification & Feedback)"]
     end
 
     subgraph ServiceLayer ["Deterministic Operational Core (Python 3.13)"]
         MON["Risk & Inventory Service\n(Threshold Scans, Stockout/Overstock Alerts)"]
-        PRED["Dual-Mode Predictive Engine\n(Statistical SDOWF Baseline & HGB Quantiles)"]
+        PRED["Dual-Mode Predictive Engine\n(SDOWF Baseline & HGB Quantiles)"]
         RIP["Ripple Intelligence Service\n(NetworkX DAG Cascading Loss Engine)"]
         OPT["Prescriptive Optimizer\n(Pyomo + HiGHS MILP Solver)"]
         REP["Dynamic Replanning Engine\n(Pre-dispatch Invariant Audit, V1/V2 Versioning)"]
-        EXEC["Execution & Inventory Ledger\n(ACID Stock Reservations, POs, Transfers)"]
-        PERF["KPI & Outcome Service\n(Expected vs Actuals, Operating Modes Comparison)"]
+        EXEC["Execution & Inventory Ledger\n(ACID Reservations, POs, Transfers)"]
+        PERF["KPI & Outcome Service\n(Expected vs Actuals, Mode Comparison)"]
     end
 
     subgraph DataLayer ["Data & Storage Layer"]
         DB[("Supabase Cloud PostgreSQL\n(27 Relational Tables, Strict FKs, Ledger)")]
     end
 
-    UI <-->|REST APIs & WebSockets| RIA
+    UI <-->|REST & WebSockets| RIA
     UI <-->|Direct CRUD / Stats| ServiceLayer
     WA <-->|Webhooks / Buttons| DCA
-    DCA <-->|Direct Approval Validation| EXEC
+    DCA <-->|Approval Validation| EXEC
     RIA <-->|Deterministic Tool Calls| ServiceLayer
     ServiceLayer <-->|Asyncpg / SQLAlchemy 2.0| DB
 ```
 
 ---
 
-## 2. Technology Stack
+## 🧰 Tech Stack
 
-| Layer | Component | Technology / Implementation |
-|---|---|---|
-| **Backend & API** | Web Framework | **FastAPI** (Python 3.13) with async lifespan |
-| | ORM & Validation | **SQLAlchemy 2.0 Async** + **Pydantic v2** |
-| | Connection Pool | **AsyncAdaptedQueuePool** with auto-recycle and pre-ping |
-| | Real-Time Streaming | **FastAPI WebSockets** (`/ws/dashboard`) |
-| **Database** | Database Engine | **Supabase Cloud PostgreSQL 16+** |
-| | Data Tables | **27 Relational Tables** with strict foreign keys & inventory invariants |
-| **Forecasting Engine** | Dual-Mode Pluggable | **Mode A (Default)**: Lightweight Seasonal DoW + Festival (SDOWF) with empirical residual uncertainty<br>**Mode B (Precision)**: **HistGradientBoostingRegressor** with Quantile Loss ($P_{10}, P_{50}, P_{90}$) |
-| | Explainability | **SHAP** TreeExplainer + Feature Attribution |
-| **Optimization & Graph** | Ripple Effects | **NetworkX** (Directed operational dependency graph) |
-| | Mathematical Solver | **Pyomo** + **HiGHS** (`appsi_highs` MILP solver) |
-| | Digital Twin | **SimPy** + **NumPy** discrete-event simulator |
-| **Cognitive Agents** | Framework | **LangGraph** StateGraph |
-| | Agents (Max 2) | 1. **Retail Intelligence Agent** (Copilot & Reasoning)<br>2. **Decision Communication Agent** (WhatsApp Dialogue & Proposals) |
-| | LLM Provider | **Groq Cloud LPU** (`openai/gpt-oss-120b`, zero Ollama dependency) |
-| **Human Approval** | Messaging Channel | **Meta WhatsApp Cloud API** + **Offline Mock Adapter** |
-| **Frontend** | Client Application | **React 18**, **Vite**, **Lucide Icons**, **Chart.js** |
-| | AI Copilot | Floating, real-time grounded retail assistant with strict guardrails |
+| Layer | Component | Technology |
+| --- | --- | --- |
+| **Backend** | Web framework | FastAPI (Python 3.13), async lifespan |
+| | ORM & validation | SQLAlchemy 2.0 Async, Pydantic v2 |
+| | Connection pool | AsyncAdaptedQueuePool (auto-recycle, pre-ping) |
+| | Real-time | FastAPI WebSockets (`/ws/dashboard`) |
+| **Database** | Engine | Supabase Cloud PostgreSQL 16+ |
+| | Schema | 27 relational tables, strict FKs, inventory invariants |
+| **Forecasting** | Modes | SDOWF (default) · HistGradientBoostingRegressor with quantile loss |
+| | Explainability | SHAP TreeExplainer |
+| **Optimization** | Graph | NetworkX directed dependency graph |
+| | Solver | Pyomo + HiGHS (`appsi_highs`) |
+| | Digital twin | SimPy + NumPy discrete-event simulator |
+| **Agents** | Framework | LangGraph StateGraph |
+| | LLM | Groq Cloud LPU (`openai/gpt-oss-120b`) |
+| **Messaging** | Channel | Meta WhatsApp Cloud API + offline mock adapter |
+| **Frontend** | App | React 18, Vite, Lucide Icons, Chart.js |
 
 ---
 
-## 3. Key Capabilities
+## 🔁 How It Works
 
-### 3.1. Dual-Mode Pluggable Demand Forecasting
-- **Mode A: Lightweight Seasonal Day-of-Week + Festival (SDOWF) [Default]**:
-  - Zero binary disk footprint (0 KB), instant computation (<1ms).
-  - Captures 14-day rolling baseline, weekly shopping patterns (Friday evening through Sunday peaks), and Tamil Nadu festival surges (Pongal in mid-Jan, Deepavali in late Oct/Nov, Tamil New Year in mid-Apr).
-  - Produces $P_{10}, P_{50}, P_{90}$ quantiles via empirical residual uncertainty.
-- **Mode B: HistGradientBoosting Quantile Regression [Precision Option]**:
-  - Trained on **160,600 sales records** across 88 SKUs, 5 stores, and 12 months.
-  - Achieves Validation $R^2 = 0.918$, $\text{WAPE} = 10.58\%$, $\text{MAE} = 5.81$.
-- **Model Comparison API**: `GET /api/v1/forecasts/compare-models` returns empirical comparative metrics across SMA-7, WMA-7, SES, SDOWF, and HistGradientBoosting.
-
-### 3.2. Ripple Effect Graph Intelligence (NetworkX)
-- Models supply chains as directed operational graphs:
-  $$\text{Supplier} \longrightarrow \text{Product} \longrightarrow \text{Inventory Node} \longrightarrow \text{Store} \longrightarrow \text{Revenue} \longrightarrow \text{Net Profit}$$
-- Automatically tracks downstream disruption cascades (e.g. supplier delivery delay $\to$ inventory burn $\to$ store stockout $\to$ lost margin).
-
-### 3.3. Prescriptive MILP Optimization (Pyomo + HiGHS)
-- Evaluates 6 actionable business interventions:
-  1. `REPLENISH_SUPPLIER`: Expedited or standard purchase order.
-  2. `INTER_STORE_TRANSFER`: Rebalance surplus from neighboring store (e.g. Coimbatore $\to$ Salem).
-  3. `ALLOCATION_CHANGE`: Redirect incoming cross-dock shipment.
-  4. `APPLY_MARKDOWN`: 10–30% discount to clear overstocked inventory before expiry.
-  5. `PROMOTION_ADJUST`: Suppress promotion banners when inventory is scarce.
-  6. `NO_ACTION`: Maintain baseline schedule when intervention costs exceed expected benefit.
-- Mathematically guarantees that source store safety stock is **never violated**.
-
-### 3.4. WhatsApp Store Manager Assistant & Idempotent Approvals
-- Interactive button messages sent to store managers (`Option 1: Transfer`, `Option 2: Supplier Order`, `Option 3: Markdown`, `Reject`).
-- State-machine verification:
-  - Cryptographic idempotency keys: duplicate button clicks return cached confirmation.
-  - Version-lock: Version 1 approval **cannot** authorize an altered Version 2 order.
-
-### 3.5. Dynamic Replanning Engine
-- Continuously re-validates operating assumptions before logistics dispatch.
-- **Example Scenario**: Salem to Coimbatore transfer approved ($V_1$). An unexpected demand spike (+45 units) hits Coimbatore before truck dispatch. The engine automatically pauses $V_1$, releases stock reservations, re-optimizes with Pyomo, creates Version 2 ($V_2$), and requests fresh manager approval.
-
-### 3.6. >90% LLM Token & Cost Reduction
-- Zero LLM calls in the core operational loop: telemetry checks, risk scans, DAG cascading, Pyomo optimization, WhatsApp button clicks, stock reservations, order execution, and replanning audits incur **\$0.00 in LLM costs**.
-- LLM calls occur strictly when human reasoning, conversational NLU, or plain-language synthesis is required (~150–250 tokens per event).
+```
+1. OBSERVE   → Risk service scans multi-store inventory for stockout / overstock
+2. PREDICT   → Quantile forecast (P10 / P50 / P90) per SKU per store
+3. DIAGNOSE  → Ripple graph estimates downstream revenue and profit impact
+4. OPTIMIZE  → MILP picks the most profitable of 6 interventions
+5. PROPOSE   → Decision Communication Agent sends WhatsApp buttons to the manager
+6. APPROVE   → Idempotent, version-locked approval
+7. EXECUTE   → Ledger reserves stock, raises POs / transfers
+8. REPLAN    → Pre-dispatch audit; if assumptions break, V1 → V2 and re-approve
+9. MEASURE   → KPI service compares expected vs actual outcomes
+```
 
 ---
 
-## 4. Local Setup & Execution Guide
+## 🚀 Getting Started
 
 ### Prerequisites
-- **Python 3.11+** (Python 3.13.5 tested)
-- **Node.js 18+** and **npm**
-- **Git**
 
----
+- Python 3.11+ (3.13.5 tested)
+- Node.js 18+ and npm
+- Git
+- A Supabase PostgreSQL project and a Groq API key
 
-### Step 1: Configure Environment
+### 1. Clone the repository
 
-Ensure your `.env` file at the project root contains your Supabase PostgreSQL credentials and Groq API key:
+```bash
+git clone https://github.com/boomiikas/RetailMindAI.git
+cd RetailMindAI
+```
 
-```ini
+### 2. Configure environment
+
+Copy `.env.example` to `.env` and fill in your credentials:
+
+```env
 APP_ENV=development
 DEBUG=true
 PORT=8000
@@ -155,92 +248,133 @@ WHATSAPP_API_VERSION=v21.0
 USE_MOCK_WHATSAPP=true
 
 # Security & CORS
-SECRET_KEY=dev-retailmind-super-secret-key-32-chars-long!
+SECRET_KEY=change-me-to-a-long-random-string
 ALLOWED_ORIGINS=http://localhost:5173,http://localhost:3000,http://127.0.0.1:5173
 ```
 
----
+> 💡 Keep `USE_MOCK_WHATSAPP=true` to run the full approval flow without a Meta account.
 
-### Step 2: Install Dependencies
+### 3. Install dependencies
 
 ```bash
-# Activate virtual environment
-.\.venv\Scripts\Activate.ps1
+# Create and activate a virtual environment
+python -m venv .venv
 
-# Install backend dependencies
+# Windows (PowerShell)
+.\.venv\Scripts\Activate.ps1
+# macOS / Linux
+# source .venv/bin/activate
+
+# Backend
 pip install -r requirements.txt
 
-# Install frontend dependencies
+# Frontend
 npm install
 ```
 
----
-
-### Step 3: Run the Backend Server
-
-Start FastAPI on port `8000`:
+### 4. Run the backend
 
 ```bash
 uvicorn backend.app.main:app --host 0.0.0.0 --port 8000 --reload
 ```
 
-- **Interactive Swagger UI**: [http://localhost:8000/docs](http://localhost:8000/docs)
-- **ReDoc Documentation**: [http://localhost:8000/redoc](http://localhost:8000/redoc)
-- **Health Check**: [http://localhost:8000/health](http://localhost:8000/health)
-- **WebSocket Feed**: `ws://localhost:8000/ws/dashboard`
+| Resource | URL |
+| --- | --- |
+| Swagger UI | http://localhost:8000/docs |
+| ReDoc | http://localhost:8000/redoc |
+| Health check | http://localhost:8000/health |
+| WebSocket feed | `ws://localhost:8000/ws/dashboard` |
 
----
+### 5. Run the frontend
 
-### Step 4: Run the Frontend Dashboard
-
-In a separate terminal window:
+In a separate terminal:
 
 ```bash
 npm run dev
 ```
 
-The React + Vite application will open at:
-**[http://localhost:3000](http://localhost:3000)**
+Open **http://localhost:3000**.
 
 ---
 
-## 5. Automated Verification Tests (18/18 Passing)
+## 🔌 API & Endpoints
 
-The test suite validates the full stack: REST APIs, Groq LLM integration, and all 8 end-to-end retail operational scenarios against Supabase PostgreSQL:
+| Method | Endpoint | Description |
+| --- | --- | --- |
+| GET | `/health` | Service health check |
+| GET | `/api/v1/dashboard/overview` | Executive dashboard overview |
+| GET | `/api/v1/inventory` | Multi-store inventory list |
+| GET | `/api/v1/forecasts` | Quantile demand forecasts |
+| GET | `/api/v1/forecasts/compare-models` | Benchmark SMA-7, WMA-7, SES, SDOWF, HGB |
+| POST | `/api/v1/chat` | Retail Copilot chatbot |
+| POST | `/api/v1/whatsapp/simulate-query` | Simulate a WhatsApp manager query |
+| WS | `/ws/dashboard` | Real-time dashboard stream |
+
+Full interactive documentation is available at `/docs` when the server is running.
+
+---
+
+## ✅ Testing
+
+The suite covers the REST APIs, Groq integration and 8 end-to-end retail scenarios against Supabase PostgreSQL.
 
 ```bash
-.\.venv\Scripts\python -m pytest backend/tests/test_api_endpoints.py backend/tests/test_groq_integration.py backend/tests/test_retailmind_scenarios.py -v
+python -m pytest backend/tests/test_api_endpoints.py \
+                 backend/tests/test_groq_integration.py \
+                 backend/tests/test_retailmind_scenarios.py -v
 ```
 
-### Full Test Suite Summary
+<details>
+<summary><b>View all 18 tests</b></summary>
 
-| Test File | Scenario / Feature Tested | Result |
-|---|---|:---:|
-| `test_api_endpoints.py` | Health check endpoint (`/health`) | **PASSED** |
-| `test_api_endpoints.py` | Executive dashboard overview (`/api/v1/dashboard/overview`) | **PASSED** |
-| `test_api_endpoints.py` | Multi-store inventory list (`/api/v1/inventory`) | **PASSED** |
-| `test_api_endpoints.py` | Quantile demand forecast (`/api/v1/forecasts`) | **PASSED** |
-| `test_api_endpoints.py` | Model comparison benchmark (`/api/v1/forecasts/compare-models`) | **PASSED** |
-| `test_api_endpoints.py` | Retail Copilot Chatbot (`/api/v1/chat`) | **PASSED** |
-| `test_api_endpoints.py` | WhatsApp query simulation (`/api/v1/whatsapp/simulate-query`) | **PASSED** |
-| `test_groq_integration.py` | Groq direct API completion (`openai/gpt-oss-120b`) | **PASSED** |
-| `test_groq_integration.py` | Groq decision explanation synthesis with SHAP weights | **PASSED** |
-| `test_groq_integration.py` | Groq store manager conversational query answering | **PASSED** |
-| `test_retailmind_scenarios.py` | Scenario 1: Normal Stockout $\to$ Inter-Store Transfer | **PASSED** |
-| `test_retailmind_scenarios.py` | Scenario 2: Overstock Detection $\to$ Markdown Strategy | **PASSED** |
-| `test_retailmind_scenarios.py` | Scenario 3: Supplier Delay $\to$ Downstream Ripple Analysis | **PASSED** |
-| `test_retailmind_scenarios.py` | Scenario 4: WhatsApp Store Manager Approval Workflow | **PASSED** |
-| `test_retailmind_scenarios.py` | Scenario 5: Dynamic Replanning on Pre-Dispatch Spike | **PASSED** |
-| `test_retailmind_scenarios.py` | Scenario 6: Rejection of Duplicate / Idempotent Approvals | **PASSED** |
-| `test_retailmind_scenarios.py` | Scenario 7: Failed Execution with Error Handling | **PASSED** |
-| `test_retailmind_scenarios.py` | Scenario 8: Baseline vs AI Prescriptive vs AI Agentic KPIs | **PASSED** |
+| File | Scenario / Feature | Result |
+| --- | --- | --- |
+| `test_api_endpoints.py` | Health check | ✅ |
+| `test_api_endpoints.py` | Executive dashboard overview | ✅ |
+| `test_api_endpoints.py` | Multi-store inventory list | ✅ |
+| `test_api_endpoints.py` | Quantile demand forecast | ✅ |
+| `test_api_endpoints.py` | Model comparison benchmark | ✅ |
+| `test_api_endpoints.py` | Retail Copilot chatbot | ✅ |
+| `test_api_endpoints.py` | WhatsApp query simulation | ✅ |
+| `test_groq_integration.py` | Groq direct API completion | ✅ |
+| `test_groq_integration.py` | Decision explanation with SHAP weights | ✅ |
+| `test_groq_integration.py` | Store manager conversational Q&A | ✅ |
+| `test_retailmind_scenarios.py` | S1: Stockout → Inter-Store Transfer | ✅ |
+| `test_retailmind_scenarios.py` | S2: Overstock → Markdown Strategy | ✅ |
+| `test_retailmind_scenarios.py` | S3: Supplier Delay → Ripple Analysis | ✅ |
+| `test_retailmind_scenarios.py` | S4: WhatsApp Approval Workflow | ✅ |
+| `test_retailmind_scenarios.py` | S5: Dynamic Replanning on Pre-Dispatch Spike | ✅ |
+| `test_retailmind_scenarios.py` | S6: Duplicate / Idempotent Approval Rejection | ✅ |
+| `test_retailmind_scenarios.py` | S7: Failed Execution with Error Handling | ✅ |
+| `test_retailmind_scenarios.py` | S8: Baseline vs AI Prescriptive vs AI Agentic KPIs | ✅ |
+
+</details>
 
 ---
 
-## 6. Real-Time Copilot Chatbot
+## 🤖 AI Copilot
 
-The dashboard includes an AI Copilot grounded in live PostgreSQL data:
-- Uses Groq Cloud LPU (`openai/gpt-oss-120b`) for rapid responses.
-- **Strict Guardrail Policy**:
-  - Answers questions related to: inventory levels, stockout risks, quantile demand, store health, supplier lead times, and pending decisions.
-  - Politely declines off-topic prompts to preserve enterprise focus.
+The dashboard includes a floating, real-time assistant grounded in live PostgreSQL data and powered by Groq (`openai/gpt-oss-120b`).
+
+- **Answers:** inventory levels, stockout risks, quantile demand, store health, supplier lead times, pending decisions.
+- **Guardrails:** politely declines off-topic prompts to keep responses focused and enterprise-safe.
+
+---
+
+## 📁 Project Structure
+
+```
+RetailMindAI/
+├── backend/            # FastAPI app, services, optimizer, agents, tests
+├── src/                # React + Vite frontend
+├── .agents/skills/     # Agent skill definitions
+├── index.html          # Vite entry point
+├── vite.config.js
+├── package.json
+├── .env.example        # Environment template
+└── README.md
+```
+
+---
+
+</div>
