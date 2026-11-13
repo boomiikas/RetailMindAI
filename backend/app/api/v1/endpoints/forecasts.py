@@ -1,5 +1,6 @@
 """Forecasting API endpoints for RetailMind AI."""
 import json
+from datetime import date
 from pathlib import Path
 from typing import List, Optional
 from fastapi import APIRouter, Depends, Query, HTTPException
@@ -24,7 +25,13 @@ async def get_forecast(
     """Generates P10, P50, and P90 quantile demand forecasts with feature attribution."""
     try:
         predictor = get_demand_predictor()
-        fc = predictor.predict(store_id=store_id, product_id=product_id, horizon_days=horizon_days, method=method)
+        fc = predictor.predict(
+            store_id=store_id,
+            product_id=product_id,
+            start_date=date.today(),
+            horizon_days=horizon_days,
+            method=method,
+        )
         return fc
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

@@ -246,7 +246,7 @@ const ExecutiveOverview = () => {
         </div>
       </div>
 
-      {/* Row: Store Risk Bar Chart & Recent AI Recommendations */}
+      {/* Row: Store Risk Bar Chart & Recent Recommendations */}
       <div className="grid-2">
         {/* Store-wise Risk Bar Chart */}
         <div className="section-card">
@@ -277,7 +277,7 @@ const ExecutiveOverview = () => {
           </div>
         </div>
 
-        {/* Recent AI Recommendations Snippet with 1-Click Approvals */}
+        {/* Latest saved recommendations */}
         <div className="section-card">
           <div className="section-card-header">
             <div>
@@ -285,7 +285,7 @@ const ExecutiveOverview = () => {
                 <Sparkles size={18} color="var(--color-purple)" />
                 Recent AI Recommendations
               </div>
-              <div className="section-card-subtitle">High-conviction decisions awaiting approval</div>
+              <div className="section-card-subtitle">Latest saved decisions and their current status</div>
             </div>
             <button className="btn btn-primary btn-sm" onClick={() => navigate('/decisions')}>
               Review All Queue
@@ -311,7 +311,7 @@ const ExecutiveOverview = () => {
                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.2rem' }}>
                     <span style={{ fontWeight: 700, fontSize: '0.8125rem' }}>{rec.sku}</span>
                     <span className="badge badge-neutral" style={{ fontSize: '0.65rem' }}>{rec.store}</span>
-                    <RiskBadge severity={rec.priority} />
+                    {rec.priority && <RiskBadge severity={rec.priority} />}
                   </div>
                   <div style={{ fontSize: '0.75rem', color: 'var(--color-text-secondary)' }}>
                     Action: <strong>{rec.action}</strong> ({rec.quantity}) • Impact: {rec.impact}

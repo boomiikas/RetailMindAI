@@ -16,7 +16,7 @@ import { useApp } from '../context/AppContext';
 const ROUTE_TITLES = {
   '/': { title: 'Executive Overview', section: 'Decision Control' },
   '/overview': { title: 'Executive Overview', section: 'Decision Control' },
-  '/demand': { title: 'Demand Intelligence', section: 'Forecasting & Signals' },
+  '/demand': { title: 'Demand Intelligence', section: 'Demand Forecast' },
   '/risks': { title: 'Risk & Alerts', section: 'Vulnerability Radar' },
   '/inventory': { title: 'Inventory Network', section: 'Multi-Store Balancing' },
   '/network': { title: 'Inventory Network', section: 'Multi-Store Balancing' },
@@ -24,8 +24,7 @@ const ROUTE_TITLES = {
   '/performance': { title: 'Impact & Performance', section: 'Business Value Realization' },
   '/impact': { title: 'Impact & Performance', section: 'Business Value Realization' },
   '/simulator': { title: 'Decision Ripple Simulator', section: 'Consequence Modeling' },
-  '/promotions': { title: 'Promotion Guardian', section: 'Operational Safety' },
-  '/hidden-demand': { title: 'Hidden Demand Detector', section: 'Unmet Demand Analysis' },
+  '/hidden-demand': { title: 'Demand Intelligence', section: 'Demand Forecast' },
   '/history': { title: 'Decision History', section: 'Audit Log & Accountability' },
 };
 
@@ -52,8 +51,7 @@ const TopNavbar = () => {
   };
   const sectionTab = new URLSearchParams(location.search).get('tab');
   const TAB_TITLES = {
-    '/demand': { forecasting: 'Demand Forecasting', drivers: 'Demand Drivers', hidden: 'Hidden Demand', 'hidden-demand': 'Hidden Demand', sku: 'SKU Demand Analysis' },
-    '/risks': { all: 'All Risks', stockout: 'Stockout Risks', overstock: 'Overstock Risks', supplier: 'Supplier Disruptions', promotions: 'Promotion Guardian', critical: 'Critical Alerts' },
+    '/risks': { all: 'All Risks', stockout: 'Stockout Risks', overstock: 'Overstock Risks', supplier: 'Supplier Disruptions', critical: 'Critical Alerts' },
     '/decisions': { recommendations: 'Recommendations', approvals: 'Pending Approvals', pending: 'Pending Approvals', simulation: 'Scenario Simulation', simulator: 'Scenario Simulation', history: 'Decision History', execution: 'Execution Tracking' },
   };
   const currentSection = TAB_TITLES[location.pathname]?.[sectionTab] || currentRouteMeta.section;

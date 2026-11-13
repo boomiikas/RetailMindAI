@@ -55,14 +55,6 @@ const THREE_MODE_BENCHMARKS = [
     verdict: 'Top-quartile availability sustained through peak monsoon'
   },
   {
-    metric: 'Promotional Margin Preservation',
-    baseline: '18.4%',
-    prescriptive: '21.0%',
-    agentic: '23.8%',
-    netDelta: '+5.4% margin lift',
-    verdict: 'Promotion Guardian halts stockout-inducing discounts'
-  },
-  {
     metric: 'Dynamic Replanning Adaptation Time',
     baseline: '48 - 72 Hours',
     prescriptive: '12 - 24 Hours',

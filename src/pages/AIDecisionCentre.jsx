@@ -332,15 +332,6 @@ const AIDecisionCentre = () => {
       {/* TAB 1 & TAB 2: RECOMMENDATIONS & PENDING APPROVALS */}
       {(activeTab === 'recommendations' || activeTab === 'approvals') && (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-          {activeTab === 'approvals' && (
-            <div className="section-card" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '1rem', flexWrap: 'wrap' }}>
-              <div>
-                <div className="section-card-title">Campaign decisions</div>
-                <div className="section-card-subtitle">Review Promotion Guardian risk, adjust campaigns, and pause or resume them.</div>
-              </div>
-              <button className="btn btn-secondary btn-sm" onClick={() => navigate('/risks?tab=promotions')}>Open campaign decisions <ArrowRight size={14} /></button>
-            </div>
-          )}
           {(activeTab === 'approvals' ? pendingRecs : filteredRecs).map((rec) => {
             const isExpanded = !!expandedCards[rec.id];
 
@@ -352,7 +343,7 @@ const AIDecisionCentre = () => {
                     <span style={{ fontFamily: 'var(--font-mono)', fontWeight: 700, fontSize: '0.85rem', color: 'var(--color-primary)' }}>
                       {rec.id}
                     </span>
-                    <RiskBadge severity={rec.priority} />
+                    {rec.priority ? <RiskBadge severity={rec.priority} /> : <span className="badge badge-neutral">Priority unavailable</span>}
                     <span className="badge badge-neutral">{rec.store}</span>
                     <span style={{ fontSize: '0.95rem', fontWeight: 700, color: 'var(--color-text-primary)' }}>
                       {rec.sku}
@@ -362,7 +353,7 @@ const AIDecisionCentre = () => {
                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
                     <div style={{ textAlign: 'right' }}>
                       <span style={{ fontSize: '0.7rem', color: 'var(--color-text-secondary)', display: 'block' }}>AI Confidence</span>
-                      <strong style={{ fontSize: '0.85rem', color: '#16A34A' }}>{rec.confidence}%</strong>
+                      <strong style={{ fontSize: '0.85rem', color: '#16A34A' }}>{rec.confidence != null ? `${rec.confidence}%` : 'Unavailable'}</strong>
                     </div>
                     <StatusBadge status={rec.status} />
                   </div>
@@ -382,27 +373,27 @@ const AIDecisionCentre = () => {
                     </div>
                     <div className="rec-meta-item">
                       <span className="rec-meta-label">Current Stock</span>
-                      <span className="rec-meta-val">{rec.currentStock} units</span>
+                      <span className="rec-meta-val">{rec.currentStock != null ? `${rec.currentStock} units` : 'Unavailable'}</span>
                     </div>
                     <div className="rec-meta-item">
                       <span className="rec-meta-label">Predicted Demand</span>
-                      <span className="rec-meta-val" style={{ color: 'var(--color-primary)' }}>{rec.predictedDemand} units</span>
+                      <span className="rec-meta-val" style={{ color: 'var(--color-primary)' }}>{rec.predictedDemand != null ? `${rec.predictedDemand} units` : 'Unavailable'}</span>
                     </div>
                     <div className="rec-meta-item">
                       <span className="rec-meta-label">Urgency Horizon</span>
-                      <span className="rec-meta-val" style={{ color: '#DC2626' }}>{rec.urgency}</span>
+                      <span className="rec-meta-val" style={{ color: '#DC2626' }}>{rec.urgency || 'Unavailable'}</span>
                     </div>
                   </div>
 
                   {/* Multi-Agent Reasoning */}
-                  <div style={{ padding: '0.85rem', backgroundColor: '#F8FAFC', borderRadius: 'var(--radius-md)', border: '1px solid #E2E8F0' }}>
+                  {rec.reasoning && <div style={{ padding: '0.85rem', backgroundColor: '#F8FAFC', borderRadius: 'var(--radius-md)', border: '1px solid #E2E8F0' }}>
                     <div style={{ fontSize: '0.75rem', fontWeight: 700, color: '#334155', textTransform: 'uppercase', marginBottom: '0.35rem' }}>
                       Retail Intelligence Multi-Agent Reasoning
                     </div>
                     <p style={{ fontSize: '0.825rem', color: '#475569', lineHeight: 1.5, margin: 0 }}>
                       "{rec.reasoning}"
                     </p>
-                  </div>
+                  </div>}
 
                   {/* Expanded Ripple Consequence Preview */}
                   {isExpanded && rec.consequences && (

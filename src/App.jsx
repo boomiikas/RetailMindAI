@@ -22,14 +22,14 @@ function App() {
             <Route index element={<ExecutiveOverview />} />
             <Route path="overview" element={<ExecutiveOverview />} />
 
-            {/* Primary Module 2: Demand Intelligence (with tabs for forecasting, drivers, hidden demand, SKU analysis) */}
+            {/* Primary Module 2: Demand Forecast */}
             <Route path="demand" element={<DemandIntelligence />} />
-            <Route path="hidden-demand" element={<Navigate to="/demand?tab=hidden" replace />} />
+            <Route path="hidden-demand" element={<Navigate to="/demand" replace />} />
             <Route path="demand/:section" element={<DemandSectionRedirect />} />
 
-            {/* Primary Module 3: Risk & Alerts (with tabs for stockout, overstock, supplier, promotion guardian, critical) */}
+            {/* Primary Module 3: Risk & Alerts */}
             <Route path="risks" element={<RiskCentre />} />
-            <Route path="promotions" element={<Navigate to="/risks?tab=promotions" replace />} />
+            <Route path="promotions" element={<Navigate to="/risks" replace />} />
             <Route path="risks/:section" element={<RiskSectionRedirect />} />
 
             {/* Primary Module 4: Inventory Network */}
@@ -56,14 +56,12 @@ function App() {
 }
 
 function DemandSectionRedirect() {
-  const { section } = useParams();
-  const tab = ({ forecasting: 'forecasting', drivers: 'drivers', 'hidden-demand': 'hidden', hidden: 'hidden', sku: 'sku', 'sku-analysis': 'sku' })[section] || 'forecasting';
-  return <Navigate to={`/demand?tab=${tab}`} replace />;
+  return <Navigate to="/demand" replace />;
 }
 
 function RiskSectionRedirect() {
   const { section } = useParams();
-  const tab = ({ all: 'all', stockout: 'stockout', overstock: 'overstock', suppliers: 'supplier', supplier: 'supplier', promotions: 'promotions', critical: 'critical' })[section] || 'all';
+  const tab = ({ all: 'all', stockout: 'stockout', overstock: 'overstock', suppliers: 'supplier', supplier: 'supplier', promotions: 'all', critical: 'critical' })[section] || 'all';
   return <Navigate to={`/risks?tab=${tab}`} replace />;
 }
 

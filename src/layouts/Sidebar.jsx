@@ -206,7 +206,7 @@ const Sidebar = () => {
             <ul style={{ paddingLeft: '1.25rem', fontSize: '0.8rem', color: 'var(--color-text-secondary)' }}>
               <li><strong>Executive Overview:</strong> High-level store health, urgent operational alerts, and network demand.</li>
               <li><strong>Demand Intelligence:</strong> Quantile forecasting (P10/P50/P90), seasonal drivers, and Hidden Demand recovery.</li>
-              <li><strong>Risk & Alerts:</strong> Stockout radar, overstock buffers, and Promotion Guardian safety guards.</li>
+              <li><strong>Risk & Alerts:</strong> Stockout radar, overstock buffers, supplier disruptions, and critical alerts.</li>
               <li><strong>Inventory Network:</strong> Live multi-store SVG topology, cross-dock route optimization, and transfers.</li>
               <li><strong>AI Decision Centre:</strong> Autonomous recommendations, approval queue, Ripple Simulator, and dynamic replanning.</li>
               <li><strong>Impact & Performance:</strong> Realized financial savings, benchmark audits, and SLA tracking.</li>

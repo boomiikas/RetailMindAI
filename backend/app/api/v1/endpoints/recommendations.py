@@ -23,39 +23,6 @@ async def list_recommendations(
         stmt = stmt.where(DecisionRecord.decision_status == status.upper())
     rows = (await db.execute(stmt)).scalars().all()
 
-    # If database has no decisions yet, trigger optimizer on detected risks
-    if not rows and (not status or status.upper() in ("PENDING", "ALL")):
-        optimizer = RetailOptimizer(db)
-        try:
-            recs_slm = await optimizer.optimize_inventory_decisions("SLM_01", "MILK_001")
-            if recs_slm:
-                top = recs_slm[0]
-                dec_1 = DecisionRecord(
-                    decision_id="DEC_2026_SLM_01",
-                    current_version=1,
-                    decision_status="PENDING",
-                    execution_status="PENDING_APPROVAL",
-                    original_recommendation_snapshot=top
-                )
-                db.add(dec_1)
-
-            recs_cbe = await optimizer.optimize_inventory_decisions("CBE_01", "OIL_001")
-            if recs_cbe:
-                top2 = recs_cbe[0]
-                dec_2 = DecisionRecord(
-                    decision_id="DEC_2026_CBE_02",
-                    current_version=1,
-                    decision_status="PENDING",
-                    execution_status="PENDING_APPROVAL",
-                    original_recommendation_snapshot=top2
-                )
-                db.add(dec_2)
-
-            await db.commit()
-            rows = [dec_1, dec_2]
-        except Exception:
-            pass
-
     results = []
     for d in rows:
         results.append({

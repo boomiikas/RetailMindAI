@@ -75,9 +75,9 @@ async def get_dashboard_demand_trend(
         if store_id == "all"
         else [store_id]
     )
-    scoped_sales = sales[
-        sales["store_id"].isin(store_ids) & (sales["product_id"] == product_id)
-    ]
+    scoped_sales = sales[sales["store_id"].isin(store_ids)]
+    if product_id != "all":
+        scoped_sales = scoped_sales[scoped_sales["product_id"] == product_id]
 
     points_by_date: Dict[str, Dict[str, Any]] = {}
     historical_sales = scoped_sales.groupby("sale_date")["units_sold"].sum().tail(14)
@@ -93,16 +93,18 @@ async def get_dashboard_demand_trend(
             "optimalStock": None,
         }
 
-    forecasts_by_store = [
-        predictor.predict(
+    forecast_pairs = (
+        scoped_sales[["store_id", "product_id"]].drop_duplicates().itertuples(index=False, name=None)
+        if product_id == "all"
+        else ((target_store_id, product_id) for target_store_id in store_ids)
+    )
+    for target_store_id, target_product_id in forecast_pairs:
+        forecast = predictor.predict(
             target_store_id,
-            product_id,
-            start_date=date.today() + timedelta(days=1),
+            target_product_id,
+            start_date=date.today(),
             horizon_days=horizon_days,
         )
-        for target_store_id in store_ids
-    ]
-    for forecast in forecasts_by_store:
         for daily in forecast.get("daily_forecasts", []):
             forecast_date = date.fromisoformat(daily["forecast_date"])
             key = forecast_date.isoformat()

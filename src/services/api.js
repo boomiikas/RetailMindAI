@@ -217,81 +217,53 @@ export const RetailPulseApi = {
   async getDemandIntelligence({ store = 'all', product = 'all', horizon = 14 }) {
     try {
       const storeId = store === 'all' ? 'SLM_01' : store;
-      const [invRes, fcRes] = await Promise.all([
-        apiClient.get(`/inventory?store_id=${storeId}`).catch(() => null),
-        apiClient.get(`/forecasts?store_id=${storeId}&product_id=MILK_001&horizon_days=${horizon}`).catch(() => null),
+      const productIds = {
+        'Cooking Oil': 'OIL_001',
+        Milk: 'MILK_001',
+        Biscuits: 'PKG_006',
+        Rice: 'RICE_003',
+        Drink: 'BEV_004',
+      };
+      const chartProductId = product === 'all' ? 'all' : productIds[product] || 'MILK_001';
+      const [fcRes, trendRes] = await Promise.all([
+        chartProductId === 'all' || store === 'all' ? Promise.resolve(null) : apiClient.get(`/forecasts?store_id=${storeId}&product_id=${encodeURIComponent(chartProductId)}&horizon_days=${horizon}`).catch(() => null),
+        apiClient.get(`/dashboard/demand-trend?store_id=${encodeURIComponent(store)}&product_id=${encodeURIComponent(chartProductId)}&horizon_days=${horizon}`).catch(() => null),
       ]);
-
-      const inventoryItems = invRes?.data || [];
       const forecastResponse = fcRes?.data || {};
 
-      // Transform real inventory items into SKU Demand Items
-      const forecastItems = inventoryItems.map((inv) => {
-        const isDepleted = inv.available_stock < inv.safety_stock;
-        const isOverstocked = inv.days_of_supply > 25;
-        const demandRate = inv.days_of_supply < 7 ? '+36%' : inv.days_of_supply > 25 ? '-14%' : '+4%';
-
-        return {
-          id: inv.product_id,
-          product: inv.product_name,
-          category: inv.category,
-          store: inv.store_id,
-          currentStock: inv.available_stock,
-          predictedDemand: Math.round(inv.available_stock * (isDepleted ? 1.45 : isOverstocked ? 0.75 : 1.1)),
-          demandChange: demandRate,
-          riskLevel: isDepleted ? 'critical' : isOverstocked ? 'medium' : 'low',
-          risk: isDepleted ? 'High Depletion (< 3 days)' : isOverstocked ? 'Excess Surplus (> 25 days)' : 'Optimal Buffer',
-          weatherImpact: inv.category === 'HOUSEHOLD' ? '+40% Monsoon' : '+15% Stable',
-          festivalImpact: inv.category === 'STAPLES' ? '+35% Diwali' : '+10% Normal',
-        };
-      });
-
-      // Transform real daily quantile predictions into chart points
-      const forecastChart = (forecastResponse.daily_forecasts || []).map((df) => ({
-        date: df.forecast_date.slice(5),
-        historical: Math.round(df.p50 * 0.94),
-        predicted: Math.round(df.p50),
-        optimalStock: Math.round(df.p90 * 1.15),
-      }));
+      // Use actual sales history with the store-scoped forecast range.
+      const formatChartDate = (value) => {
+        if (!/^\d{4}-\d{2}-\d{2}$/.test(value || '')) return value;
+        const date = new Date(`${value}T00:00:00`);
+        return date.toLocaleDateString('en-US', { month: 'short', day: '2-digit' });
+      };
+      const trendPoints = Array.isArray(trendRes?.data) ? trendRes.data.map((point) => ({
+        ...point,
+        date: formatChartDate(point.date),
+        p50: point.p50 ?? point.predicted ?? null,
+        historical: point.historical ?? point.actual ?? null,
+        forecastRange: point.p10 != null && point.p90 != null ? Math.max(0, point.p90 - point.p10) : null,
+      })) : [];
+      const trendHasForecast = trendPoints.some((point) => Number.isFinite(point.p50));
+      const forecastFallback = (forecastResponse.daily_forecasts || []).map((df) => ({
+          date: formatChartDate(df.forecast_date),
+          historical: null,
+          predicted: Math.round(df.p50),
+          p10: Math.round(df.p10),
+          p50: Math.round(df.p50),
+          p90: Math.round(df.p90),
+          forecastRange: Math.max(0, Math.round(df.p90) - Math.round(df.p10)),
+          optimalStock: Math.round(df.p90),
+        }));
+      const chartFallback = trendHasForecast || chartProductId === 'all'
+        ? trendPoints
+        : [
+          ...trendPoints.filter((point) => point.historical != null),
+          ...forecastFallback,
+        ];
 
       return {
-        forecastItems: forecastItems.length > 0 ? forecastItems : [
-          {
-            id: 'MILK_001',
-            product: 'Aavin Toned Fresh Milk 500ml',
-            category: 'DAIRY',
-            store: storeId,
-            currentStock: 10,
-            predictedDemand: 45,
-            demandChange: '+42%',
-            riskLevel: 'critical',
-            risk: 'Critical Stockout (< 3.5 hrs)',
-            weatherImpact: '+12% Normal',
-            festivalImpact: '+25% Peak',
-          },
-          {
-            id: 'OIL_001',
-            product: '1L Sunflower Cooking Oil',
-            category: 'STAPLES',
-            store: storeId,
-            currentStock: 180,
-            predictedDemand: 220,
-            demandChange: '+28%',
-            riskLevel: 'medium',
-            risk: 'Elevated Velocity',
-            weatherImpact: '+5% Regular',
-            festivalImpact: '+38% Surge',
-          },
-        ],
-        forecastChart: forecastChart.length > 0 ? forecastChart : [
-          { date: '11-08', historical: 145, predicted: 150, optimalStock: 180 },
-          { date: '11-09', historical: 152, predicted: 164, optimalStock: 180 },
-          { date: '11-10', historical: 148, predicted: 172, optimalStock: 180 },
-          { date: '11-11', historical: 160, predicted: 185, optimalStock: 180 },
-          { date: '11-12', historical: 175, predicted: 190, optimalStock: 180 },
-          { date: '11-13', historical: 182, predicted: 198, optimalStock: 180 },
-          { date: '11-14', historical: 190, predicted: 210, optimalStock: 180 },
-        ],
+        forecastChart: chartFallback,
       };
     } catch (e) {
       console.error('Error fetching real demand intelligence:', e);
@@ -312,16 +284,17 @@ export const RetailPulseApi = {
         .filter((r) => category === 'all' || r.risk_type.toLowerCase().includes(category.toLowerCase()))
         .map((r) => ({
           id: r.risk_id,
-          score: r.severity === 'CRITICAL' ? 95 : r.severity === 'HIGH' ? 82 : r.severity === 'MEDIUM' ? 65 : 45,
           product: r.product_name,
           product_id: r.product_id,
           store: r.city || r.store_name,
           store_id: r.store_id,
           category: r.risk_type.replace(/_/g, ' '),
           severity: r.severity.toLowerCase(),
-          financialImpact: `₹${Math.round(r.financial_impact_est || 600).toLocaleString('en-IN')}`,
-          reason: r.root_cause || `${r.affected_quantity} units at risk`,
-          recommendedAction: r.risk_type.includes('STOCKOUT') ? 'Authorize Inter-Store Transfer' : 'Evaluate Markdown Strategy',
+          financialImpact: r.financial_impact_est == null ? null : Number(r.financial_impact_est),
+          reason: r.root_cause || null,
+          affectedQuantity: r.affected_quantity,
+          expectedOccurrence: r.expected_occurrence,
+          status: r.status,
         }));
     } catch (e) {
       console.error('Error fetching live risks:', e);
@@ -455,26 +428,31 @@ export const RetailPulseApi = {
 
       return records.map((d) => {
         const rec = d.recommendation || {};
+        const productNames = {
+          MILK_001: 'Fresh Milk 500ml',
+          OIL_001: 'Sunflower Oil 1L',
+          PKG_006: 'Butter Crunch Biscuits 200g',
+          RICE_003: 'Basmati Rice 5kg',
+          BEV_004: 'Soft Drink 750ml',
+        };
+        const productId = rec.product_id;
+        const expectedProfit = rec.expected_net_profit;
         return {
           id: d.decision_id,
           version: d.version || 1,
-          status: d.status ? d.status.charAt(0) + d.status.slice(1).toLowerCase() : 'Pending',
-          sku: rec.product_id ? `${rec.product_id} (${rec.product_id === 'MILK_001' ? 'Fresh Milk 500ml' : 'Sunflower Oil 1L'})` : 'MILK_001 Fresh Milk',
-          store: rec.dest_store_id ? `${rec.dest_store_id} Supermarket` : 'Salem Central',
-          action: (rec.action_type || 'INTER_STORE_TRANSFER').replace(/_/g, ' '),
-          quantity: `${rec.quantity || 50} units`,
-          impact: `+₹${Math.round(rec.expected_net_profit || 1800).toLocaleString('en-IN')}`,
-          currentStock: 10,
-          predictedDemand: 45,
-          urgency: 'Stockout in 3.5 Hours',
-          confidence: Math.round((rec.confidence_score || 0.96) * 100),
-          reasoning: rec.explanation || 'Optimal multi-agent rebalancing from nearest surplus node.',
-          consequences: {
-            stockoutRisk: '0% (Eliminated)',
-            originImpact: 'Safe (+45 units retained)',
-            netMargin: '+₹1,800.00 protected',
-            freightCost: `₹${rec.expected_cost || 120}.00 (NH-544 direct)`,
-          },
+          status: d.status ? d.status.charAt(0) + d.status.slice(1).toLowerCase() : 'Unavailable',
+          sku: productId ? `${productId}${productNames[productId] ? ` (${productNames[productId]})` : ''}` : 'SKU unavailable',
+          store: rec.dest_store_id || 'Store unavailable',
+          action: rec.action_type ? rec.action_type.replace(/_/g, ' ') : 'Action unavailable',
+          quantity: rec.quantity != null ? `${rec.quantity} units` : 'Unavailable',
+          impact: expectedProfit != null ? `+₹${Math.round(expectedProfit).toLocaleString('en-IN')}` : 'Unavailable',
+          currentStock: rec.current_stock ?? null,
+          predictedDemand: rec.predicted_demand ?? null,
+          urgency: rec.urgency || null,
+          confidence: rec.confidence_score != null ? Math.round(rec.confidence_score * 100) : null,
+          priority: rec.priority || rec.risk_level || null,
+          reasoning: rec.explanation || null,
+          consequences: rec.consequences || null,
         };
       });
     } catch (e) {
@@ -690,40 +668,8 @@ export const RetailPulseApi = {
   },
 
   // ==========================================
-  // Promotion Guardian & Hidden Demand (Computed from Live Inventory)
+  // Hidden Demand
   // ==========================================
-  async getPromotions(store = 'all') {
-    try {
-      const storeId = store === 'all' ? 'SLM_01' : store;
-      const res = await apiClient.get(`/inventory?store_id=${storeId}`);
-      const invs = (res.data || []).slice(0, 5);
-
-      return invs.map((inv, idx) => ({
-        id: `PROMO-LIVE-00${idx + 1}`,
-        name: `${inv.product_name} Weekend Campaign`,
-        product: inv.product_name,
-        store: `${inv.store_id} Supermarket`,
-        currentDiscount: 15 + idx * 5,
-        currentStock: inv.available_stock,
-        expectedDemand: Math.round(inv.available_stock * (1.2 + idx * 0.15)),
-        safetyScore: inv.available_stock > inv.safety_stock ? 92 - idx * 10 : 54,
-        safetyStatus: inv.available_stock < inv.safety_stock ? 'Critical Risk' : idx === 2 ? 'Moderate Risk' : 'Safe',
-        recommendation: inv.available_stock < inv.safety_stock
-          ? 'Stockout imminent: Pre-allocate DC buffer before launch.'
-          : 'Campaign parameters safe. Backroom stock adequately absorbs velocity.',
-        chartData: [
-          { day: 'Day 1', currentStock: inv.available_stock, expectedDemand: Math.round(inv.available_stock * 0.25) },
-          { day: 'Day 2', currentStock: Math.round(inv.available_stock * 0.75), expectedDemand: Math.round(inv.available_stock * 0.45) },
-          { day: 'Day 3', currentStock: Math.round(inv.available_stock * 0.45), expectedDemand: Math.round(inv.available_stock * 0.75) },
-          { day: 'Day 4', currentStock: Math.round(inv.available_stock * 0.2), expectedDemand: Math.round(inv.available_stock * 0.95) },
-        ],
-      }));
-    } catch (e) {
-      console.warn('Live promotions fallback:', e);
-      return [];
-    }
-  },
-
   async getHiddenDemand(store = 'all') {
     try {
       const res = await apiClient.get('/risks');
