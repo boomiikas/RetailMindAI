@@ -6,7 +6,7 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from backend.app.database.session import get_db
-from backend.app.models import KPIPerformance, DecisionRecord, ManagerApproval
+from backend.app.models import KPIPerformance, DecisionRecord
 from backend.app.agents.learning_agent import LearningAgent
 
 router = APIRouter(prefix="/performance", tags=["Performance & Learning"])
@@ -60,7 +60,6 @@ async def get_actual_vs_expected():
 async def get_recommendation_performance(db: AsyncSession = Depends(get_db)):
     """Returns acceptance rate and execution outcomes for proposed recommendations."""
     total_decs = (await db.execute(select(DecisionRecord))).scalars().all()
-    approvals = (await db.execute(select(ManagerApproval))).scalars().all()
 
     total_count = len(total_decs)
     approved_count = sum(1 for d in total_decs if d.decision_status == "APPROVED")
@@ -70,6 +69,5 @@ async def get_recommendation_performance(db: AsyncSession = Depends(get_db)):
         "total_recommendations_proposed": total_count,
         "total_approved": approved_count,
         "acceptance_rate": acceptance_rate,
-        "average_manager_response_time_sec": 42,
-        "whatsapp_approvals_share_pct": 85.0
+        "average_manager_response_time_sec": 42
     }

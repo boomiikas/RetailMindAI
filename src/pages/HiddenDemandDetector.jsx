@@ -201,12 +201,12 @@ const HiddenDemandDetector = () => {
               <span style={{ fontSize: '0.7rem', color: '#DC2626' }}>Unmet demand during stockout hours</span>
             </div>
 
-            <div style={{ padding: '1rem', backgroundColor: '#EFF6FF', borderRadius: 'var(--radius-md)', border: '1px solid #BFDBFE' }}>
-              <div style={{ fontSize: '0.75rem', color: '#1E40AF', fontWeight: 600 }}>True Model-Estimated Demand</div>
-              <div style={{ fontSize: '1.75rem', fontWeight: 800, color: '#1D4ED8' }}>
+            <div style={{ padding: '1rem', backgroundColor: 'var(--color-primary-light)', borderRadius: 'var(--radius-md)', border: '1px solid var(--color-primary-border)' }}>
+              <div style={{ fontSize: '0.75rem', color: 'var(--color-primary-active)', fontWeight: 600 }}>True Model-Estimated Demand</div>
+              <div style={{ fontSize: '1.75rem', fontWeight: 800, color: 'var(--color-primary)' }}>
                 {selectedItem.estimatedTrueDemand} <span style={{ fontSize: '0.8rem', fontWeight: 500 }}>units</span>
               </div>
-              <span style={{ fontSize: '0.7rem', color: '#1E40AF' }}>Combined actual purchasing power</span>
+              <span style={{ fontSize: '0.7rem', color: 'var(--color-text-secondary)' }}>Combined actual purchasing power</span>
             </div>
 
             <div style={{ padding: '1rem', backgroundColor: '#FEF3C7', borderRadius: 'var(--radius-md)' }}>

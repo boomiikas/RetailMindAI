@@ -1,4 +1,4 @@
-<div align="center">
+﻿<div align="center">
 
 # 🛒 RetailMind AI
 
@@ -13,7 +13,6 @@
 ![PostgreSQL](https://img.shields.io/badge/Supabase-PostgreSQL-3ECF8E?logo=supabase&logoColor=white)
 ![LangGraph](https://img.shields.io/badge/LangGraph-Agents-1C3C3C)
 ![Groq](https://img.shields.io/badge/LLM-Groq-F55036)
-![Tests](https://img.shields.io/badge/tests-18%2F18%20passing-brightgreen)
 
 [Overview](#-overview) •
 [Features](#-key-features) •
@@ -49,7 +48,7 @@
 
 Instead of stopping at passive forecasting, RetailMind AI closes the loop:
 
-> **Observe** inventory → **Predict** quantile demand (P10 / P50 / P90) → **Diagnose** ripple effects → **Optimize** with MILP → **Ask** the store manager on WhatsApp → **Execute** approved actions → **Replan** when conditions change.
+> **Observe** inventory → **Predict** quantile demand (P10 / P50 / P90) → **Diagnose** ripple effects → **Optimize** with MILP → **Ask** the manager through the web dashboard → **Execute** approved actions → **Replan** when conditions change.
 
 <!-- Add a hero screenshot or GIF of the dashboard here -->
 <!-- ![RetailMind AI Dashboard](docs/images/dashboard.png) -->
@@ -65,7 +64,7 @@ Instead of stopping at passive forecasting, RetailMind AI closes the loop:
 | Supplier delays that silently cascade | Directed-graph ripple analysis down to net profit |
 | Plans that go stale before the truck leaves | Pre-dispatch replanning with V1 → V2 versioning |
 | LLMs are costly and unreliable for math | Deterministic core; LLMs only for language and explanation |
-| Managers don't want another dashboard | Approvals via interactive WhatsApp messages |
+| Managers don't want another dashboard | Approvals through the web decision centre |
 
 ---
 
@@ -107,10 +106,9 @@ Pyomo + HiGHS evaluate six interventions and pick the most profitable one:
 
 Source-store safety stock is **mathematically guaranteed never to be violated**.
 
-### 💬 WhatsApp Manager Assistant with Idempotent Approvals
-- Interactive buttons: **Transfer · Supplier Order · Markdown · Reject**
-- **Idempotency keys:** duplicate button taps return the cached confirmation.
-- **Version lock:** a V1 approval can never authorize an altered V2 order.
+### Web-Based Decision Approvals
+- Review, approve, or reject recommendations in the AI Decision Centre.
+- Approval actions are recorded in the decision audit trail.
 
 ### 🔄 Dynamic Replanning Engine
 Assumptions are re-validated before dispatch. *Example:* a Salem → Coimbatore transfer is approved (V1), then demand in Coimbatore spikes by 45 units before the truck leaves. The engine pauses V1, releases the stock reservations, re-optimizes, creates V2 and asks for fresh approval.
@@ -125,20 +123,17 @@ Risk scans, DAG cascades, optimization, button handling, stock reservations, ord
 RetailMind AI uses a **two-layer decoupled architecture**:
 
 1. **Deterministic Operational Core** (Python 3.13 + Math + SQL) — telemetry, risk detection, forecasting, graph cascading, MILP optimization, ledger transactions, replanning and KPI reporting. No LLM in any mission-critical calculation.
-2. **Cognitive Agent Layer** (max 2 LLM agents)
+2. **Cognitive Agent Layer** (one LLM agent)
    - **Retail Intelligence Agent** — LangGraph + Groq brain for NLU, tool routing, grounded retrieval and SHAP/decision explanation.
-   - **Decision Communication Agent** — handles WhatsApp / Telegram, turns decision snapshots into interactive proposals and explains revised plans (V1 → V2).
 
 ```mermaid
 flowchart TD
     subgraph ClientLayer ["Client & Interaction Layer"]
         UI["React 18 + Vite Dashboard\n(Port 3000)"]
-        WA["WhatsApp / Telegram (Managers)"]
     end
 
-    subgraph AgentLayer ["Cognitive Agent Layer (Max 2 LLM Agents)"]
+    subgraph AgentLayer ["Cognitive Agent Layer (one LLM agent)"]
         RIA["Retail Intelligence Agent\n(NLU, Tool Calling, SHAP & Optimization Synthesis)"]
-        DCA["Decision Communication Agent\n(Proposal Messaging, Clarification & Feedback)"]
     end
 
     subgraph ServiceLayer ["Deterministic Operational Core (Python 3.13)"]
@@ -157,8 +152,6 @@ flowchart TD
 
     UI <-->|REST & WebSockets| RIA
     UI <-->|Direct CRUD / Stats| ServiceLayer
-    WA <-->|Webhooks / Buttons| DCA
-    DCA <-->|Approval Validation| EXEC
     RIA <-->|Deterministic Tool Calls| ServiceLayer
     ServiceLayer <-->|Asyncpg / SQLAlchemy 2.0| DB
 ```
@@ -182,7 +175,7 @@ flowchart TD
 | | Digital twin | SimPy + NumPy discrete-event simulator |
 | **Agents** | Framework | LangGraph StateGraph |
 | | LLM | Groq Cloud LPU (`openai/gpt-oss-120b`) |
-| **Messaging** | Channel | Meta WhatsApp Cloud API + offline mock adapter |
+| **Approvals** | Channel | Web dashboard decision centre |
 | **Frontend** | App | React 18, Vite, Lucide Icons, Chart.js |
 
 ---
@@ -194,7 +187,7 @@ flowchart TD
 2. PREDICT   → Quantile forecast (P10 / P50 / P90) per SKU per store
 3. DIAGNOSE  → Ripple graph estimates downstream revenue and profit impact
 4. OPTIMIZE  → MILP picks the most profitable of 6 interventions
-5. PROPOSE   → Decision Communication Agent sends WhatsApp buttons to the manager
+5. PRESENT   → Show the recommendation and alternatives in the web dashboard
 6. APPROVE   → Idempotent, version-locked approval
 7. EXECUTE   → Ledger reserves stock, raises POs / transfers
 8. REPLAN    → Pre-dispatch audit; if assumptions break, V1 → V2 and re-approve
@@ -240,19 +233,12 @@ GROQ_MODEL=openai/gpt-oss-120b
 LLM_PROVIDER=groq
 LLM_TEMPERATURE=0.1
 
-# WhatsApp Meta Cloud API
-WHATSAPP_TOKEN=""
-WHATSAPP_PHONE_NUMBER_ID=mock_phone_id
-WHATSAPP_VERIFY_TOKEN=retailmind_meta_webhook_verify_secret
-WHATSAPP_API_VERSION=v21.0
-USE_MOCK_WHATSAPP=true
 
 # Security & CORS
 SECRET_KEY=change-me-to-a-long-random-string
 ALLOWED_ORIGINS=http://localhost:5173,http://localhost:3000,http://127.0.0.1:5173
 ```
 
-> 💡 Keep `USE_MOCK_WHATSAPP=true` to run the full approval flow without a Meta account.
 
 ### 3. Install dependencies
 
@@ -307,7 +293,6 @@ Open **http://localhost:3000**.
 | GET | `/api/v1/forecasts` | Quantile demand forecasts |
 | GET | `/api/v1/forecasts/compare-models` | Benchmark SMA-7, WMA-7, SES, SDOWF, HGB |
 | POST | `/api/v1/chat` | Retail Copilot chatbot |
-| POST | `/api/v1/whatsapp/simulate-query` | Simulate a WhatsApp manager query |
 | WS | `/ws/dashboard` | Real-time dashboard stream |
 
 Full interactive documentation is available at `/docs` when the server is running.
@@ -316,7 +301,7 @@ Full interactive documentation is available at `/docs` when the server is runnin
 
 ## ✅ Testing
 
-The suite covers the REST APIs, Groq integration and 8 end-to-end retail scenarios against Supabase PostgreSQL.
+The suite covers REST APIs, Groq integration, and end-to-end retail scenarios.
 
 ```bash
 python -m pytest backend/tests/test_api_endpoints.py \
@@ -325,7 +310,7 @@ python -m pytest backend/tests/test_api_endpoints.py \
 ```
 
 <details>
-<summary><b>View all 18 tests</b></summary>
+<summary><b>View test coverage</b></summary>
 
 | File | Scenario / Feature | Result |
 | --- | --- | --- |
@@ -335,14 +320,12 @@ python -m pytest backend/tests/test_api_endpoints.py \
 | `test_api_endpoints.py` | Quantile demand forecast | ✅ |
 | `test_api_endpoints.py` | Model comparison benchmark | ✅ |
 | `test_api_endpoints.py` | Retail Copilot chatbot | ✅ |
-| `test_api_endpoints.py` | WhatsApp query simulation | ✅ |
 | `test_groq_integration.py` | Groq direct API completion | ✅ |
 | `test_groq_integration.py` | Decision explanation with SHAP weights | ✅ |
 | `test_groq_integration.py` | Store manager conversational Q&A | ✅ |
 | `test_retailmind_scenarios.py` | S1: Stockout → Inter-Store Transfer | ✅ |
 | `test_retailmind_scenarios.py` | S2: Overstock → Markdown Strategy | ✅ |
 | `test_retailmind_scenarios.py` | S3: Supplier Delay → Ripple Analysis | ✅ |
-| `test_retailmind_scenarios.py` | S4: WhatsApp Approval Workflow | ✅ |
 | `test_retailmind_scenarios.py` | S5: Dynamic Replanning on Pre-Dispatch Spike | ✅ |
 | `test_retailmind_scenarios.py` | S6: Duplicate / Idempotent Approval Rejection | ✅ |
 | `test_retailmind_scenarios.py` | S7: Failed Execution with Error Handling | ✅ |

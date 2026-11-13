@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import {
   Cpu,
   CheckCircle2,
@@ -42,6 +42,7 @@ const SCENARIOS = [
 ];
 
 const AIDecisionCentre = () => {
+  const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const initialTab = searchParams.get('tab') || 'recommendations';
 
@@ -54,6 +55,10 @@ const AIDecisionCentre = () => {
   };
 
   const [activeTab, setActiveTab] = useState(mapInitialTab(initialTab));
+
+  useEffect(() => {
+    setActiveTab(mapInitialTab(searchParams.get('tab') || 'recommendations'));
+  }, [searchParams]);
 
   const {
     recommendations,
@@ -74,7 +79,7 @@ const AIDecisionCentre = () => {
   const [expandedCards, setExpandedCards] = useState({});
   const [rejectingRec, setRejectingRec] = useState(null);
   const [rejectReason, setRejectReason] = useState('Supplier pricing discount negotiated directly');
-  const [alternativesRec, setAlternativesRec] = useState(null);
+  const [simulationRecommendation, setSimulationRecommendation] = useState(null);
 
   // Ripple Simulator State
   const [scenarioType, setScenarioType] = useState('promotion');
@@ -97,6 +102,31 @@ const AIDecisionCentre = () => {
       ...prev,
       [id]: !prev[id],
     }));
+  };
+
+  const simulateRecommendation = (rec) => {
+    const sku = String(rec.sku || '').toLowerCase();
+    const product = sku.includes('milk')
+      ? 'Fresh Farm Milk 500ml'
+      : sku.includes('oil')
+        ? '1L Sunflower Cooking Oil'
+        : sku.includes('drink')
+          ? 'Sparkling Citrus Drink 750ml'
+          : selectedProduct;
+    const storeMatch = stores.find((store) =>
+      String(rec.store || '').toLowerCase().includes(String(store.id).toLowerCase()) ||
+      String(rec.store || '').toLowerCase().includes(String(store.name).toLowerCase())
+    );
+    const action = String(rec.action || '').toLowerCase();
+    const scenario = ['promotion', 'discount', 'transfer', 'allocation', 'delay', 'spike'].find((type) => action.includes(type)) || 'transfer';
+    setSimulationRecommendation(rec);
+    setSelectedProduct(product);
+    setCurrentPrice(product.includes('Milk') ? 32 : product.includes('Oil') ? 165 : product.includes('Drink') ? 50 : currentPrice);
+    setSimStore(storeMatch?.name || simStore);
+    setCurrentInventory(Number(rec.currentStock) || currentInventory);
+    setScenarioType(scenario);
+    setSimulationResult(null);
+    handleTabChange('simulation');
   };
 
   const handleOpenReject = (rec) => {
@@ -278,8 +308,7 @@ const AIDecisionCentre = () => {
           onClick={() => handleTabChange('simulation')}
         >
           <GitFork size={15} style={{ display: 'inline', marginRight: '6px' }} />
-          Decision Ripple Simulator
-          <span className="badge badge-purple" style={{ marginLeft: '6px', fontSize: '0.65rem' }}>CASCADE ENGINE</span>
+          Scenario Simulation
         </button>
 
         <button
@@ -287,7 +316,7 @@ const AIDecisionCentre = () => {
           onClick={() => handleTabChange('history')}
         >
           <History size={15} style={{ display: 'inline', marginRight: '6px' }} />
-          Decision History & Audit
+          Decision History
         </button>
 
         <button
@@ -295,7 +324,7 @@ const AIDecisionCentre = () => {
           onClick={() => handleTabChange('execution')}
         >
           <Truck size={15} style={{ display: 'inline', marginRight: '6px' }} />
-          Execution Tracking & Replanning
+          Execution Tracking
           <span className="badge badge-success" style={{ marginLeft: '6px', fontSize: '0.65rem' }}>v1 $\to$ v2 Lineage</span>
         </button>
       </div>
@@ -303,6 +332,15 @@ const AIDecisionCentre = () => {
       {/* TAB 1 & TAB 2: RECOMMENDATIONS & PENDING APPROVALS */}
       {(activeTab === 'recommendations' || activeTab === 'approvals') && (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+          {activeTab === 'approvals' && (
+            <div className="section-card" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '1rem', flexWrap: 'wrap' }}>
+              <div>
+                <div className="section-card-title">Campaign decisions</div>
+                <div className="section-card-subtitle">Review Promotion Guardian risk, adjust campaigns, and pause or resume them.</div>
+              </div>
+              <button className="btn btn-secondary btn-sm" onClick={() => navigate('/risks?tab=promotions')}>Open campaign decisions <ArrowRight size={14} /></button>
+            </div>
+          )}
           {(activeTab === 'approvals' ? pendingRecs : filteredRecs).map((rec) => {
             const isExpanded = !!expandedCards[rec.id];
 
@@ -368,8 +406,8 @@ const AIDecisionCentre = () => {
 
                   {/* Expanded Ripple Consequence Preview */}
                   {isExpanded && rec.consequences && (
-                    <div style={{ padding: '0.85rem', backgroundColor: '#EFF6FF', borderRadius: 'var(--radius-md)', border: '1px solid #BFDBFE' }}>
-                      <div style={{ fontSize: '0.75rem', fontWeight: 700, color: '#1E40AF', textTransform: 'uppercase', marginBottom: '0.5rem' }}>
+                    <div style={{ padding: '0.85rem', backgroundColor: 'var(--color-primary-light)', borderRadius: 'var(--radius-md)', border: '1px solid var(--color-primary-border)' }}>
+                      <div style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--color-primary-active)', textTransform: 'uppercase', marginBottom: '0.5rem' }}>
                         Simulated Consequence Ripple (Pyomo + HiGHS Validated)
                       </div>
                       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: '0.5rem', fontSize: '0.75rem' }}>
@@ -389,6 +427,12 @@ const AIDecisionCentre = () => {
                     >
                       {isExpanded ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
                       {isExpanded ? 'Hide Consequence Ripple' : 'View Consequence Ripple'}
+                    </button>
+                    <button
+                      className="btn btn-primary btn-sm"
+                      onClick={() => simulateRecommendation(rec)}
+                    >
+                      <GitFork size={14} /> Simulate alternatives
                     </button>
 
                     <div style={{ display: 'flex', gap: '0.5rem' }}>
@@ -424,6 +468,15 @@ const AIDecisionCentre = () => {
       {/* TAB 3: DECISION RIPPLE SIMULATOR (Consolidated from DecisionRippleSimulator) */}
       {activeTab === 'simulation' && (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+          {simulationRecommendation && (
+            <div className="section-card" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '1rem', flexWrap: 'wrap' }}>
+              <div>
+                <div className="section-card-title">Scenario for {simulationRecommendation.id}</div>
+                <div className="section-card-subtitle">{simulationRecommendation.sku} at {simulationRecommendation.store} · {simulationRecommendation.action}</div>
+              </div>
+              <button className="btn btn-secondary btn-sm" onClick={() => setSimulationRecommendation(null)}>Clear recommendation</button>
+            </div>
+          )}
           {/* Top Banner */}
           <div
             className="card"
@@ -435,7 +488,7 @@ const AIDecisionCentre = () => {
             }}
           >
             <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', background: 'rgba(56, 189, 248, 0.15)', color: '#38BDF8', padding: '0.2rem 0.6rem', borderRadius: '4px', fontSize: '0.75rem', fontWeight: 700, marginBottom: '0.5rem' }}>
-              <Sparkles size={13} /> SIGNATURE CAPABILITY: DECISION RIPPLE ENGINE
+              <Sparkles size={13} /> SCENARIO SIMULATION
             </div>
             <h3 style={{ fontSize: '1.5rem', fontWeight: 800, letterSpacing: '-0.02em', marginBottom: '0.35rem' }}>
               "What happens if I make this decision?"
@@ -588,7 +641,7 @@ const AIDecisionCentre = () => {
                       padding: '1.25rem',
                       cursor: 'pointer',
                       border: selectedOption === opt.id ? '2px solid var(--color-primary)' : '1px solid var(--color-border)',
-                      backgroundColor: selectedOption === opt.id ? '#EFF6FF' : '#FFFFFF',
+                      backgroundColor: selectedOption === opt.id ? 'var(--color-primary-light)' : '#FFFFFF',
                     }}
                   >
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>

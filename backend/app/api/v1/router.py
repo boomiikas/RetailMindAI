@@ -12,7 +12,6 @@ from backend.app.api.v1.endpoints.decisions import router as decisions_router
 from backend.app.api.v1.endpoints.replanning import router as replanning_router
 from backend.app.api.v1.endpoints.executions import router as executions_router
 from backend.app.api.v1.endpoints.performance import router as performance_router
-from backend.app.api.v1.endpoints.whatsapp import router as whatsapp_router
 from backend.app.api.v1.endpoints.chat import router as chat_router
 
 api_router = APIRouter(prefix="/api/v1")
@@ -28,5 +27,4 @@ api_router.include_router(decisions_router)
 api_router.include_router(replanning_router)
 api_router.include_router(executions_router)
 api_router.include_router(performance_router)
-api_router.include_router(whatsapp_router)
 api_router.include_router(chat_router)

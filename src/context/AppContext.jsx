@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+﻿import React, { createContext, useContext, useState, useEffect } from 'react';
 import { RetailPulseApi } from '../services/api';
 
 const AppContext = createContext();
@@ -97,17 +97,17 @@ export const AppProvider = ({ children }) => {
     const targetRec = recommendations.find(r => r.id === recId);
     if (!targetRec) return;
 
-    // Update state immediately
-    setRecommendations(prev =>
-      prev.map(r => (r.id === recId ? { ...r, status: 'Approved' } : r))
-    );
-
-    // Call real backend execution endpoint
+    // Only mark the recommendation approved after the backend confirms it.
     try {
       await RetailPulseApi.approveRecommendation(recId);
     } catch (e) {
       console.warn('Real approval backend sync:', e);
+      return;
     }
+
+    setRecommendations(prev =>
+      prev.map(r => (r.id === recId ? { ...r, status: 'Approved' } : r))
+    );
 
     // Append to Decision Audit History
     const newAuditEntry = {

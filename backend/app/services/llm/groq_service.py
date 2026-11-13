@@ -43,7 +43,7 @@ class GroqLLMService:
                 if resp.status_code == 200:
                     data = resp.json()
                     content = data["choices"][0]["message"].get("content", "")
-                    # Sanitize smart punctuation for clean console/SMS/WhatsApp output
+                    # Sanitize smart punctuation for clean user-facing output
                     cleaned = (
                         content.replace("\u2019", "'")
                         .replace("\u2018", "'")
@@ -85,19 +85,6 @@ class GroqLLMService:
             f"- Key Demand Drivers (SHAP): {driver_str}\n"
             f"- Alternatives Evaluated: {alt_str}\n"
             f"Use strict business terminology. Do not invent any numbers."
-        )
-        return await self.generate_completion(prompt)
-
-    async def answer_manager_query(
-        self,
-        query: str,
-        context_data: Dict[str, Any]
-    ) -> str:
-        """Synthesizes a response to a manager's WhatsApp query based strictly on retrieved DB context."""
-        prompt = (
-            f"The store manager asked: '{query}'\n\n"
-            f"Here is the verified database context:\n{context_data}\n\n"
-            f"Answer the manager's question clearly and concisely (under 60 words) using only the provided facts."
         )
         return await self.generate_completion(prompt)
 

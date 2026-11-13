@@ -27,7 +27,6 @@ const ROUTE_TITLES = {
   '/promotions': { title: 'Promotion Guardian', section: 'Operational Safety' },
   '/hidden-demand': { title: 'Hidden Demand Detector', section: 'Unmet Demand Analysis' },
   '/history': { title: 'Decision History', section: 'Audit Log & Accountability' },
-  '/whatsapp': { title: 'WhatsApp Manager Assistant', section: 'Mobile Approvals' },
 };
 
 const TopNavbar = () => {
@@ -51,6 +50,13 @@ const TopNavbar = () => {
     title: 'RetailMind AI',
     section: 'Intelligence Suite',
   };
+  const sectionTab = new URLSearchParams(location.search).get('tab');
+  const TAB_TITLES = {
+    '/demand': { forecasting: 'Demand Forecasting', drivers: 'Demand Drivers', hidden: 'Hidden Demand', 'hidden-demand': 'Hidden Demand', sku: 'SKU Demand Analysis' },
+    '/risks': { all: 'All Risks', stockout: 'Stockout Risks', overstock: 'Overstock Risks', supplier: 'Supplier Disruptions', promotions: 'Promotion Guardian', critical: 'Critical Alerts' },
+    '/decisions': { recommendations: 'Recommendations', approvals: 'Pending Approvals', pending: 'Pending Approvals', simulation: 'Scenario Simulation', simulator: 'Scenario Simulation', history: 'Decision History', execution: 'Execution Tracking' },
+  };
+  const currentSection = TAB_TITLES[location.pathname]?.[sectionTab] || currentRouteMeta.section;
 
   return (
     <header className="top-navbar">
@@ -68,7 +74,7 @@ const TopNavbar = () => {
           <div className="breadcrumb-trail">
             <span>RetailMind AI</span>
             <span>/</span>
-            <span>{currentRouteMeta.section}</span>
+            <span>{currentSection}</span>
           </div>
           <h1 className="breadcrumb-page-title">{currentRouteMeta.title}</h1>
         </div>

@@ -1,91 +1,189 @@
 /* ==========================================================================
    RetailMind AI - Design System Tokens
-   Premium Enterprise SaaS Control Tower Palette
+   Premium Enterprise SaaS Control Tower Palette & Design System Foundation
    ========================================================================== */
 
 :root {
-  /* Brand & Primary Interactive Colors */
-  --color-primary: #2563EB;
-  --color-primary-hover: #1D4ED8;
-  --color-primary-active: #1E40AF;
-  --color-primary-light: #EFF6FF;
-  --color-primary-subtle: #DBEAFE;
-  --color-primary-border: #BFDBFE;
+  /* --------------------------------------------------------------------------
+     1. Brand & Interactive Colors (Teal Enterprise Visual Identity)
+     -------------------------------------------------------------------------- */
+  --color-primary: #147D75;
+  --color-primary-hover: #106B64;
+  --color-primary-active: #0E5A55;
+  --color-primary-light: #E9F5F3;
+  --color-primary-subtle: #D5ECE9;
+  --color-primary-border: #B4DCD7;
 
-  /* Surfaces & Canvas Backgrounds */
-  --color-bg: #F5F7FA;
+  /* --------------------------------------------------------------------------
+     2. Deep Navy Navigation & Enterprise Identity
+     -------------------------------------------------------------------------- */
+  --color-dark-navy: #0B132B;
+  --color-navy: #0B132B;
+  --color-navy-surface: #111C3A;
+  --color-navy-hover: #162040;
+  --color-navy-border: #1E293B;
+  --color-navy-muted: #334155;
+
+  /* Sidebar Tokens (Strictly Preserved) */
+  --color-sidebar-bg: #0B132B;
+  --color-sidebar-hover: #162040;
+  --color-sidebar-active: #147D75;
+  --color-sidebar-text: #94A3B8;
+  --color-sidebar-text-active: #FFFFFF;
+  --color-sidebar-border: #1E293B;
+
+  /* --------------------------------------------------------------------------
+     3. Surfaces & Canvas Backgrounds (Cool Neutral / White Content)
+     -------------------------------------------------------------------------- */
+  --color-bg: #F3F6F7;
   --color-surface: #FFFFFF;
   --color-surface-hover: #F8FAFC;
   --color-surface-active: #F1F5F9;
   --color-surface-muted: #F8FAFC;
-  
-  /* Borders */
-  --color-border: #E5EAF1;
+  --color-surface-subtle: #F8FAFC; /* Resolved: Table headers, inputs, card headers */
+  --color-surface-overlay: rgba(16, 24, 40, 0.6);
+
+  /* --------------------------------------------------------------------------
+     4. Borders & Dividers
+     -------------------------------------------------------------------------- */
+  --color-border: #E1E8E9;
   --color-border-subtle: #F0F4F8;
   --color-border-strong: #CBD5E1;
-  --color-border-focus: #2563EB;
+  --color-border-focus: #147D75;
 
-  /* Typography Colors */
+  /* --------------------------------------------------------------------------
+     5. Typography Colors
+     -------------------------------------------------------------------------- */
   --color-text-primary: #172033;
   --color-text-secondary: #64748B;
   --color-text-muted: #94A3B8;
   --color-text-disabled: #CBD5E1;
   --color-text-white: #FFFFFF;
 
-  /* Semantic Feedback Colors */
+  /* --------------------------------------------------------------------------
+     6. Semantic Status Colors (Consistent Supply Chain Feedback)
+     -------------------------------------------------------------------------- */
+  /* Success - Healthy stock, positive trend, optimal risk */
   --color-success: #16A34A;
+  --color-success-hover: #15803D;
   --color-success-bg: #DCFCE7;
   --color-success-border: #86EFAC;
   --color-success-text: #15803D;
 
+  /* Warning - Stock caution, expiring batch, reorder required */
   --color-warning: #F59E0B;
+  --color-warning-hover: #D97706;
   --color-warning-bg: #FEF3C7;
   --color-warning-border: #FCD34D;
   --color-warning-text: #B45309;
 
+  /* Danger - Stockout risk, critical disruption, delayed shipment */
   --color-danger: #DC2626;
+  --color-danger-hover: #B91C1C;
   --color-danger-bg: #FEE2E2;
   --color-danger-border: #FCA5A5;
   --color-danger-text: #B91C1C;
 
-  /* Accent Tints */
+  /* Info - Supply chain signals, sync status, general alerts */
+  --color-info: #147D75;
+  --color-info-hover: #106B64;
+  --color-info-bg: #E9F5F3;
+  --color-info-border: #B4DCD7;
+  --color-info-text: #106B64;
+
+  /* --------------------------------------------------------------------------
+     7. Analytical Accent Tints
+     -------------------------------------------------------------------------- */
+  /* Teal - Supply Chain Analytics & Optimization Accent */
+  --color-teal: #0D9488;
+  --color-teal-hover: #0F766E;
+  --color-teal-bg: #CCFBF1;
+  --color-teal-border: #99F6E4;
+  --color-teal-text: #0F766E;
+  --color-teal-light: #F0FDFA;
+
+  /* Purple - AI Models, Simulation & Machine Learning Accents */
   --color-purple: #7C3AED;
+  --color-purple-hover: #6D28D9;
   --color-purple-bg: #F3E8FF;
   --color-purple-border: #D8B4FE;
   --color-purple-text: #6D28D9;
 
-  --color-teal: #0D9488;
-  --color-teal-bg: #CCFBF1;
-  --color-teal-border: #99F6E4;
-  --color-teal-text: #0F766E;
-
-  /* Deep Navy Enterprise Sidebar */
-  --color-sidebar-bg: #0B132B;
-  --color-sidebar-hover: #162040;
-  --color-sidebar-active: #2563EB;
-  --color-sidebar-text: #94A3B8;
-  --color-sidebar-text-active: #FFFFFF;
-  --color-sidebar-border: #1E293B;
-
-  /* Typography Scale */
-  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  /* --------------------------------------------------------------------------
+     8. Typography Tokens (Professional Inter & JetBrains Mono)
+     -------------------------------------------------------------------------- */
+  --font-sans: 'Segoe UI', 'Inter', -apple-system, BlinkMacSystemFont, Roboto, Helvetica, Arial, sans-serif;
   --font-mono: 'JetBrains Mono', 'SFMono-Regular', Consolas, monospace;
 
-  /* Spacing Scale */
-  --space-0-5: 0.125rem; /* 2px */
-  --space-1: 0.25rem;   /* 4px */
-  --space-1-5: 0.375rem; /* 6px */
-  --space-2: 0.5rem;    /* 8px */
-  --space-2-5: 0.625rem; /* 10px */
-  --space-3: 0.75rem;   /* 12px */
-  --space-4: 1rem;      /* 16px */
-  --space-5: 1.25rem;   /* 20px */
-  --space-6: 1.5rem;    /* 24px */
-  --space-8: 2rem;      /* 32px */
-  --space-10: 2.5rem;   /* 40px */
-  --space-12: 3rem;     /* 48px */
+  /* Font Sizes */
+  --font-size-2xs: 0.75rem;    /* 12px - compact tags */
+  --font-size-xs: 0.8125rem;   /* 13px - metadata and secondary labels */
+  --font-size-sm: 0.875rem;    /* 14px - table cells, form labels, nav links */
+  --font-size-base: 0.9375rem; /* 15px - standard application body */
+  --font-size-md: 1rem;       /* 16px - subheadings, card titles */
+  --font-size-lg: 1.125rem;   /* 18px - modal titles, section headers */
+  --font-size-xl: 1.25rem;    /* 20px - primary section headings */
+  --font-size-2xl: 1.5rem;    /* 24px - page titles */
+  --font-size-3xl: 1.75rem;   /* 28px - KPI values */
+  --font-size-4xl: 2.25rem;   /* 36px - hero stat counters */
 
-  /* Border Radii */
+  /* Font Weights */
+  --font-weight-light: 300;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  --font-weight-extrabold: 800;
+
+  /* Line Heights */
+  --line-height-none: 1;
+  --line-height-tight: 1.25;
+  --line-height-snug: 1.375;
+  --line-height-normal: 1.5;
+  --line-height-relaxed: 1.625;
+  --line-height-loose: 1.75;
+
+  /* Letter Spacing */
+  --letter-spacing-tighter: -0.02em;
+  --letter-spacing-tight: -0.01em;
+  --letter-spacing-normal: 0em;
+  --letter-spacing-wide: 0.02em;
+  --letter-spacing-wider: 0.05em;
+  --letter-spacing-widest: 0.08em;
+
+  /* --------------------------------------------------------------------------
+     9. Spacing Scale (8-point enterprise grid system)
+     -------------------------------------------------------------------------- */
+  --space-0: 0;
+  --space-0-5: 0.125rem; /* 2px */
+  --space-1: 0.25rem;    /* 4px */
+  --space-1-5: 0.375rem; /* 6px */
+  --space-2: 0.5rem;     /* 8px */
+  --space-2-5: 0.625rem; /* 10px */
+  --space-3: 0.75rem;    /* 12px */
+  --space-3-5: 0.875rem; /* 14px */
+  --space-4: 1rem;       /* 16px */
+  --space-5: 1.25rem;    /* 20px */
+  --space-6: 1.5rem;     /* 24px */
+  --space-7: 1.75rem;    /* 28px */
+  --space-8: 2rem;       /* 32px */
+  --space-10: 2.5rem;    /* 40px */
+  --space-12: 3rem;      /* 48px */
+  --space-16: 4rem;      /* 64px */
+  --space-20: 5rem;      /* 80px */
+
+  /* Semantic Spacing Aliases */
+  --spacing-2xs: var(--space-0-5);
+  --spacing-xs: var(--space-1);
+  --spacing-sm: var(--space-2);
+  --spacing-md: var(--space-4);
+  --spacing-lg: var(--space-6);
+  --spacing-xl: var(--space-8);
+  --spacing-2xl: var(--space-12);
+
+  /* --------------------------------------------------------------------------
+     10. Border Radii Scale
+     -------------------------------------------------------------------------- */
   --radius-xs: 4px;
   --radius-sm: 6px;
   --radius-md: 8px;
@@ -93,7 +191,9 @@
   --radius-xl: 16px;
   --radius-full: 9999px;
 
-  /* Elevation Shadows - Clean Enterprise SaaS */
+  /* --------------------------------------------------------------------------
+     11. Elevation Shadows (Clean Enterprise SaaS - subtle, sharp, non-blurry)
+     -------------------------------------------------------------------------- */
   --shadow-none: none;
   --shadow-xs: 0 1px 2px rgba(16, 24, 40, 0.04);
   --shadow-sm: 0 1px 3px rgba(16, 24, 40, 0.05), 0 1px 2px rgba(16, 24, 40, 0.03);
@@ -101,13 +201,73 @@
   --shadow-lg: 0 12px 20px -4px rgba(16, 24, 40, 0.08), 0 4px 6px -2px rgba(16, 24, 40, 0.03);
   --shadow-xl: 0 20px 28px -6px rgba(16, 24, 40, 0.10), 0 8px 10px -4px rgba(16, 24, 40, 0.04);
 
-  /* Layout Dimensions */
+  /* --------------------------------------------------------------------------
+     12. Reusable Component & Layout Dimensions
+     -------------------------------------------------------------------------- */
+  /* Shell / Layout */
   --sidebar-width: 256px;
   --sidebar-collapsed-width: 72px;
   --topbar-height: 64px;
   --content-max-width: 1536px;
 
-  /* Transitions */
+  /* Inputs & Form Controls */
+  --input-height-sm: 32px;
+  --input-height-md: 38px;
+  --input-height-lg: 44px;
+
+  /* Button Dimensions */
+  --btn-height-sm: 28px;
+  --btn-height-md: 36px;
+  --btn-height-lg: 44px;
+
+  /* Icon Containers & Avatars */
+  --avatar-size-xs: 24px;
+  --avatar-size-sm: 26px;
+  --avatar-size-md: 34px;
+  --avatar-size-lg: 38px;
+  --icon-wrapper-size: 36px;
+  --icon-action-size: 38px;
+
+  /* Overlays, Drawers & Panels */
+  --modal-max-width-sm: 480px;
+  --modal-max-width-md: 620px;
+  --modal-max-width-lg: 800px;
+  --drawer-width: 380px;
+  --chatbot-width: 410px;
+  --chatbot-height: 560px;
+
+  /* Data Table */
+  --table-header-height: 40px;
+  --table-row-height: 48px;
+
+  /* --------------------------------------------------------------------------
+     13. Layering & Z-Index Scale
+     -------------------------------------------------------------------------- */
+  --z-negative: -1;
+  --z-elevate: 1;
+  --z-dropdown: 20;
+  --z-sticky: 30;
+  --z-header: 40;
+  --z-backdrop: 45;
+  --z-sidebar: 50;
+  --z-modal: 100;
+  --z-drawer: 105;
+  --z-popover: 110;
+  --z-tooltip: 120;
+  --z-chatbot: 9999;
+
+  /* --------------------------------------------------------------------------
+     14. Responsive Breakpoint References
+     -------------------------------------------------------------------------- */
+  --breakpoint-sm: 640px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+  --breakpoint-xl: 1280px;
+  --breakpoint-2xl: 1536px;
+
+  /* --------------------------------------------------------------------------
+     15. Transitions & Animations
+     -------------------------------------------------------------------------- */
   --transition-fast: 120ms cubic-bezier(0.4, 0, 0.2, 1);
   --transition-normal: 200ms cubic-bezier(0.4, 0, 0.2, 1);
   --transition-slow: 300ms cubic-bezier(0.4, 0, 0.2, 1);

@@ -62,34 +62,66 @@ async def get_store_health(db: AsyncSession = Depends(get_db)):
     return results
 
 @router.get("/demand-trend")
-async def get_dashboard_demand_trend():
-    """Returns network-wide historical vs forward demand trajectory."""
+async def get_dashboard_demand_trend(
+    store_id: str = Query("all", description="Store ID, or all for the network"),
+    product_id: str = Query("MILK_001", description="Product ID to chart"),
+    horizon_days: int = Query(14, ge=1, le=30, description="Forecast horizon in days"),
+):
+    """Returns store-scoped sales history and quantile demand forecast."""
     predictor = get_demand_predictor()
-    today = date.today()
-    points = []
-    base_sales = 1520
-    for i in range(14, 0, -1):
-        d = today - timedelta(days=i)
-        dow = d.weekday()
-        factor = 1.25 if dow in (5, 6) else 0.95
-        actual = int(base_sales * factor + (i * 12) % 150 - 75)
-        points.append({
-            "date": d.strftime("%b %d"),
-            "historical": actual,
+    sales = predictor.sales_df
+    store_ids = (
+        sorted(sales["store_id"].dropna().unique().tolist())
+        if store_id == "all"
+        else [store_id]
+    )
+    scoped_sales = sales[
+        sales["store_id"].isin(store_ids) & (sales["product_id"] == product_id)
+    ]
+
+    points_by_date: Dict[str, Dict[str, Any]] = {}
+    historical_sales = scoped_sales.groupby("sale_date")["units_sold"].sum().tail(14)
+    for sale_date, units_sold in historical_sales.items():
+        date_key = sale_date.date() if hasattr(sale_date, "date") else sale_date
+        points_by_date[date_key.isoformat()] = {
+            "date": date_key.strftime("%b %d"),
+            "historical": int(units_sold),
             "predicted": None,
-            "optimalStock": 1950
-        })
-    fc = predictor.predict("SLM_01", "MILK_001", horizon_days=7)
-    for i, df in enumerate(fc.get("daily_forecasts", [])):
-        d = today + timedelta(days=i)
-        p50_scaled = int(df["p50"] * 24 + 1100)
-        points.append({
-            "date": d.strftime("%b %d"),
-            "historical": None,
-            "predicted": p50_scaled,
-            "optimalStock": 1950
-        })
-    return points
+            "p10": None,
+            "p50": None,
+            "p90": None,
+            "optimalStock": None,
+        }
+
+    forecasts_by_store = [
+        predictor.predict(
+            target_store_id,
+            product_id,
+            start_date=date.today() + timedelta(days=1),
+            horizon_days=horizon_days,
+        )
+        for target_store_id in store_ids
+    ]
+    for forecast in forecasts_by_store:
+        for daily in forecast.get("daily_forecasts", []):
+            forecast_date = date.fromisoformat(daily["forecast_date"])
+            key = forecast_date.isoformat()
+            point = points_by_date.setdefault(key, {
+                "date": forecast_date.strftime("%b %d"),
+                "historical": None,
+                "predicted": 0,
+                "p10": 0,
+                "p50": 0,
+                "p90": 0,
+                "optimalStock": 0,
+            })
+            point["p10"] += round(daily["p10"])
+            point["p50"] += round(daily["p50"])
+            point["p90"] += round(daily["p90"])
+            point["predicted"] += round(daily["p50"])
+            point["optimalStock"] += round(daily["p90"])
+
+    return [points_by_date[key] for key in sorted(points_by_date)]
 
 @router.get("/kpis", response_model=List[KPIItem])
 async def get_kpis(

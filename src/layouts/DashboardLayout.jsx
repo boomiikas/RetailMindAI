@@ -22,7 +22,7 @@ const DashboardLayout = () => {
       {/* Slide-over Notifications Drawer */}
       <NotificationPanel />
 
-      {/* Persistent Floating AI Copilot & WhatsApp Assistant */}
+      {/* Persistent floating Copilot */}
       <FloatingAssistant />
     </div>
   );

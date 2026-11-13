@@ -24,12 +24,8 @@ import {
   IndianRupee,
   ArrowRight,
   TrendingUp,
-  AlertTriangle,
   CheckCircle2,
-  Clock,
   Sparkles,
-  ShieldCheck,
-  Zap
 } from 'lucide-react';
 import KPICard from '../components/common/KPICard';
 import RiskBadge from '../components/common/RiskBadge';
@@ -39,17 +35,21 @@ import { RetailPulseApi } from '../services/api';
 
 const ExecutiveOverview = () => {
   const navigate = useNavigate();
-  const { selectedStore, recommendations, approveRecommendation } = useApp();
+  const { selectedStore, stores, recommendations, approveRecommendation } = useApp();
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     let isMounted = true;
+    setLoading(true);
     RetailPulseApi.getExecutiveOverview(selectedStore).then((res) => {
       if (isMounted) {
         setData(res);
         setLoading(false);
       }
+    }).catch((error) => {
+      console.error('Unable to load executive overview:', error);
+      if (isMounted) setLoading(false);
     });
     return () => { isMounted = false; };
   }, [selectedStore]);
@@ -59,13 +59,18 @@ const ExecutiveOverview = () => {
       <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '60vh' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', color: 'var(--color-primary)' }}>
           <Sparkles className="pulse-dot" />
-          <span style={{ fontWeight: 600 }}>Synthesizing network decision intelligence...</span>
+          <span style={{ fontWeight: 600 }}>{selectedStore === 'all' ? 'Loading network overview...' : 'Loading selected location...'}</span>
         </div>
       </div>
     );
   }
 
-  const { kpis, alerts, demandTrend, inventoryHealth, storeRisks } = data;
+  const { kpis, demandTrend, inventoryHealth, storeRisks } = data;
+  const isNetworkView = selectedStore === 'all';
+  const selectedStoreLabel = stores.find((store) => store.id === selectedStore)?.city || kpis.selectedStoreLabel || 'Selected store';
+  const visibleRecommendations = isNetworkView
+    ? recommendations
+    : recommendations.filter((rec) => rec.store_id === selectedStore || String(rec.store || '').includes(selectedStore));
 
   return (
     <div className="overview-page">
@@ -73,15 +78,6 @@ const ExecutiveOverview = () => {
       <div className="page-header-row">
         <div>
           <h2 className="page-title">Executive Control Tower</h2>
-          <p className="page-subtitle">Real-time autonomous decisioning & operational health across Tamil Nadu retail nodes.</p>
-        </div>
-        <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center', flexWrap: 'wrap' }}>
-          <span className="badge badge-success" style={{ padding: '0.4rem 0.75rem', fontSize: '0.75rem' }}>
-            <span className="pulse-dot" /> Dual-Mode Engine: Active (96.2% Confidence)
-          </span>
-          <button className="btn btn-primary btn-sm" onClick={() => navigate('/decisions')}>
-            <Cpu size={15} /> Open Decision Centre
-          </button>
         </div>
       </div>
 
@@ -90,17 +86,17 @@ const ExecutiveOverview = () => {
         <KPICard
           title="Total Stores"
           value={kpis.totalStores}
-          trend="5 Hubs Active"
-          trendDirection="positive"
-          subtitle="TN Regional Network"
+          trend={isNetworkView ? `${kpis.totalStores} Hubs Active` : 'Selected location'}
+          trendDirection={isNetworkView ? 'positive' : 'neutral'}
+          subtitle={isNetworkView ? 'Tamil Nadu Network' : selectedStoreLabel}
           icon={Store}
-          iconColor="#2563EB"
-          iconBg="#EFF6FF"
+          iconColor="var(--color-primary)"
+          iconBg="var(--color-primary-light)"
         />
         <KPICard
           title="Products Monitored"
-          value="1,250"
-          subtitle="SKU Velocity Tracks"
+          value={kpis.productsMonitored.toLocaleString('en-IN')}
+          subtitle={isNetworkView ? 'SKUs across the network' : 'SKUs at this location'}
           icon={Package}
           iconColor="#0D9488"
           iconBg="#CCFBF1"
@@ -108,9 +104,9 @@ const ExecutiveOverview = () => {
         <KPICard
           title="Stockout Risks"
           value={kpis.stockoutRisks}
-          trend="+3 critical"
+          trend={kpis.criticalRisks > 0 ? `${kpis.criticalRisks} critical` : undefined}
           trendDirection="negative"
-          subtitle="Immediate rebalance needed"
+          subtitle={kpis.stockoutRisks > 0 ? 'Location stockout risks' : 'No stockout risks'}
           icon={AlertOctagon}
           iconColor="#DC2626"
           iconBg="#FEE2E2"
@@ -118,9 +114,9 @@ const ExecutiveOverview = () => {
         <KPICard
           title="Overstock Risks"
           value={kpis.overstockRisks}
-          trend="Capital bound"
+          trend={kpis.overstockRisks > 0 ? `${kpis.overstockRisks} at risk` : undefined}
           trendDirection="warning"
-          subtitle="Surplus ready for transfer"
+          subtitle={kpis.overstockRisks > 0 ? 'Review local surplus' : 'No overstock risks'}
           icon={Boxes}
           iconColor="#F59E0B"
           iconBg="#FEF3C7"
@@ -132,71 +128,16 @@ const ExecutiveOverview = () => {
           icon={Cpu}
           iconColor="#7C3AED"
           iconBg="#F3E8FF"
-          badgeText="96% Conviction"
+          badgeText={kpis.recommendationConfidence}
         />
         <KPICard
           title="Margin at Risk"
           value={kpis.estimatedProfitAtRisk}
-          trend="Protected by AI"
-          trendDirection="positive"
-          subtitle="Recoverable via transfers"
+          subtitle={isNetworkView ? 'From active network alerts' : `From alerts at ${selectedStoreLabel}`}
           icon={IndianRupee}
           iconColor="#16A34A"
           iconBg="#DCFCE7"
         />
-      </div>
-
-      {/* Situations Requiring Attention (Alerts) */}
-      <div className="section-card" style={{ marginBottom: '1.5rem' }}>
-        <div className="section-card-header">
-          <div>
-            <div className="section-card-title">
-              <AlertTriangle size={18} color="var(--color-danger)" />
-              Prioritized Operational Situations Requiring Attention
-            </div>
-            <div className="section-card-subtitle">
-              Ranked bottlenecks with calculated consequence ripple across demand, logistics freight, and margin
-            </div>
-          </div>
-          <button className="btn btn-secondary btn-sm" onClick={() => navigate('/risks')}>
-            View Risk & Alerts <ArrowRight size={14} />
-          </button>
-        </div>
-
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(290px, 1fr))', gap: '1rem' }}>
-          {alerts.map((alert) => (
-            <div key={alert.id} className={`alert-card-item ${alert.severity}`}>
-              <div style={{ flex: 1 }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.35rem' }}>
-                  <RiskBadge severity={alert.severity} label={alert.store} />
-                  <span style={{ fontSize: '0.7rem', color: 'var(--color-text-muted)' }}>{alert.time}</span>
-                </div>
-                <div style={{ fontWeight: 700, fontSize: '0.85rem', color: 'var(--color-text-primary)', marginBottom: '0.25rem' }}>
-                  {alert.title}
-                </div>
-                <p style={{ fontSize: '0.75rem', color: 'var(--color-text-secondary)', lineHeight: 1.4, marginBottom: '0.5rem' }}>
-                  {alert.description}
-                </p>
-                <div
-                  style={{
-                    fontSize: '0.75rem',
-                    color: 'var(--color-primary)',
-                    fontWeight: 600,
-                    backgroundColor: 'rgba(37, 99, 235, 0.06)',
-                    padding: '0.35rem 0.5rem',
-                    borderRadius: 'var(--radius-sm)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '0.35rem',
-                  }}
-                >
-                  <Sparkles size={13} />
-                  <span>Prescribed Action: {alert.actionRequired}</span>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
       </div>
 
       {/* Row: Charts (Demand Trend Line & Inventory Health Donut) */}
@@ -207,10 +148,10 @@ const ExecutiveOverview = () => {
             <div>
               <div className="section-card-title">
                 <TrendingUp size={18} color="var(--color-primary)" />
-                Network Demand Trajectory (Actuals vs Quantile Forecast)
+                {isNetworkView ? 'Network Milk Demand Trajectory' : `${selectedStoreLabel} Milk Demand Trajectory`}
               </div>
               <div className="section-card-subtitle">
-                Trailing sales synchronized with 7-day forward predictive baseline (Units)
+                Aavin Toned Fresh Milk · Historical sales and 7-day demand forecast (units)
               </div>
             </div>
             <span className="badge badge-primary">Model Confidence: 96.2%</span>
@@ -221,7 +162,7 @@ const ExecutiveOverview = () => {
               <LineChart data={demandTrend} margin={{ top: 10, right: 20, left: 0, bottom: 0 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#E2E8F0" vertical={false} />
                 <XAxis dataKey="date" stroke="#64748B" fontSize={12} tickLine={false} />
-                <YAxis stroke="#64748B" fontSize={12} tickLine={false} domain={[1200, 2200]} />
+                <YAxis stroke="#64748B" fontSize={12} tickLine={false} domain={[0, 'dataMax + 10']} />
                 <Tooltip
                   contentStyle={{
                     backgroundColor: '#1E293B',
@@ -253,7 +194,7 @@ const ExecutiveOverview = () => {
                 <Line
                   type="monotone"
                   dataKey="optimalStock"
-                  name="Optimal Stock Threshold"
+                  name="High Forecast (P90)"
                   stroke="#16A34A"
                   strokeWidth={1.5}
                   dot={false}
@@ -268,7 +209,7 @@ const ExecutiveOverview = () => {
           <div className="section-card-header">
             <div>
               <div className="section-card-title">Inventory Health</div>
-              <div className="section-card-subtitle">1,250 Active SKUs</div>
+              <div className="section-card-subtitle">{kpis.productsMonitored.toLocaleString('en-IN')} active SKUs {isNetworkView ? 'across the network' : `at ${selectedStoreLabel}`}</div>
             </div>
           </div>
 
@@ -311,8 +252,8 @@ const ExecutiveOverview = () => {
         <div className="section-card">
           <div className="section-card-header">
             <div>
-              <div className="section-card-title">Store-Wise Stockout & Overstock Distribution</div>
-              <div className="section-card-subtitle">Active product count at risk by store node</div>
+              <div className="section-card-title">{isNetworkView ? 'Store-Wise Stockout & Overstock Distribution' : `${selectedStoreLabel} Stockout & Overstock Risks`}</div>
+              <div className="section-card-subtitle">{isNetworkView ? 'Active product count at risk by store node' : 'Active product counts at this location'}</div>
             </div>
             <button className="btn btn-secondary btn-sm" onClick={() => navigate('/inventory')}>
               Network Map <ArrowRight size={13} />
@@ -352,7 +293,7 @@ const ExecutiveOverview = () => {
           </div>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-            {recommendations.slice(0, 3).map((rec) => (
+            {visibleRecommendations.slice(0, 3).map((rec) => (
               <div
                 key={rec.id}
                 style={{
@@ -391,6 +332,11 @@ const ExecutiveOverview = () => {
                 </div>
               </div>
             ))}
+            {visibleRecommendations.length === 0 && (
+              <div style={{ padding: '1rem', color: 'var(--color-text-secondary)', fontSize: '0.9rem' }}>
+                No recommendations for {isNetworkView ? 'the current network' : selectedStoreLabel}.
+              </div>
+            )}
           </div>
         </div>
       </div>

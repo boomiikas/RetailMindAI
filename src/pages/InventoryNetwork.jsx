@@ -380,8 +380,8 @@ const InventoryNetwork = () => {
           <div
             style={{
               padding: '0.85rem',
-              backgroundColor: '#EFF6FF',
-              border: '1px solid #BFDBFE',
+              backgroundColor: 'var(--color-primary-light)',
+              border: '1px solid var(--color-primary-border)',
               borderRadius: 'var(--radius-md)',
               display: 'flex',
               alignItems: 'center',
@@ -390,10 +390,10 @@ const InventoryNetwork = () => {
           >
             <Sparkles size={22} color="var(--color-primary)" />
             <div>
-              <div style={{ fontWeight: 700, color: '#1E40AF', fontSize: '0.85rem' }}>
+              <div style={{ fontWeight: 700, color: 'var(--color-primary-active)', fontSize: '0.85rem' }}>
                 Algorithmic Optimization Results
               </div>
-              <p style={{ fontSize: '0.75rem', color: '#1E3A8A', margin: 0 }}>
+              <p style={{ fontSize: '0.75rem', color: 'var(--color-text-secondary)', margin: 0 }}>
                 Analyzed 1,250 SKUs across 5 stores. Proposed 4 lateral transfers resolving 100% of critical deficits while preserving minimum safety buffers across origin stores.
               </p>
             </div>

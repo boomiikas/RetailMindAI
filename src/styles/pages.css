@@ -1,5 +1,39 @@
 /* Page-Specific Styles */
 
+/* Shared page rhythm and quieter enterprise surfaces */
+.page-header { gap: .45rem; margin-bottom: 1.35rem; }
+.page-title { font-size: clamp(1.5rem, 2vw, 1.85rem); letter-spacing: -.015em; }
+.page-subtitle { max-width: 760px; line-height: 1.6; }
+.page-header-row { margin-bottom: 1.25rem; }
+.kpi-grid { gap: .9rem; margin-bottom: 1.25rem; }
+.grid-2, .grid-3, .grid-3-1, .grid-1-2 { gap: 1.15rem; margin-bottom: 1.25rem; }
+.section-card, .card {
+  border-color: #E3E9E9;
+  border-radius: 13px;
+  box-shadow: 0 2px 7px rgba(19,42,51,.035);
+}
+.section-card { padding: 1.25rem; gap: .9rem; }
+.section-card-header { border-bottom-color: #EDF1F1; padding-bottom: .75rem; }
+.section-card-title { letter-spacing: -.01em; }
+.section-card-subtitle { line-height: 1.5; }
+.tab-btn { transition: color .16s ease, background-color .16s ease, border-color .16s ease; }
+.tab-btn.active { color: var(--color-primary); border-color: var(--color-primary); }
+.alert-card-item { border-color: #E8EDED; border-radius: 11px; }
+.rec-card { border-color: #E3E9E9; border-radius: 13px; }
+.rec-card-header { background: #FAFBFB; border-bottom-color: #E9EEEE; }
+.rec-meta-grid { background: #F6F8F8; }
+.chart-container, .recharts-responsive-container { min-width: 0; }
+
+@media (max-width: 900px) {
+  .grid-3-1, .grid-1-2 { grid-template-columns: 1fr; }
+  .grid-3 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 600px) {
+  .grid-2, .grid-3 { grid-template-columns: 1fr; }
+  .section-card { padding: 1rem; }
+  .page-header-row { align-items: flex-start; }
+}
+
 /* Common Page Header */
 .page-header {
   margin-bottom: 1.5rem;
@@ -9,10 +43,10 @@
 }
 
 .page-title {
-  font-size: 1.5rem;
+  font-size: 1.6rem;
   font-weight: 700;
   color: var(--color-dark-navy);
-  letter-spacing: -0.02em;
+  letter-spacing: -0.015em;
 }
 
 .page-subtitle {
@@ -88,8 +122,8 @@
 }
 
 .section-card-title {
-  font-size: 1rem;
-  font-weight: 600;
+  font-size: 1.025rem;
+  font-weight: 650;
   color: var(--color-text-primary);
   display: flex;
   align-items: center;
@@ -97,7 +131,8 @@
 }
 
 .section-card-subtitle {
-  font-size: 0.75rem;
+  font-size: 0.8125rem;
+  line-height: 1.5;
   color: var(--color-text-secondary);
   margin-top: 0.15rem;
 }
@@ -131,7 +166,7 @@
 
 .alert-card-item.primary {
   border-left: 4px solid var(--color-primary);
-  background: linear-gradient(to right, #EFF6FF 0%, #FFFFFF 15%);
+  background: linear-gradient(to right, var(--color-primary-light) 0%, #FFFFFF 18%);
 }
 
 .alert-card-item.purple {

@@ -1,4 +1,4 @@
-"""Integration tests for Groq Cloud LLM Service."""
+﻿"""Integration tests for Groq Cloud LLM Service."""
 import pytest
 from backend.app.config import settings
 from backend.app.services.llm.groq_service import groq_llm
@@ -39,19 +39,3 @@ async def test_groq_decision_explanation():
     assert len(explanation) > 50
     assert "transfer" in explanation.lower() or "salem" in explanation.lower() or "profit" in explanation.lower()
     print("\n[Groq Explanation]:\n", explanation.encode("ascii", "ignore").decode())
-
-@pytest.mark.asyncio
-async def test_groq_manager_query_answer():
-    """Verify that Groq answers a natural-language WhatsApp query using provided store context."""
-    context = {
-        "store": "Salem Central",
-        "low_stock_items": [{"product": "Fresh Milk", "units": 15, "safety_buffer": 25}],
-        "transfer_sources": [{"store": "Coimbatore", "surplus_units": 65}]
-    }
-    answer = await groq_llm.answer_manager_query(
-        query="Why do we need a transfer from Coimbatore today?",
-        context_data=context
-    )
-    assert answer is not None
-    assert len(answer) > 20
-    print("\n[Groq Query Answer]:\n", answer.encode("ascii", "ignore").decode())

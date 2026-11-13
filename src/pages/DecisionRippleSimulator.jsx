@@ -269,7 +269,7 @@ const DecisionRippleSimulator = () => {
                     <div
                       className="ripple-node-step"
                       style={{
-                        borderTop: `4px solid ${isPos ? '#16A34A' : isNeg ? '#DC2626' : isWarn ? '#F59E0B' : '#2563EB'}`,
+                        borderTop: `4px solid ${isPos ? '#16A34A' : isNeg ? '#DC2626' : isWarn ? '#F59E0B' : 'var(--color-primary)'}`,
                       }}
                     >
                       <div style={{ fontSize: '0.65rem', textTransform: 'uppercase', fontWeight: 800, color: 'var(--color-text-muted)', marginBottom: '0.25rem' }}>

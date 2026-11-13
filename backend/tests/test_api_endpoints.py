@@ -1,4 +1,4 @@
-"""API integration tests for RetailMind AI REST endpoints."""
+﻿"""API integration tests for RetailMind AI REST endpoints."""
 import pytest
 import pytest_asyncio
 from httpx import AsyncClient, ASGITransport
@@ -67,16 +67,3 @@ async def test_copilot_chat_endpoint():
         data = resp.json()
         assert data["is_domain_relevant"] is True
         assert len(data["reply"]) > 0
-
-@pytest.mark.asyncio
-async def test_simulate_whatsapp_query_endpoint():
-    transport = ASGITransport(app=app)
-    async with AsyncClient(transport=transport, base_url="http://test") as ac:
-        payload = {
-            "manager_phone": "+919843123456",
-            "query_text": "Which products are running low in my store?"
-        }
-        resp = await ac.post("/api/v1/whatsapp/simulate-query", json=payload)
-        assert resp.status_code == 200
-        data = resp.json()
-        assert data["simulation"] == "SUCCESS"

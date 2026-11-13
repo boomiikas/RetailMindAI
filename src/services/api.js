@@ -1,4 +1,4 @@
-/**
+﻿/**
  * RetailMind AI - API Service Layer
  * Fully connected to FastAPI backend & Supabase PostgreSQL database.
  * No static mockdata arrays - 100% live database models and ML predictions.
@@ -108,31 +108,61 @@ export const RetailPulseApi = {
   // ==========================================
   async getExecutiveOverview(storeFilter = 'all') {
     try {
-      const [overviewRes, alertsRes, healthRes, trendRes] = await Promise.all([
+      const [overviewRes, alertsRes, healthRes, trendRes, recommendationsRes] = await Promise.all([
         apiClient.get('/dashboard/overview').catch(() => null),
         apiClient.get('/dashboard/alerts').catch(() => null),
         apiClient.get('/dashboard/store-health').catch(() => null),
-        apiClient.get('/dashboard/demand-trend').catch(() => null),
+        apiClient.get(`/dashboard/demand-trend?store_id=${encodeURIComponent(storeFilter)}`).catch(() => null),
+        apiClient.get('/recommendations').catch(() => null),
       ]);
 
       const live = overviewRes?.data || {};
-      const alerts = alertsRes?.data || [];
+      const allAlerts = alertsRes?.data || [];
       const storeHealthList = healthRes?.data || [];
       const demandTrend = trendRes?.data || [];
+      const recommendationRows = recommendationsRes?.data || [];
+      const isNetworkView = !storeFilter || storeFilter === 'all';
+      const scopedHealth = isNetworkView
+        ? storeHealthList
+        : storeHealthList.filter((store) => store.store_id === storeFilter);
+      const selectedHealth = isNetworkView ? null : scopedHealth[0];
+      const alerts = isNetworkView
+        ? allAlerts
+        : allAlerts.filter((alert) => alert.store_id === storeFilter);
+      const scopedRecommendations = isNetworkView
+        ? recommendationRows
+        : recommendationRows.filter((row) => row.recommendation?.dest_store_id === storeFilter);
+      const pendingRecommendations = scopedRecommendations.filter((row) =>
+        String(row.status || '').toUpperCase() === 'PENDING'
+      );
+      const stockoutCount = scopedHealth.reduce((sum, store) => sum + (store.stockout_count || 0), 0);
+      const overstockCount = scopedHealth.reduce((sum, store) => sum + (store.overstock_count || 0), 0);
+      const monitoredSkus = scopedHealth.reduce((sum, store) => sum + (store.total_skus || 0), 0);
+      const totalRiskImpact = alerts.reduce((sum, alert) => sum + Number(alert.financial_impact_est || 0), 0);
+      const criticalRiskCount = alerts.filter((alert) => String(alert.severity || '').toUpperCase() === 'CRITICAL').length;
+      const confidenceScores = pendingRecommendations
+        .map((row) => Number(row.recommendation?.confidence_score))
+        .filter((score) => Number.isFinite(score) && score > 0);
+      const recommendationConfidence = confidenceScores.length
+        ? `${Math.round(confidenceScores.reduce((sum, score) => sum + score, 0) / confidenceScores.length * 100)}% Conviction`
+        : null;
+      const formatRiskImpact = (amount) => amount >= 100000
+        ? `₹${(amount / 100000).toFixed(2)}L`
+        : `₹${Math.round(amount).toLocaleString('en-IN')}`;
 
-      // Mapped Live KPIs
+      // Use per-store health and decision records when a single location is selected.
       const liveKpis = {
-        totalStores: live.total_stores || 5,
-        productsMonitored: live.total_products || 88,
-        stockoutRisks: live.active_alerts_count || (alerts.length > 0 ? alerts.length : 3),
-        overstockRisks: storeHealthList.reduce((acc, s) => acc + (s.overstock_count || 0), 0) || 5,
-        aiRecommendations: live.pending_decisions_count || 8,
-        serviceLevel: live.aggregate_service_level
-          ? `${(live.aggregate_service_level * 100).toFixed(1)}%`
-          : '96.5%',
-        estimatedProfitAtRisk: live.total_inventory_valuation_inr
-          ? `₹${(live.total_inventory_valuation_inr / 100000).toFixed(2)}L`
-          : '₹2.45L',
+        totalStores: isNetworkView ? (scopedHealth.length || live.total_stores || 0) : (selectedHealth ? 1 : 0),
+        productsMonitored: monitoredSkus || (isNetworkView ? live.total_products || 0 : 0),
+        stockoutRisks: scopedHealth.length ? stockoutCount : (isNetworkView ? live.active_alerts_count || 0 : 0),
+        overstockRisks: overstockCount,
+        aiRecommendations: recommendationRows.length
+          ? pendingRecommendations.length
+          : (isNetworkView ? live.pending_decisions_count || 0 : 0),
+        criticalRisks: criticalRiskCount,
+        recommendationConfidence,
+        selectedStoreLabel: selectedHealth?.city || selectedHealth?.store_name || '',
+        estimatedProfitAtRisk: formatRiskImpact(totalRiskImpact),
       };
 
       // Mapped Live Alerts
@@ -151,46 +181,29 @@ export const RetailPulseApi = {
         }));
 
       // Store-wise Risk Distribution from DB
-      const storeRisks = storeHealthList.map((s) => ({
+      const storeRisks = scopedHealth.map((s) => ({
         store: s.city,
         stockout: s.stockout_count,
         overstock: s.overstock_count,
       }));
 
-      // Inventory health distribution percentages
-      const totalSkusMonitored = storeHealthList.reduce((acc, s) => acc + s.total_skus, 0) || 100;
-      const totalStockouts = storeHealthList.reduce((acc, s) => acc + s.stockout_count, 0);
-      const totalOverstocks = storeHealthList.reduce((acc, s) => acc + s.overstock_count, 0);
-      const healthySkus = Math.max(0, totalSkusMonitored - totalStockouts - totalOverstocks);
+      // Inventory health distribution uses the same store scope as the KPI cards.
+      const totalSkusMonitored = monitoredSkus;
+      const healthySkus = Math.max(0, totalSkusMonitored - stockoutCount - overstockCount);
+      const asPercent = (count) => totalSkusMonitored > 0 ? Math.round((count / totalSkusMonitored) * 100) : 0;
 
       const inventoryHealth = [
-        { name: 'Optimal Buffer', value: Math.round((healthySkus / totalSkusMonitored) * 100), color: '#16A34A' },
-        { name: 'Stockout Risk', value: Math.max(4, Math.round((totalStockouts / totalSkusMonitored) * 100)), color: '#DC2626' },
-        { name: 'Overstock Risk', value: Math.max(6, Math.round((totalOverstocks / totalSkusMonitored) * 100)), color: '#F59E0B' },
-        { name: 'Low Stock Buffer', value: 8, color: '#0284C7' },
+        { name: 'Optimal Buffer', value: asPercent(healthySkus), color: '#16A34A' },
+        { name: 'Stockout Risk', value: asPercent(stockoutCount), color: '#DC2626' },
+        { name: 'Overstock Risk', value: asPercent(overstockCount), color: '#F59E0B' },
       ];
 
       return {
         kpis: liveKpis,
         alerts: mappedAlerts,
-        demandTrend: demandTrend.length > 0 ? demandTrend : [
-          { date: 'Nov 01', historical: 1420, predicted: null, optimalStock: 1950 },
-          { date: 'Nov 03', historical: 1560, predicted: null, optimalStock: 1950 },
-          { date: 'Nov 05', historical: 1680, predicted: null, optimalStock: 1950 },
-          { date: 'Nov 07', historical: 1720, predicted: null, optimalStock: 1950 },
-          { date: 'Nov 08', historical: 1810, predicted: 1810, optimalStock: 1950 },
-          { date: 'Nov 09', historical: null, predicted: 1890, optimalStock: 1950 },
-          { date: 'Nov 11', historical: null, predicted: 1940, optimalStock: 1950 },
-          { date: 'Nov 14', historical: null, predicted: 2020, optimalStock: 1950 },
-        ],
+        demandTrend,
         inventoryHealth,
-        storeRisks: storeRisks.length > 0 ? storeRisks : [
-          { store: 'Chennai', stockout: 3, overstock: 4 },
-          { store: 'Coimbatore', stockout: 1, overstock: 6 },
-          { store: 'Salem', stockout: 4, overstock: 2 },
-          { store: 'Madurai', stockout: 5, overstock: 3 },
-          { store: 'Trichy', stockout: 2, overstock: 2 },
-        ],
+        storeRisks,
       };
     } catch (e) {
       console.error('Error generating live executive overview:', e);
@@ -481,8 +494,8 @@ export const RetailPulseApi = {
       });
       return res.data;
     } catch (e) {
-      console.warn('Backend decision approve error, fallback to simulated approval:', e);
-      return this.simulateWhatsAppApproval({ decisionId, optionChosen: options.option || 'INTER_STORE_TRANSFER' });
+      console.warn('Backend decision approve error:', e);
+      throw e;
     }
   },
 
@@ -747,52 +760,4 @@ export const RetailPulseApi = {
   },
 
   // ==========================================
-  // WhatsApp Simulated Endpoints
-  // ==========================================
-  async simulateWhatsAppApproval({
-    decisionId,
-    version = 1,
-    optionChosen = 'INTER_STORE_TRANSFER',
-    managerPhone = '+919843123456',
-  }) {
-    try {
-      const res = await apiClient.post('/whatsapp/simulate-approval', {
-        decision_id: decisionId,
-        version: version,
-        option_chosen: optionChosen,
-        manager_phone: managerPhone,
-      });
-      return res.data;
-    } catch (e) {
-      console.warn('Backend whatsapp approval simulation fallback:', e);
-      return {
-        simulation: 'SUCCESS',
-        handler_result: {
-          status: 'approved_and_executed',
-          decision_id: decisionId,
-          action: optionChosen,
-          reply: `✅ *APPROVAL CONFIRMED* | Decision \`${decisionId}\`\nAuthorized Strategy: *${optionChosen.replace(/_/g, ' ')}*\nExecution Status: *RESERVED & DISPATCH IN PROGRESS*\nStock reservations committed in ERP ledger.`,
-        },
-      };
-    }
-  },
-
-  async simulateWhatsAppQuery({ queryText, managerPhone = '+919843123456' }) {
-    try {
-      const res = await apiClient.post('/whatsapp/simulate-query', {
-        query_text: queryText,
-        manager_phone: managerPhone,
-      });
-      return res.data;
-    } catch (e) {
-      console.warn('Backend whatsapp query fallback:', e);
-      return {
-        simulation: 'SUCCESS',
-        query: queryText,
-        handler_result: {
-          reply: 'RetailMind AI monitoring active across 5 Tamil Nadu clusters. No unhandled critical anomalies.',
-        },
-      };
-    }
-  },
 };

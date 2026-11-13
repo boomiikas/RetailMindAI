@@ -9,12 +9,11 @@ import {
   BarChart3,
   Settings,
   HelpCircle,
-  Sparkles,
   X,
-  Activity
 } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 import Modal from '../components/common/Modal';
+import RetailMindLogo from '../assets/retailmind-mark.svg';
 
 const NAV_ITEMS = [
   { path: '/overview', label: 'Executive Overview', icon: LayoutDashboard },
@@ -47,14 +46,11 @@ const Sidebar = () => {
         {/* Brand Header */}
         <div className="sidebar-header">
           <div className="brand-wrapper">
-            <div className="brand-icon">
-              <Sparkles size={20} />
-            </div>
+            <img className="brand-icon" src={RetailMindLogo} alt="RetailMind" />
             <div className="brand-info">
               <div className="brand-title">
                 RetailMind <span className="ai-badge">AI</span>
               </div>
-              <div className="brand-subtitle">Control Tower v2.4</div>
             </div>
             {isMobileSidebarOpen && (
               <button
@@ -68,27 +64,6 @@ const Sidebar = () => {
           </div>
         </div>
 
-        {/* Live Engine Status Indicator */}
-        <div style={{ padding: '0.75rem 1rem 0.25rem 1rem' }}>
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '0.5rem',
-              padding: '0.4rem 0.75rem',
-              borderRadius: '6px',
-              backgroundColor: 'rgba(22, 163, 74, 0.12)',
-              border: '1px solid rgba(34, 197, 94, 0.25)',
-              fontSize: '0.7rem',
-              color: '#4ADE80',
-              fontWeight: 600,
-            }}
-          >
-            <span className="pulse-dot" style={{ width: '6px', height: '6px' }} />
-            <span>Dual-Forecast & Optimizer: Live</span>
-          </div>
-        </div>
-
         {/* Navigation Items (Consolidated into exactly 6 primary modules) */}
         <nav className="sidebar-nav-container">
           <div className="nav-section-title">Operational Navigation</div>
@@ -99,6 +74,7 @@ const Sidebar = () => {
               <NavLink
                 key={item.path}
                 to={item.path}
+                end
                 className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}
                 onClick={() => setIsMobileSidebarOpen(false)}
               >
@@ -110,15 +86,6 @@ const Sidebar = () => {
                 {item.pillKey === 'pendingDecisions' && pendingRecommendationsCount > 0 && (
                   <span className="nav-pill-counter" title={`${pendingRecommendationsCount} pending AI decisions`}>
                     {pendingRecommendationsCount}
-                  </span>
-                )}
-                {item.pillKey === 'risks' && (
-                  <span
-                    className="nav-pill-counter"
-                    style={{ backgroundColor: 'var(--color-warning)' }}
-                    title="18 active risk alerts"
-                  >
-                    18
                   </span>
                 )}
               </NavLink>

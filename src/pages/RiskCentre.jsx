@@ -46,6 +46,11 @@ const RiskCentre = () => {
   const initialTab = searchParams.get('tab') || 'all';
   const [activeTab, setActiveTab] = useState(initialTab);
 
+  useEffect(() => {
+    const tab = searchParams.get('tab') || 'all';
+    setActiveTab(['stockout', 'overstock', 'supplier', 'promotions', 'critical'].includes(tab) ? tab : 'all');
+  }, [searchParams]);
+
   const { selectedStore, setSelectedStore, stores } = useApp();
   const [risks, setRisks] = useState([]);
   const [promotions, setPromotions] = useState([]);

@@ -1,6 +1,11 @@
-/* Global Styles for RetailPulse AI */
-@import './variables.css';
+/* ==========================================================================
+   RetailMind AI - Global Design System Base Styles
+   Base resets, typography consistency, inputs & global primitives
+   ========================================================================== */
 
+/* --------------------------------------------------------------------------
+   1. CSS Reset & Box-Sizing
+   -------------------------------------------------------------------------- */
 *, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
@@ -12,10 +17,11 @@ html, body {
   font-family: var(--font-sans);
   background-color: var(--color-bg);
   color: var(--color-text-primary);
-  font-size: 14px;
-  line-height: 1.5;
+  font-size: var(--font-size-base, 14px);
+  line-height: var(--line-height-normal, 1.5);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
 #root {
@@ -24,6 +30,87 @@ html, body {
   flex-direction: column;
 }
 
+/* --------------------------------------------------------------------------
+   2. Global Typography Hierarchy & Consistency
+   -------------------------------------------------------------------------- */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-sans);
+  color: var(--color-dark-navy);
+  font-weight: var(--font-weight-bold, 700);
+  line-height: var(--line-height-tight, 1.25);
+  letter-spacing: var(--letter-spacing-tight, -0.01em);
+}
+
+h1 {
+  font-size: var(--font-size-2xl, 1.5rem);
+  font-weight: var(--font-weight-bold, 700);
+  letter-spacing: -0.015em;
+}
+
+h2 {
+  font-size: var(--font-size-xl, 1.25rem);
+  font-weight: var(--font-weight-bold, 700);
+}
+
+h3 {
+  font-size: var(--font-size-lg, 1.125rem);
+  font-weight: var(--font-weight-semibold, 600);
+  line-height: var(--line-height-snug, 1.375);
+}
+
+h4 {
+  font-size: var(--font-size-md, 1rem);
+  font-weight: var(--font-weight-semibold, 600);
+  color: var(--color-text-primary);
+}
+
+h5 {
+  font-size: var(--font-size-base, 0.875rem);
+  font-weight: var(--font-weight-semibold, 600);
+  color: var(--color-text-primary);
+}
+
+h6 {
+  font-size: var(--font-size-xs, 0.8125rem);
+  font-weight: var(--font-weight-semibold, 600);
+  color: var(--color-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: var(--letter-spacing-wider, 0.05em);
+}
+
+p {
+  font-size: var(--font-size-base, 0.875rem);
+  line-height: var(--line-height-normal, 1.5);
+  color: var(--color-text-primary);
+}
+
+small {
+  font-size: var(--font-size-xs, 0.8125rem);
+  line-height: var(--line-height-normal, 1.4);
+  color: var(--color-text-secondary);
+}
+
+strong, b {
+  font-weight: var(--font-weight-semibold, 600);
+  color: inherit;
+}
+
+code, kbd, samp, pre {
+  font-family: var(--font-mono);
+  font-size: 0.85em;
+}
+
+code {
+  background-color: var(--color-surface-subtle);
+  border: 1px solid var(--color-border);
+  padding: 0.15em 0.35em;
+  border-radius: var(--radius-xs);
+  color: var(--color-primary);
+}
+
+/* --------------------------------------------------------------------------
+   3. Interactive Primitives (Links & Buttons)
+   -------------------------------------------------------------------------- */
 a {
   color: var(--color-primary);
   text-decoration: none;
@@ -34,10 +121,16 @@ a:hover {
   color: var(--color-primary-hover);
 }
 
+a:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+  border-radius: var(--radius-xs);
+}
+
 button {
   font-family: inherit;
-  font-size: 0.875rem;
-  font-weight: 500;
+  font-size: var(--font-size-base, 0.875rem);
+  font-weight: var(--font-weight-medium, 500);
   cursor: pointer;
   border: none;
   background: none;
@@ -50,9 +143,12 @@ button:focus-visible {
   outline-offset: 2px;
 }
 
+/* --------------------------------------------------------------------------
+   4. Form Controls & Range Inputs
+   -------------------------------------------------------------------------- */
 input, select, textarea {
   font-family: inherit;
-  font-size: 0.875rem;
+  font-size: var(--font-size-base, 0.875rem);
   color: var(--color-text-primary);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
@@ -64,7 +160,18 @@ input, select, textarea {
 
 input:focus, select:focus, textarea:focus {
   border-color: var(--color-primary);
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-primary) 15%, transparent);
+}
+
+input::placeholder, textarea::placeholder {
+  color: var(--color-text-muted);
+}
+
+input:disabled, select:disabled, textarea:disabled {
+  background-color: var(--color-surface-subtle);
+  color: var(--color-text-disabled);
+  cursor: not-allowed;
+  border-color: var(--color-border-subtle);
 }
 
 input[type="range"] {
@@ -72,7 +179,7 @@ input[type="range"] {
   appearance: none;
   height: 6px;
   background: #E2E8F0;
-  border-radius: 999px;
+  border-radius: var(--radius-full);
   padding: 0;
   border: none;
 }
@@ -93,7 +200,9 @@ input[type="range"]::-webkit-slider-thumb:hover {
   transform: scale(1.15);
 }
 
-/* Custom Scrollbar */
+/* --------------------------------------------------------------------------
+   5. Custom Scrollbar (Subtle Enterprise Slate)
+   -------------------------------------------------------------------------- */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
@@ -112,15 +221,17 @@ input[type="range"]::-webkit-slider-thumb:hover {
   background: #94A3B8;
 }
 
-/* Utility classes */
+/* --------------------------------------------------------------------------
+   6. Core Reusable Utility Classes (Strictly Preserved)
+   -------------------------------------------------------------------------- */
 .badge {
   display: inline-flex;
   align-items: center;
   gap: 0.35rem;
   padding: 0.2rem 0.6rem;
   border-radius: var(--radius-full);
-  font-size: 0.75rem;
-  font-weight: 600;
+  font-size: var(--font-size-xs, 0.75rem);
+  font-weight: var(--font-weight-semibold, 600);
   line-height: 1;
 }
 
@@ -160,4 +271,65 @@ input[type="range"]::-webkit-slider-thumb:hover {
     transform: scale(0.95);
     box-shadow: 0 0 0 0 rgba(22, 163, 74, 0);
   }
+}
+
+/* --------------------------------------------------------------------------
+   7. Typography & Color Utility Helpers
+   -------------------------------------------------------------------------- */
+.font-sans {
+  font-family: var(--font-sans);
+}
+
+.font-mono {
+  font-family: var(--font-mono);
+}
+
+.text-navy {
+  color: var(--color-dark-navy) !important;
+}
+
+.text-primary {
+  color: var(--color-text-primary) !important;
+}
+
+.text-secondary {
+  color: var(--color-text-secondary) !important;
+}
+
+.text-muted {
+  color: var(--color-text-muted) !important;
+}
+
+.text-success {
+  color: var(--color-success) !important;
+}
+
+.text-warning {
+  color: var(--color-warning-text) !important;
+}
+
+.text-danger {
+  color: var(--color-danger) !important;
+}
+
+.text-teal {
+  color: var(--color-teal) !important;
+}
+
+.text-truncate {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }

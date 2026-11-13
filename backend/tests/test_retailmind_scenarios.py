@@ -1,13 +1,6 @@
-"""Comprehensive test suite for RetailMind AI covering all 8 critical operational scenarios.
+﻿"""Retail operations scenario coverage.
 
-1. Normal stockout risk detection & multi-action recommendations
-2. Overstock risk detection & markdown strategy
-3. Supplier delivery delay & ripple effect analysis
-4. WhatsApp approval workflow & status transition
-5. Dynamic replanning: Coimbatore demand spike pauses v1, generates v2, requires new approval
-6. Duplicate approval rejection via idempotency key
-7. Failed execution handling & audit logging
-8. Performance KPI evaluation across Baseline vs AI Prescriptive vs AI Agentic
+Stockout, overstock, supplier disruption, dynamic replanning, execution failure, and performance evaluation.
 """
 
 import uuid
@@ -26,8 +19,6 @@ from backend.app.services.optimization.optimizer import RetailOptimizer
 from backend.app.services.ripple.ripple_service import RippleEffectService
 from backend.app.agents.replanning_agent import DynamicReplanningAgent
 from backend.app.agents.learning_agent import LearningAgent
-from backend.app.whatsapp.webhook_handler import WhatsAppWebhookHandler
-from backend.app.whatsapp.mock_adapter import mock_whatsapp
 
 # Database tables initialized in Supabase PostgreSQL
 
@@ -99,62 +90,12 @@ async def test_scenario_3_supplier_delay_ripple():
         assert ripple["financial_loss_est"] > 0
 
 @pytest.mark.asyncio
-async def test_scenario_4_whatsapp_approval_flow():
-    """Test 4: WhatsApp button click approves decision and creates reserved transfer order."""
-    async with AsyncSessionLocal() as session:
-        # Ensure source store has sufficient available stock for reservation
-        cbe_inv = (await session.execute(
-            select(Inventory).where(Inventory.store_id == "CBE_01", Inventory.product_id == "MILK_001")
-        )).scalar_one_or_none()
-        if cbe_inv:
-            cbe_inv.available_stock = 100
-            cbe_inv.physical_on_hand = 100
-            await session.commit()
-
-        uid = uuid.uuid4().hex[:8]
-        dec_id = f"DEC_TEST_APPR_{uid}"
-        rec_snapshot = {
-            "action_type": "INTER_STORE_TRANSFER",
-            "product_id": "MILK_001",
-            "source_store_id": "CBE_01",
-            "dest_store_id": "SLM_01",
-            "quantity": 50,
-            "expected_cost": 100.0,
-            "expected_net_profit": 500.0
-        }
-        dec = DecisionRecord(
-            decision_id=dec_id,
-            current_version=1,
-            decision_status="PENDING",
-            execution_status="NOT_STARTED",
-            original_recommendation_snapshot=rec_snapshot
-        )
-        session.add(dec)
-        await session.commit()
-
-        # Simulate manager WhatsApp button click
-        webhook_handler = WhatsAppWebhookHandler(session)
-        payload = mock_whatsapp.simulate_manager_button_click(
-            manager_phone=f"+919843{uid[:6]}",
-            decision_id=dec_id,
-            version=1,
-            option_chosen="INTER_STORE_TRANSFER"
-        )
-        result = await webhook_handler.handle_payload(payload)
-        assert result["status"] == "approved_and_executed"
-
-        # Verify DB state
-        updated_dec = await session.get(DecisionRecord, dec_id)
-        assert updated_dec.decision_status == "APPROVED"
-        assert updated_dec.execution_status == "RESERVED"
-
-@pytest.mark.asyncio
 async def test_scenario_5_dynamic_replanning_coimbatore_spike():
     """Test 5: Dynamic replanning scenario:
     1. Salem needs milk, AI recommends Coimbatore transfer of 80 units.
     2. Manager approves v1.
     3. Coimbatore suffers unexpected demand spike before dispatch.
-    4. AI pauses v1, releases reservation, re-optimizes, creates v2, and sends renewed WhatsApp prompt.
+    4. AI pauses v1, releases reservation, re-optimizes, creates v2, and publishes the revised decision version.
     """
     async with AsyncSessionLocal() as session:
         uid = uuid.uuid4().hex[:8]
@@ -201,7 +142,7 @@ async def test_scenario_5_dynamic_replanning_coimbatore_spike():
 
         assert replan_res["status"] == "REPLANNING_TRIGGERED"
         assert replan_res["new_version"] == 2
-        assert "PAUSED" in replan_res["manager_notification_text"]
+        assert replan_res["replanning_reason"]
 
         # Verify DB version increment and decision status
         updated_dec = await session.get(DecisionRecord, dec_id)
@@ -211,44 +152,6 @@ async def test_scenario_5_dynamic_replanning_coimbatore_spike():
         # Verify that unexecuted transfer order was cancelled/paused
         updated_order = await session.get(TransferOrder, f"TRF_{dec_id}")
         assert updated_order.status == "CANCELLED"
-
-@pytest.mark.asyncio
-async def test_scenario_6_duplicate_approval_rejection():
-    """Test 6: Idempotency check: Repeated WhatsApp approvals do not double execute."""
-    async with AsyncSessionLocal() as session:
-        uid = uuid.uuid4().hex[:8]
-        dec_id = f"DEC_IDEMP_{uid}"
-        rec_snapshot = {
-            "action_type": "INTER_STORE_TRANSFER",
-            "product_id": "MILK_001",
-            "source_store_id": "CBE_01",
-            "dest_store_id": "SLM_01",
-            "quantity": 30
-        }
-        dec = DecisionRecord(
-            decision_id=dec_id,
-            current_version=1,
-            decision_status="PENDING",
-            execution_status="NOT_STARTED",
-            original_recommendation_snapshot=rec_snapshot
-        )
-        session.add(dec)
-        await session.commit()
-
-        webhook_handler = WhatsAppWebhookHandler(session)
-        payload = mock_whatsapp.simulate_manager_button_click(
-            manager_phone=f"+919843{uid[:6]}",
-            decision_id=dec_id,
-            version=1,
-            option_chosen="INTER_STORE_TRANSFER"
-        )
-        # First call succeeds
-        res1 = await webhook_handler.handle_payload(payload)
-        assert res1["status"] == "approved_and_executed"
-
-        # Second identical call is caught by idempotency
-        res2 = await webhook_handler.handle_payload(payload)
-        assert res2["status"] == "duplicate_ignored"
 
 @pytest.mark.asyncio
 async def test_scenario_7_failed_execution_handling():

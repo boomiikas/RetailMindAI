@@ -24,8 +24,7 @@ class AgentState(TypedDict):
     execution_status: str # NOT_STARTED, RESERVED, DISPATCHED, IN_TRANSIT, RECEIVED, COMPLETED, FAILED
 
     # Human-in-the-Loop & Approval
-    approval_channel: Optional[str] # WHATSAPP, WEB_DASHBOARD
-    manager_phone: Optional[str]
+    approval_channel: Optional[str] # WEB_DASHBOARD
     manager_decision: Optional[str] # APPROVED, REJECTED, ALTERNATIVE_REQUESTED
     option_selected: Optional[str]
     idempotency_key: Optional[str]
@@ -37,7 +36,6 @@ class AgentState(TypedDict):
     is_replanned: bool
 
     # Natural Language Explanations
-    manager_notification_text: Optional[str]
     structured_explanation: Optional[str]
     
     # Execution & Outcomes

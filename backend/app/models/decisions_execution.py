@@ -75,7 +75,7 @@ class ManagerApproval(Base):
     decision_id: Mapped[str] = mapped_column(String(64), ForeignKey("decision_records.decision_id"), nullable=False)
     version_number: Mapped[int] = mapped_column(Integer, nullable=False, default=1)
     manager_phone: Mapped[str] = mapped_column(String(32), nullable=False)
-    channel: Mapped[str] = mapped_column(String(32), default="WHATSAPP") # WHATSAPP, WEB_DASHBOARD
+    channel: Mapped[str] = mapped_column(String(32), default="WEB_DASHBOARD")
     decision_outcome: Mapped[str] = mapped_column(String(32), nullable=False) # APPROVED, REJECTED, ALTERNATIVE_REQUESTED
     option_selected: Mapped[Optional[str]] = mapped_column(String(64), nullable=True)
     notes: Mapped[Optional[str]] = mapped_column(Text, nullable=True)

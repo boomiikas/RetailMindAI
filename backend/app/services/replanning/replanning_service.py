@@ -1,4 +1,4 @@
-"""Dynamic Replanning Service for RetailMind AI.
+﻿"""Dynamic Replanning Service for RetailMind AI.
 
 Deterministic operational service providing continuous pre-execution feasibility validation
 and automated re-optimization:
@@ -16,7 +16,7 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from backend.app.models import (
-    DecisionRecord, DecisionVersion, TransferOrder, Inventory, Product, Store, ExecutionLog
+    DecisionRecord, DecisionVersion, TransferOrder, Inventory, Product, ExecutionLog
 )
 from backend.app.services.inventory.inventory_service import InventoryService
 from backend.app.services.optimization.optimizer import RetailOptimizer
@@ -153,23 +153,6 @@ class DynamicReplanningService:
             self.session.add(exec_log)
             await self.session.commit()
 
-            # E. Format Fresh Manager Notification
-            dest_store = await self.session.get(Store, transfer_order.dest_store_id)
-            dest_city = dest_store.city if dest_store else transfer_order.dest_store_id
-
-            v2_notification = (
-                f"⚠️ *RETAILMIND DYNAMIC REPLANNING ALERT*\n"
-                f"Decision `{decision_id}` (v1) has been *PAUSED* before dispatch.\n"
-                f"────────────────────────\n"
-                f"🔍 *Reason*: {src_store_id} experienced an unexpected demand spike (+{spike} units). "
-                f"Dispatching original 80 units would breach Coimbatore safety stock.\n\n"
-                f"🔄 *Revised Strategies (Version {new_version_num})*:\n"
-                f"1. *Split Transfer*: Transfer {transferable_safe_stock} units from Coimbatore + 40 from Trichy.\n"
-                f"2. *Expedited PO*: Order 80 units directly from Supplier.\n"
-                f"3. *Partial Fulfillment*: Transfer {transferable_safe_stock} units and adjust {dest_city} allocation.\n\n"
-                f"Reply with *1*, *2*, or *3* to authorize Version {new_version_num}."
-            )
-
             return {
                 "status": "REPLANNING_TRIGGERED",
                 "decision_id": decision_id,
@@ -177,8 +160,7 @@ class DynamicReplanningService:
                 "new_version": new_version_num,
                 "paused_transfer_id": transfer_order.transfer_id,
                 "replanning_reason": v2_record.replanning_reason,
-                "revised_recommendations": v2_recs,
-                "manager_notification_text": v2_notification
+                "revised_recommendations": v2_recs
             }
 
         return {"status": "VALID", "decision_id": decision_id}

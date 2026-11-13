@@ -37,13 +37,13 @@
 .brand-icon {
   width: 36px;
   height: 36px;
-  background: linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%);
+  background: linear-gradient(135deg, var(--color-primary), var(--color-primary-hover));
   border-radius: var(--radius-md);
   display: flex;
   align-items: center;
   justify-content: center;
   color: #FFFFFF;
-  box-shadow: 0 4px 10px rgba(37, 99, 235, 0.35);
+  box-shadow: 0 4px 10px color-mix(in srgb, var(--color-primary) 35%, transparent);
   flex-shrink: 0;
 }
 
@@ -65,11 +65,11 @@
 
 .brand-title .ai-badge {
   font-size: 0.65rem;
-  background: rgba(37, 99, 235, 0.3);
-  color: #60A5FA;
+  background: color-mix(in srgb, var(--color-primary) 25%, transparent);
+  color: #9CE0D6;
   padding: 0.1rem 0.35rem;
   border-radius: var(--radius-sm);
-  border: 1px solid rgba(96, 165, 250, 0.4);
+  border: 1px solid color-mix(in srgb, var(--color-primary) 55%, transparent);
   font-weight: 700;
   text-transform: uppercase;
 }
@@ -122,7 +122,7 @@
   background-color: var(--color-primary);
   color: #FFFFFF;
   font-weight: 600;
-  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.4);
+  box-shadow: 0 2px 8px color-mix(in srgb, var(--color-primary) 35%, transparent);
 }
 
 .nav-item.active .nav-icon {
@@ -173,7 +173,7 @@
   width: 34px;
   height: 34px;
   border-radius: var(--radius-full);
-  background: #3B82F6;
+  background: var(--color-primary);
   color: #FFFFFF;
   display: flex;
   align-items: center;
@@ -439,4 +439,41 @@
   .app-content {
     padding: 1rem;
   }
+}
+
+/* Refined control tower shell */
+.app-sidebar {
+  background: linear-gradient(180deg, #101C2A 0%, #0D1723 100%);
+  border-right-color: rgba(255,255,255,.07);
+}
+.sidebar-header { padding: 1.35rem 1.15rem 1.1rem; }
+.brand-icon { background: linear-gradient(145deg, #20A293, #147D75); box-shadow: 0 7px 18px rgba(20,125,117,.28); }
+.brand-icon { object-fit: cover; padding: 0; }
+.sidebar-nav-container { padding: 1.15rem .75rem; gap: .35rem; }
+.nav-section-title { color: #718394; padding-left: .8rem; }
+.nav-item { min-height: 42px; border-radius: 9px; letter-spacing: .005em; }
+.nav-item.active { background: rgba(32,162,147,.17); color: #C7F1EA; box-shadow: inset 3px 0 #35B5A6; }
+.nav-item.active .nav-icon { color: #62CBBE; }
+.nav-item:hover:not(.active) { background: rgba(255,255,255,.055); }
+.sidebar-bottom { border-top-color: rgba(255,255,255,.08); }
+.user-profile-widget { background: rgba(255,255,255,.055); }
+.app-main-layout { background: var(--color-bg); }
+.top-navbar {
+  min-height: var(--topbar-height);
+  background: rgba(255,255,255,.94);
+  backdrop-filter: blur(14px);
+  border-bottom-color: #E3E9EA;
+  box-shadow: 0 1px 3px rgba(16,35,45,.025);
+  padding: 0 1.65rem;
+}
+.breadcrumb-trail { font-size: .7rem; letter-spacing: .025em; }
+.breadcrumb-page-title { font-size: 1.08rem; letter-spacing: -.025em; }
+.global-search-input { background: #F6F8F8; border-color: #E7ECEC; border-radius: 10px; }
+.filter-control { background: #FFF; border-color: #E5EBEB; border-radius: 9px; }
+.icon-action-btn { border-color: #E5EBEB; border-radius: 10px; }
+.app-content { padding: 1.6rem 1.8rem 2.5rem; }
+
+@media (max-width: 768px) {
+  .top-navbar { padding-left: 1rem; padding-right: 1rem; }
+  .app-content { padding: 1.1rem .9rem 2rem; }
 }

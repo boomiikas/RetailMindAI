@@ -19,7 +19,6 @@ import {
   CloudSun,
   PartyPopper,
   Tag,
-  Info,
   Calendar,
   Filter,
   ArrowUpRight,
@@ -45,6 +44,11 @@ const DemandIntelligence = () => {
   const [activeTab, setActiveTab] = useState(
     initialTab === 'hidden-demand' ? 'hidden' : initialTab === 'drivers' ? 'drivers' : initialTab === 'sku' ? 'sku' : 'forecasting'
   );
+
+  useEffect(() => {
+    const tab = searchParams.get('tab') || 'forecasting';
+    setActiveTab(tab === 'hidden-demand' ? 'hidden' : ['drivers', 'hidden', 'sku'].includes(tab) ? tab : 'forecasting');
+  }, [searchParams]);
 
   const { selectedStore, setSelectedStore, stores } = useApp();
   const [selectedProduct, setSelectedProduct] = useState('all');
@@ -315,12 +319,12 @@ const DemandIntelligence = () => {
         <>
           {/* Signal Influence Indicator Strip */}
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1rem', marginBottom: '1.5rem' }}>
-            <div className="section-card" style={{ padding: '1rem', borderLeft: '4px solid #0284C7' }}>
+            <div className="section-card" style={{ padding: '1rem', borderLeft: '4px solid var(--color-primary)' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '0.25rem' }}>
-                <CloudSun size={18} color="#0284C7" />
+                <CloudSun size={18} color="var(--color-primary)" />
                 <span style={{ fontWeight: 700, fontSize: '0.85rem' }}>Weather Signal</span>
               </div>
-              <div style={{ fontSize: '1.25rem', fontWeight: 700, color: '#0284C7' }}>+34% Surge</div>
+              <div style={{ fontSize: '1.25rem', fontWeight: 700, color: 'var(--color-primary)' }}>+34% Surge</div>
               <span style={{ fontSize: '0.75rem', color: 'var(--color-text-secondary)' }}>
                 Northeast monsoon rains in Western corridor
               </span>
@@ -433,29 +437,6 @@ const DemandIntelligence = () => {
             </div>
           </div>
 
-          {/* Autonomous Explanation Banner */}
-          <div
-            className="card"
-            style={{
-              padding: '1.25rem 1.5rem',
-              backgroundColor: '#EFF6FF',
-              borderColor: '#BFDBFE',
-              marginBottom: '1.5rem',
-              display: 'flex',
-              gap: '1rem',
-              alignItems: 'flex-start',
-            }}
-          >
-            <Info size={20} color="var(--color-primary)" style={{ flexShrink: 0, marginTop: '2px' }} />
-            <div>
-              <h4 style={{ fontWeight: 700, fontSize: '0.9rem', color: '#1E40AF', marginBottom: '0.35rem' }}>
-                Autonomous Causal Demand Explanation Engine
-              </h4>
-              <p style={{ fontSize: '0.85rem', color: '#1E3A8A', lineHeight: 1.5, margin: 0 }}>
-                "Demand is expected to surge +38% across Coimbatore and Salem due to the upcoming festival calendar and seasonal monsoon weather. Basmati rice and cooking oil velocity is accelerating 1.4x above trailing 30-day baseline."
-              </p>
-            </div>
-          </div>
         </>
       )}
 
@@ -479,10 +460,10 @@ const DemandIntelligence = () => {
               <div style={{ padding: '1.25rem', backgroundColor: '#F8FAFC', borderRadius: '8px', border: '1px solid #E2E8F0' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
                   <span style={{ fontWeight: 600, fontSize: '0.85rem' }}>Historical Day-of-Week Seasonality</span>
-                  <span style={{ fontWeight: 700, color: '#2563EB' }}>38% Influence</span>
+                  <span style={{ fontWeight: 700, color: 'var(--color-primary)' }}>38% Influence</span>
                 </div>
                 <div style={{ height: '8px', backgroundColor: '#E2E8F0', borderRadius: '4px', overflow: 'hidden' }}>
-                  <div style={{ width: '38%', height: '100%', backgroundColor: '#2563EB' }} />
+                  <div style={{ width: '38%', height: '100%', backgroundColor: 'var(--color-primary)' }} />
                 </div>
                 <p style={{ fontSize: '0.75rem', color: '#64748B', marginTop: '0.5rem' }}>
                   Strong Saturday-Sunday replenishment lift across peri-urban supermarket locations.
@@ -593,12 +574,12 @@ const DemandIntelligence = () => {
                   <span style={{ fontSize: '0.7rem', color: '#DC2626' }}>Unfulfilled during stockout</span>
                 </div>
 
-                <div style={{ padding: '1rem', backgroundColor: '#EFF6FF', borderRadius: 'var(--radius-md)', border: '1px solid #BFDBFE' }}>
-                  <div style={{ fontSize: '0.75rem', color: '#1E40AF', fontWeight: 600 }}>True Market Demand</div>
-                  <div style={{ fontSize: '1.75rem', fontWeight: 800, color: '#1D4ED8' }}>
+                <div style={{ padding: '1rem', backgroundColor: 'var(--color-primary-light)', borderRadius: 'var(--radius-md)', border: '1px solid var(--color-primary-border)' }}>
+                  <div style={{ fontSize: '0.75rem', color: 'var(--color-primary-active)', fontWeight: 600 }}>True Market Demand</div>
+                  <div style={{ fontSize: '1.75rem', fontWeight: 800, color: 'var(--color-primary)' }}>
                     {selectedHiddenItem.estimatedTrueDemand} <span style={{ fontSize: '0.8rem', fontWeight: 500 }}>units</span>
                   </div>
-                  <span style={{ fontSize: '0.7rem', color: '#1E40AF' }}>Reconstructed customer intent</span>
+                  <span style={{ fontSize: '0.7rem', color: 'var(--color-text-secondary)' }}>Reconstructed customer intent</span>
                 </div>
 
                 <div style={{ padding: '1rem', backgroundColor: '#FEF3C7', borderRadius: 'var(--radius-md)' }}>

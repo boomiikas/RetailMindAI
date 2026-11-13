@@ -34,7 +34,7 @@ app = FastAPI(
     description=(
         "Explainable, Adaptive Multi-Agent Retail Decision Intelligence Platform Backend. "
         "Integrates demand forecasting, inventory health, ripple effect DAGs, Pyomo MILP optimization, "
-        "What-If digital twins, WhatsApp manager assistant, and dynamic replanning."
+        "What-If digital twins, decision workflows, and dynamic replanning."
     ),
     version="1.0.0",
     docs_url="/docs",

@@ -148,8 +148,8 @@ const ImpactPerformance = () => {
           trendDirection="positive"
           subtitle="Holding cost & write-off savings"
           icon={IndianRupee}
-          iconColor="#2563EB"
-          iconBg="#EFF6FF"
+          iconColor="var(--color-primary)"
+          iconBg="var(--color-primary-light)"
         />
         <KPICard
           title="Stockout Rate"
@@ -197,7 +197,7 @@ const ImpactPerformance = () => {
                 <th>Operational Dimension</th>
                 <th style={{ textAlign: 'center' }}>1. Traditional Baseline (Min-Max)</th>
                 <th style={{ textAlign: 'center' }}>2. Prescriptive Optimization (LP)</th>
-                <th style={{ textAlign: 'center', backgroundColor: '#EFF6FF', color: 'var(--color-primary)' }}>
+                <th style={{ textAlign: 'center', backgroundColor: 'var(--color-primary-light)', color: 'var(--color-primary-active)' }}>
                   3. RetailMind Agentic AI
                 </th>
                 <th style={{ textAlign: 'center' }}>Net Realized Delta</th>

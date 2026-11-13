@@ -363,7 +363,7 @@ const PromotionGuardian = () => {
               style={{ width: '100%' }}
             />
           </div>
-          <div style={{ padding: '0.75rem', backgroundColor: '#EFF6FF', borderRadius: 'var(--radius-sm)', fontSize: '0.8rem', color: '#1E40AF' }}>
+          <div style={{ padding: '0.75rem', backgroundColor: 'var(--color-primary-light)', borderRadius: 'var(--radius-sm)', fontSize: '0.8rem', color: 'var(--color-primary-active)' }}>
             Recommended by AI: <strong>10% Discount</strong> caps total weekend demand at ~180 units, completely eliminating stockout risks while preserving healthy margins.
           </div>
         </div>

@@ -238,11 +238,11 @@ const DecisionHistory = () => {
             </div>
 
             {/* Chosen Action & Decision Rationale */}
-            <div style={{ padding: '1rem', backgroundColor: '#EFF6FF', border: '1px solid #BFDBFE', borderRadius: 'var(--radius-md)' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', color: '#1E40AF', fontWeight: 700, fontSize: '0.85rem', marginBottom: '0.35rem' }}>
+            <div style={{ padding: '1rem', backgroundColor: 'var(--color-primary-light)', border: '1px solid var(--color-primary-border)', borderRadius: 'var(--radius-md)' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', color: 'var(--color-primary-active)', fontWeight: 700, fontSize: '0.85rem', marginBottom: '0.35rem' }}>
                 <Sparkles size={16} /> 4. Chosen Action & Decision Rationale
               </div>
-              <p style={{ fontSize: '0.8rem', color: '#1E3A8A', margin: 0, lineHeight: 1.5 }}>
+              <p style={{ fontSize: '0.8rem', color: 'var(--color-text-secondary)', margin: 0, lineHeight: 1.5 }}>
                 {selectedDecision.details.rationale}
               </p>
             </div>

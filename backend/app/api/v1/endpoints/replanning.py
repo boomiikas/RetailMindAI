@@ -64,7 +64,7 @@ async def trigger_replanning(
 ):
     """Triggers dynamic pre-dispatch re-validation (e.g. Coimbatore demand spike).
     
-    Pauses unexecuted transfers, re-optimizes, creates Version 2, and pushes WhatsApp notification.
+    Pauses unexecuted transfers, re-optimizes, and creates a new decision version.
     """
     agent = DynamicReplanningAgent(db)
     result = await agent.validate_and_replan(

@@ -38,13 +38,6 @@ class Settings(BaseSettings):
     LLM_PROVIDER: str = "groq"
     LLM_TEMPERATURE: float = 0.1
 
-    # WhatsApp Cloud API
-    WHATSAPP_TOKEN: str = "mock_token"
-    WHATSAPP_PHONE_NUMBER_ID: str = "mock_phone_id"
-    WHATSAPP_VERIFY_TOKEN: str = "retailmind_meta_webhook_verify_secret"
-    WHATSAPP_API_VERSION: str = "v21.0"
-    USE_MOCK_WHATSAPP: bool = True
-
     # Security & CORS
     SECRET_KEY: str = "dev-retailmind-super-secret-key-32-chars-long!"
     ALLOWED_ORIGINS: Union[str, List[str]] = ["http://localhost:5173", "http://localhost:3000", "http://127.0.0.1:5173"]

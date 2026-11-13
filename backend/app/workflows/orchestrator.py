@@ -13,7 +13,6 @@ from backend.app.agents.state import AgentState
 from backend.app.agents.monitoring_agent import MonitoringAgent
 from backend.app.agents.impact_agent import ImpactAnalysisAgent
 from backend.app.agents.optimization_agent import DecisionOptimizationAgent
-from backend.app.agents.manager_agent import StoreManagerAgent
 from backend.app.agents.execution_agent import ExecutionAgent
 from backend.app.agents.replanning_agent import DynamicReplanningAgent
 from backend.app.core.logging import logger
@@ -24,7 +23,6 @@ class RetailMindOrchestrator:
         self.monitoring_agent = MonitoringAgent(session)
         self.impact_agent = ImpactAnalysisAgent(session)
         self.optimization_agent = DecisionOptimizationAgent(session)
-        self.manager_agent = StoreManagerAgent(session)
         self.execution_agent = ExecutionAgent(session)
         self.replanning_agent = DynamicReplanningAgent(session)
 
@@ -44,16 +42,12 @@ class RetailMindOrchestrator:
         async def optimization_node(state: AgentState) -> AgentState:
             return await self.optimization_agent.run(state)
 
-        async def manager_prompt_node(state: AgentState) -> AgentState:
-            return await self.manager_agent.format_whatsapp_proposal(state)
-
         async def execution_node(state: AgentState) -> AgentState:
             return await self.execution_agent.execute_approved_plan(state)
 
         workflow.add_node("monitoring", monitoring_node)
         workflow.add_node("impact_analysis", impact_node)
         workflow.add_node("optimization", optimization_node)
-        workflow.add_node("manager_prompt", manager_prompt_node)
         workflow.add_node("execution", execution_node)
 
         # 2. Define Edges & Conditional Routing
@@ -74,7 +68,7 @@ class RetailMindOrchestrator:
         )
 
         workflow.add_edge("impact_analysis", "optimization")
-        workflow.add_edge("optimization", "manager_prompt")
+        workflow.add_edge("optimization", END)
         
         # When approval received, proceeds to execution
         workflow.add_edge("execution", END)
@@ -86,7 +80,7 @@ class RetailMindOrchestrator:
         store_id: str,
         product_id: str
     ) -> AgentState:
-        """Runs the monitoring -> impact -> optimization -> manager alert pipeline."""
+    """Runs the monitoring -> impact -> optimization recommendation pipeline."""
         initial_state: AgentState = {
             "workflow_id": f"WF_{store_id}_{product_id}",
             "triggered_at": str(logger),
@@ -103,7 +97,6 @@ class RetailMindOrchestrator:
             "decision_status": "PENDING",
             "execution_status": "NOT_STARTED",
             "approval_channel": None,
-            "manager_phone": None,
             "manager_decision": None,
             "option_selected": None,
             "idempotency_key": None,
@@ -111,7 +104,6 @@ class RetailMindOrchestrator:
             "previous_version_data": None,
             "replanning_reason": None,
             "is_replanned": False,
-            "manager_notification_text": None,
             "structured_explanation": None,
             "transfer_order_id": None,
             "purchase_order_id": None,

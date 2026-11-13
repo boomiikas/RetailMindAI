@@ -48,21 +48,19 @@ const NotificationPanel = () => {
 
       <div className={`notification-drawer ${isNotificationDrawerOpen ? 'open' : ''}`}>
         <div className="drawer-header">
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+          <div className="notification-heading">
             <Bell size={18} color="var(--color-primary)" />
-            <span style={{ fontWeight: 700, fontSize: '1rem', color: 'var(--color-text-primary)' }}>
-              Notifications
-            </span>
+            <span>Notifications</span>
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+          <div className="notification-header-actions">
             <button
               className="btn btn-secondary btn-sm"
               onClick={markAllNotificationsAsRead}
               title="Mark all as read"
-              style={{ fontSize: '0.75rem', padding: '0.2rem 0.5rem' }}
+              style={{ fontSize: '0.8125rem', padding: '0.35rem 0.65rem' }}
             >
               <CheckCheck size={14} />
-              Read all
+              Mark all read
             </button>
             <button
               className="modal-close-btn"
@@ -81,29 +79,29 @@ const NotificationPanel = () => {
             </div>
           ) : (
             notifications.map((item) => (
-              <div
+              <button
                 key={item.id}
+                type="button"
                 className={`notification-item ${!item.read ? 'unread' : ''}`}
                 onClick={() => handleNotificationClick(item)}
-                style={{ cursor: 'pointer' }}
               >
-                <div style={{ paddingTop: '2px' }}>
+                <div className="notification-icon">
                   {getNotifIcon(item.type)}
                 </div>
-                <div style={{ flex: 1, minWidth: 0 }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '0.25rem' }}>
-                    <span style={{ fontWeight: 600, fontSize: '0.8125rem', color: 'var(--color-text-primary)' }}>
+                <div className="notification-copy">
+                  <div className="notification-item-heading">
+                    <span className="notification-title">
                       {item.title}
                     </span>
-                    <span style={{ fontSize: '0.7rem', color: 'var(--color-text-muted)' }}>
+                    <span className="notification-time">
                       {item.timestamp}
                     </span>
                   </div>
-                  <p style={{ fontSize: '0.75rem', color: 'var(--color-text-secondary)', lineHeight: 1.4, margin: 0 }}>
+                  <p className="notification-message">
                     {item.message}
                   </p>
                 </div>
-              </div>
+              </button>
             ))
           )}
         </div>
